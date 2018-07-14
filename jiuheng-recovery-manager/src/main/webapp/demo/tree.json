@@ -1,0 +1,93 @@
+[
+    {
+        "id": "1",
+        "text": "类目管理",
+        "children": [
+            {
+                "id": "11",
+                "text": "定义属性组",
+                "attributes": {
+                    "url": ""
+                }
+            },
+            {
+                "id": "12",
+                "text": "定义属性",
+                "attributes": {
+                    "url": ""
+                }
+            },
+            {
+                "id": "13",
+                "text": "定义展示类目",
+                "attributes": {
+                    "url": "backCategories/index"
+                }
+            },
+                {
+                "id": "14",
+                "text": "申请SPU",
+                "attributes": {
+                    "url": "spu/index"
+                }
+            },
+                {
+                "id": "15",
+                "text": "定义图片",
+                "attributes": {
+                    "url": ""
+                }
+            },
+                {
+                "id": "16",
+                "text": "绑定SPU/SKU",
+                "attributes": {
+                    "url": ""
+                }
+            },
+                {
+                "id": "17",
+                "text": "管理SPU图片",
+                "attributes": {
+                    "url": "spic/index"
+                }
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "text": "商品管理",
+        "children": [
+            {
+                "id": "21",
+                "text": "SPU管理",
+                "children": [],
+                "attributes": {
+                    "url": "log/index.do"
+                }
+            },
+            {
+                "id": "22",
+                "text": "商品发布",
+                "children": [],
+                "attributes": {
+                    "url": "log/index.do"
+                }
+            }
+        ]
+    },
+    {
+        "id": "3",
+        "text": "营销管理",
+        "children": [
+            {
+                "id": "31",
+                "text": "商品上下架管理",
+                "children": [],
+                "attributes": {
+                    "url": "goodsManage/index"
+                }
+            }
+        ]
+    }
+]

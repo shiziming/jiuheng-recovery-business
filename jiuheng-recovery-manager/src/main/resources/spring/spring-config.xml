@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+    	http://www.springframework.org/schema/context/spring-context.xsd
+     	http://www.springframework.org/schema/tx
+     	http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/cache 
+		http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 组件扫描 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.jiuheng.web.controller">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<context:property-placeholder
+		location="classpath:application-${activatedProfile}.properties"/>
+
+	<!--<bean class="com.gome.o2m.web.util.ImagesPathUtil">
+		<property name="basePath" value="${images-base-path}"></property>
+		<property name="ewmUrl" value="${ewmUrl}"></property>
+		<property name="size" value="${size}"></property>
+	</bean>
+	
+	<bean id="zipCompressor" class="com.gome.o2m.web.util.ZipCompressor">
+		<property name="baseDir" value="${images-base-path}"></property>
+	</bean>-->
+	
+	<import resource="spring-dubbo-client.xml" />
+</beans>

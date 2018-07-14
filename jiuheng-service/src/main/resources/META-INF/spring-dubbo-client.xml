@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<dubbo:registry id="clientZk" protocol="zookeeper" address="${dubbo.zookeeper.client}"/>
+
+	<!-- 序列号服务 -->
+	<!--<dubbo:reference id="dubboSerialDistributeService" interface="com.gome.cs.serial.dubbo.DubboSerialDistributeService"
+		registry="clientZk" loadbalance="random" version="1.0.0" check="false" retries="3"/>
+
+	&lt;!&ndash; 收银台服务 &ndash;&gt;
+	<dubbo:reference id="dubboCashierService" interface="com.gome.cs.cashier.request.dubbo.PayRequestDubbo"
+		registry="clientZk" loadbalance="random" version="${dubbo.cashier.version}" check="false" retries="3"/>
+
+	&lt;!&ndash; 地区服务 &ndash;&gt;
+	<dubbo:reference id="regionService" interface="com.gome.cs.common.dubbo.DubboRegionService"
+		registry="clientZk" loadbalance="random" version="1.0.0" check="false" retries="3"/>
+
+	&lt;!&ndash; 极可修财务对账单接口 &ndash;&gt;
+	<dubbo:reference id="dzOrderService" interface="com.tmg.jikexiu.dazhong.service.DzOrderService"
+		registry="clientZk" loadbalance="random" version="1.0.0" check="false" retries="3"/>
+	&lt;!&ndash;获取用户头像接口&ndash;&gt;
+	<dubbo:reference id="dubboMemberHeaderImageService"
+		interface="com.gome.cs.member.dubbo.DubboMemberHeaderImageService"
+		registry="clientZk" version="1.2.0" check="false" />
+	&lt;!&ndash;获取用户昵称&ndash;&gt;
+	<dubbo:reference id="dubboMemberBaseService"
+		interface="com.gome.cs.member.dubbo.DubboMemberBaseService" registry="clientZk"
+		version="1.2.0" check="false" />-->
+
+</beans>

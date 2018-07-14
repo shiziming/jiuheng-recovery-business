@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.jiuheng</groupId>
+  <artifactId>jiuheng-recovery-business</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>jiuheng-recovery-manager</module>
+    <module>jiuheng-service</module>
+    <module>jiuheng-inf</module>
+  </modules>
+  <properties>
+    <!-- 指定使用UTF-8编码 -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!--jdk版本-->
+    <java.version>1.8</java.version>
+    <!-- 指定spring使用的版本 -->
+    <spring.version>4.1.7.RELEASE</spring.version>
+    <spring-boot.verison>1.4.5.RELEASE</spring-boot.verison>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.verison}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+  <plugins>
+  <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+      <source>${java.version}</source>
+      <target>${java.version}</target>
+      <encoding>${project.build.sourceEncoding}</encoding>
+    </configuration>
+  </plugin>
+  </plugins>
+  </build>
+</project>

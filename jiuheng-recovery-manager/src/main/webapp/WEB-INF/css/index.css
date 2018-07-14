@@ -1,0 +1,77 @@
+@charset "utf-8";
+
+/********************************* 页面布局样式 *************************************/
+#header-inner {
+	text-align: left;
+	margin: 0 auto;
+	padding: 10px 0;
+}
+
+#topmenu {
+	text-align: right;
+}
+#header {
+	padding:0px;
+}
+/*左侧菜单*/
+#west {
+	width:200px;
+}
+
+/*底部Footer*/
+#footer {text-align:center; height:20px; padding:5px 0px 2px 0px;background:#F2F2F2;}
+
+.data-center {height:800px } 
+
+/* 中间部分panel */
+div.easyui-panel.panel-body.panel-body-noheader.panel-body-noborder{
+	padding:10px;
+	width: 100%;
+	height: 100%;
+}
+/* 跳转页面展示表格信息 */
+#editPanel table .label{
+	width: 15%;
+	text-align : right;
+}
+#editPanel table .content{
+	width: 18%;
+	text-align : left;
+}
+/* 中间部分表单 */
+div.content {
+	width: 100%;
+	height: 100%;
+}
+.panel.datagrid {
+	width: 100%;
+	height: 100%;
+}
+.search table { padding:5px; cellspacing:5px; cellpadding:5px } 
+.toolbar { padding:5px; border-top-color: #D4D4D4; border-top-width: 1px; border-top-style: solid;}
+.search td.label { line-height:14px; text-align:right; width:80px }
+
+#topmenu a {
+	display: inline-block;
+	padding: 1px 3px;
+	text-decoration: none;
+	color: #fff;
+}
+
+#topmenu a:hover {
+	text-decoration: underline;
+}
+
+html {
+	height: 100%
+}
+
+body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px
+}
+
+#container {
+	height: 95%
+}

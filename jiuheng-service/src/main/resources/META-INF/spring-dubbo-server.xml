@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="jiuheng-order-service"/>
+	<dubbo:protocol port="20200" name="dubbo"/>
+	<dubbo:registry id="serverZk" protocol="zookeeper" address="${dubbo.zookeeper.server}"
+		register="true"/>
+
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboOrderService" ref="dubboOrderService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboMenuService" ref="dubboMenuService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboGoodsService" ref="dubboGoodsService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboCategoryService" ref="dubboCategoryService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboBrandService" ref="dubboBrandService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+</beans>
