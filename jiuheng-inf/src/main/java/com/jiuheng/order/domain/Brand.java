@@ -1,16 +1,15 @@
 package com.jiuheng.order.domain;
 
 import java.io.Serializable;
-import java.util.List;
 import lombok.Data;
 
 /**
- * Created by shiziming on 2018/7/10.
- * 商品品牌返回
+ * Created by shiziming on 2018/7/15.
  */
 @Data
-public class BrandResp implements Serializable{
+public class Brand implements Serializable {
 
+    private static final long serialVersionUID = -5043519002678180348L;
     /**
      *品牌id
      */
@@ -47,8 +46,5 @@ public class BrandResp implements Serializable{
      *最近更新人名称
      */
     private String updator;
-    /**
-     * 品牌拥有的设备分类
-     */
-    private List<BrandCategory> categories;
+
 }

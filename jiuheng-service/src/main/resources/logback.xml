@@ -36,8 +36,6 @@
         </encoder>
     </appender>
 
-    <logger name="com.gome.cs.cashier.core.repository" level="@log_level@"/>
-
     <root>
         <level value="@log_level@"/>
         <appender-ref ref="@log_appender@"/>

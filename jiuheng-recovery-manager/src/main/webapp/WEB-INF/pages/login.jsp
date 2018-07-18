@@ -37,7 +37,7 @@
 	</div>
 
 	<div class="footer">
-		<label>国美电器股份有限公司</label>
+		<label>久恒股份有限公司</label>
 	</div>
 	
 	<div style="display: none; height: 0px;">

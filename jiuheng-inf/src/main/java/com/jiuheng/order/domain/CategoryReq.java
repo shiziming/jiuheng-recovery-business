@@ -5,18 +5,19 @@ import lombok.Data;
 
 /**
  * Created by shiziming on 2018/7/8.
+ * 品类接收参数
  */
 @Data
-public class Category implements Serializable{
+public class CategoryReq implements Serializable{
 
     /**
      * 品类id
      */
-    private int id;
+    private Integer id;
     /**
      * 父级id,root为-1
      */
-    private int fid;
+    private Integer fid;
     /**
      * 分类名称
      */
@@ -40,7 +41,7 @@ public class Category implements Serializable{
     /**
      * 分类节点从父节点到本节点的name路径，如 3C >> 手机
      */
-    private String path_name;
+    private String pathName;
     /**
      * 记录创建时间
      */

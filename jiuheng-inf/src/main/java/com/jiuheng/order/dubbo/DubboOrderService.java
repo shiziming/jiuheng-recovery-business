@@ -1,10 +1,8 @@
 package com.jiuheng.order.dubbo;
 
 import com.jiuheng.order.domain.RecoveryOrderReq;
-import com.jiuheng.order.domain.RecoveryOrderResp;
-import com.jiuheng.order.domain.Response;
-import com.jiuheng.order.domain.SearchResult;
-import java.util.List;
+import com.jiuheng.order.respResult.Response;
+import com.jiuheng.order.respResult.SearchResult;
 
 /**
  * Created by shiziming on 2018/6/23.

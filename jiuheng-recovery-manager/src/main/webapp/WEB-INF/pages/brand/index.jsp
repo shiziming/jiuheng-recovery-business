@@ -32,7 +32,7 @@
     $("#brand_search_btn").click(loadBrandList);
 
     $("#brand_add_btn").click(function(){
-        showBrandDialog(ctx+"/device/addBrand");
+        showBrandDialog(ctx+"/brand/addBrand");
     });
 
     $("#brand_data_div").datagrid({
@@ -49,7 +49,7 @@
           if(val){
             var cs = [];
             $(val).each(function(i, j){
-              cs.push(j.categoryPathName);
+              cs.push(j.categoryName);
             });
 
             return cs.join(",");
@@ -76,11 +76,10 @@
 
   var showBrandDialog = function (url, id) {
     var title = id ? "修改品牌" :"新增品牌";
-
     $("#brand_dialog_div").dialog({
       title:title,
       width : 700,
-      height : getDlgHeight(),
+      height : $.o2m.centerHeight,
       cache: false,
       modal : true,
       maximizable:true,
@@ -101,7 +100,7 @@
           }
           $.messager.progress();
           $("#brand_data_form").form("submit",{
-            url : ctx +"/device/saveBrand",
+            url : "brand/saveBrand",
             onSubmit:function(param){
               renameCategories();
               var isValid = $(this).form('validate');
@@ -112,9 +111,9 @@
 
             },
             success:function(data){
-              $.messager.progress('close');	// 如果提交成功则隐藏进度条
+              parent.$.messager.progress('close');	// 如果提交成功则隐藏进度条
               data = $.parseJSON(data);
-              if(data.result == 1){
+              if(data.result == true){
                 $.messager.alert("提示","保存成功","info");
                 reloadBrandList();
                 closeBrandDlg();
@@ -208,8 +207,7 @@
       $.messager.alert("提示","请选中一条记录" ,"info");
       return;
     }
-
-    var url = ctx +"/device/editBrand?id="+selected.id;
+    var url = ctx +"/brand/editBrand?id="+selected.id;
     showBrandDialog(url, selected.id);
   }
 

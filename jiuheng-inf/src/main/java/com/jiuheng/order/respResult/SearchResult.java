@@ -1,4 +1,4 @@
-package com.jiuheng.order.domain;
+package com.jiuheng.order.respResult;
 
 import java.io.Serializable;
 import java.util.ArrayList;

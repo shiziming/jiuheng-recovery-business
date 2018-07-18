@@ -1,6 +1,6 @@
 package com.jiuheng.order.utils;
 
-import com.jiuheng.order.domain.SearchResult;
+import com.jiuheng.order.respResult.SearchResult;
 import java.util.List;
 
 import net.sf.json.JSONObject;

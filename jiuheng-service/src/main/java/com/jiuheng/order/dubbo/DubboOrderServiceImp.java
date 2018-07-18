@@ -1,12 +1,10 @@
 package com.jiuheng.order.dubbo;
 
 import com.github.pagehelper.PageHelper;
-import com.jiuheng.order.domain.RecoveryOrder;
 import com.jiuheng.order.domain.RecoveryOrderReq;
 import com.jiuheng.order.domain.RecoveryOrderResp;
-import com.jiuheng.order.domain.Response;
-import com.jiuheng.order.domain.SearchResult;
-import com.jiuheng.order.repository.MenuMapper;
+import com.jiuheng.order.respResult.Response;
+import com.jiuheng.order.respResult.SearchResult;
 import com.jiuheng.order.repository.RecoveryOrderMapper;
 import com.jiuheng.order.utils.EasyUiDataGridUtil;
 import java.util.List;

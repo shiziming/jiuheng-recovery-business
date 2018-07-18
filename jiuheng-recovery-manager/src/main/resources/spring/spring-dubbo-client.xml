@@ -17,4 +17,6 @@
 		registry="clientZk" version="${dubbo.version.client}" check="true" retries="3"/>
 	<dubbo:reference id="dubboBrandService" interface="com.jiuheng.order.dubbo.DubboBrandService"
 		registry="clientZk" version="${dubbo.version.client}" check="true" retries="3"/>
+	<dubbo:reference id="dubboCategoryService" interface="com.jiuheng.order.dubbo.DubboCategoryService"
+		registry="clientZk" version="${dubbo.version.client}" check="true" retries="3"/>
 </beans>

@@ -24,7 +24,7 @@
 	
     #top{width: 100%;height: 80px;background: url(images/banner.png) no-repeat center center;}
    	#_top{margin: 0 50px;}
-   	#logo{height: 75px;width: 78px;float: left;margin: 2px 0;background: url(images/banner-logo.png) no-repeat center center;}
+   	#logo{height: 75px;width: 78px;float: left;margin: 2px 0;background: url(images/user/background.jpg) no-repeat center center;}
    	#exit{height: 32px;width: 32px;float: right;margin-top: 40px;background: url(images/exit.png) no-repeat center center;cursor: pointer;}
 </style>
 </head>

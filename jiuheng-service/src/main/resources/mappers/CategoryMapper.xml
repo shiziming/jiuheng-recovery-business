@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.order.repository.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.order.domain.CategoryResp">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="fid" jdbcType="INTEGER" property="fid"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="categoryPic" jdbcType="VARCHAR" property="category_pic"/>
+    <result column="sort" jdbcType="INTEGER" property="sort"/>
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="pathId" jdbcType="INTEGER" property="path_id"/>
+    <result column="pathName" jdbcType="VARCHAR" property="path_name"/>
+    <result column="createTime" jdbcType="VARCHAR" property="create_time"/>
+    <result column="updateTime" jdbcType="VARCHAR" property="update_time"/>
+    <result column="updator" jdbcType="VARCHAR" property="updator"/>
+  </resultMap>
+  <!--<sql id="Base_Column_List">
+    c.id,c.fid,c.name,c.category_pic,c.status,c.sort,c.path_id,c.path_name,c.create_time,c.update_time,c.updator
+  </sql>
+  <select id="getCategoryList" parameterType="com.jiuheng.order.domain.CategoryReq" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+      recovery_category b
+    LEFT JOIN
+      recovery_category c
+    ON
+      b.id = c.fid  AND c.status=1
+    WHERE
+      b.fid= -1
+      AND  b.status = 1
+    ORDER BY
+      sort
+   </select>-->
+  <select id="getCategoryList" parameterType="com.jiuheng.order.domain.CategoryReq" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      recovery_category
+    WHERE
+      STATUS = 1
+  </select>
+  <select id="getCategoryById" parameterType="com.jiuheng.order.domain.CategoryReq" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      recovery_category
+    WHERE
+      id = #{id}
+  </select>
+</mapper>
