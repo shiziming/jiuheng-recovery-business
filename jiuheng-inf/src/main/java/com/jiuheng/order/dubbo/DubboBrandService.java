@@ -17,4 +17,8 @@ public interface DubboBrandService {
     Response<Boolean> saveBrand(BrandReq brand);
 
     Response<Boolean> updateBrand(BrandReq brand);
+
+    Response<Boolean> updateBrandStatus(BrandReq brand);
+
+    Response<Boolean> deleteBrand(BrandReq brand);
 }

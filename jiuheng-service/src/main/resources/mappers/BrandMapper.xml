@@ -30,7 +30,10 @@
     <if test="brandReq.name != null and brandReq.name != ''">
       AND name=#{brandReq.name}
     </if>
-    <if test="brandReq.status != null">
+    <if test="brandReq.status != null and brandReq.status == -2">
+      AND status != - 1
+    </if>
+    <if test="brandReq.status != null and brandReq.status != -2">
       AND status=#{brandReq.status}
     </if>
     ORDER BY id,sort
@@ -83,5 +86,11 @@
   <insert id="insertBrandCategory" parameterType="com.jiuheng.order.domain.BrandCategory">
     INSERT INTO recovery_brand_category (brand_id, category_id)
     VALUES (#{brandCategory.brandId}, #{brandCategory.categoryId})
+  </insert>
+
+  <insert id="insertBrands" useGeneratedKeys="true" keyProperty="brand.id"
+    parameterType="com.jiuheng.order.domain.BrandReq">
+    INSERT INTO recovery_brand(name, pic, status, create_time)
+    VALUES (#{brand.name}, #{brand.pic}, #{brand.status}, #{brand.createTime})
   </insert>
 </mapper>

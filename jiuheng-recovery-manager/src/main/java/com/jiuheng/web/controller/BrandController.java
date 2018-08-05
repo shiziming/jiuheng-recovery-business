@@ -72,15 +72,57 @@ public class BrandController {
         Response<Boolean> resp = null;
         if(brand == null) throw new IllegalArgumentException("错误的品牌信息");
         ModelMap model = new ModelMap();
-        if(brand.getId() == 0){
+        if(brand.getId() == null){
             resp=dubboBrandService.saveBrand(brand);
         }else if(brand.getId() > 0){
             resp=dubboBrandService.updateBrand(brand);
         }else{
-            throw new IllegalArgumentException("错误的品牌标识id");
+            resp=Response.fail("错误的品牌标识id");
         }
         return resp;
     }
+    @RequestMapping("editBrandStatus")
+    @ResponseBody
+    public Response<Boolean> editBrandStatus(Integer id, Integer status){
+        Response<Boolean> resp = null;
+        try {
+            if(id == null || id <= 0){
+                throw new IllegalArgumentException("错误的品牌标识id");
+            }
 
+            BrandReq brand = new BrandReq();
+            brand.setId(id);
+            brand.setStatus(status);
+            resp=dubboBrandService.updateBrandStatus(brand);
+            return resp;
+        } catch (IllegalArgumentException e) {
+            return Response.fail(e.getMessage());
+        }
+    }
+
+    @RequestMapping("addBrand")
+    public ModelAndView addBrand(){
+        ModelAndView model=new ModelAndView("brand/brandEdit");
+        Response<SearchResult> result=dubboCategoryService.getCategoryList(null,0,0);
+        model.addObject("deviceCategories",result.getResult().getRows());
+        return model;
+    }
+
+    @RequestMapping("deleteBrand")
+    @ResponseBody
+    public Response<Boolean> deleteBrand(Integer id){
+        Response<Boolean> resp = null;
+        try {
+            if(id == null || id <= 0){
+                throw new IllegalArgumentException("错误的品牌标识id");
+            }
+            BrandReq brand = new BrandReq();
+            brand.setId(id);
+            resp=dubboBrandService.deleteBrand(brand);
+            return resp;
+        } catch (IllegalArgumentException e) {
+            return Response.fail(e.getMessage());
+        }
+    }
 
 }

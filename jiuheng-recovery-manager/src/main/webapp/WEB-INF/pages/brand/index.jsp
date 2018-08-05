@@ -32,7 +32,7 @@
     $("#brand_search_btn").click(loadBrandList);
 
     $("#brand_add_btn").click(function(){
-        showBrandDialog(ctx+"/brand/addBrand");
+        showBrandDialog("brand/addBrand");
     });
 
     $("#brand_data_div").datagrid({
@@ -145,9 +145,9 @@
 
     $.messager.confirm("提示","确定删除这条记录？",function(r){
       if(r){
-        var url = ctx +"/device/deleteBrand?id="+selected.id;
+        var url = "brand/deleteBrand?id="+selected.id;
         $.post(url, null, function(data){
-          if(data.result == 1){
+          if(data.result == true){
             $.messager.alert("提示","删除品牌成功","info");
             reloadBrandList();
           }
@@ -186,9 +186,9 @@
 
     $.messager.confirm("提示","确定"+op+"这条记录？",function(r){
       if(r){
-        var url = ctx +"/device/editBrandStatus?id="+selected.id + "&status=" + s;
+        var url = "brand/editBrandStatus?id="+selected.id + "&status=" + s;
         $.post(url, null, function(data){
-          if(data.result == 1){
+          if(data.result == true){
             $.messager.alert("提示",op+"品牌成功","info");
             reloadBrandList();
           }

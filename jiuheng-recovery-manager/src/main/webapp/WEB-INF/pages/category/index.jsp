@@ -11,15 +11,14 @@
 <table id="device_category_data_div"></table>
 <div id="device_category_dlg_div"></div>
 <script type="text/javascript" src="common/js/common/prototype.js"></script>
-<%--<script type="text/javascript" src="common/js/common/uploadFile.js"></script>--%>
 <script type="text/javascript">
-  $(function(){
+    $(function(){
     var dg, currentRow;
     dg = $("#device_category_data_div").datagrid({
-      url : ctx + "/device/getDeviceCategoryList.json",
+      url : "category/getCategoryList",
       pagination : true,
       fitColumns : true,
-        pageSize:20,
+        pageSize :20,
       singleSelect:true,
       toolbar : [{text:"新增分类",iconCls:"icon-add",handler:function(){
         if(currentRow != undefined){
@@ -50,30 +49,6 @@
           }
         }},
         {title:"排序",field:"sort",width:100,align:"center",editor:{type:"numberbox",options:{min:0,value:1}}
-        },
-        {title:"支持维修",field:"supportRepair",width:100,align:"center",editor:{type:'checkbox',options:{on:'1',off:'0'}},
-          formatter: function(value, row, index){
-            if(row.fid!=-1){
-              if (value == 1) {
-                return '是';
-              }
-              else {
-                return '<font color="red">否</font>';
-              }
-            }
-          }
-        },
-        {title:"支持回收",field:"supportRecycle",width:100,align:"center",editor:{type:'checkbox',options:{on:'1',off:'0'}},
-          formatter: function(value, row, index){
-              if(row.fid!=-1){
-                if (value == 1) {
-                  return '是';
-                }
-                else {
-                  return '<font color="red">否</font>';
-                }
-              }
-            }
         },
         {title:"操作",field:"ss", width:200,align:"center",formatter:function(val, row,index){
           var link = "";
@@ -119,9 +94,9 @@
         currentRow = undefined;
         flushRow(index);
         $.messager.progress();
-        $.post(ctx+"/device/saveDeviceCategory", row, function(data){
+        $.post("category/saveCategory", row, function(data){
           $.messager.progress("close");
-          if(data.result=1){
+          if(data.result=true){
             $.messager.alert("提示", "保存成功", "info");
             reloadDeviceCategory();
           }else{
@@ -135,7 +110,7 @@
     function uploadCategoryPic(obj,index){
       $(obj).ajaxUpload({
         fileType: "pic",
-        action: ctx + "/imgFileUpload",
+        action: "imgFileUpload",
         onComplete: function (file, response) {
           if (response != null) {
             $("#device_category_data_div").datagrid('updateRow',{
@@ -205,8 +180,8 @@
       if ($.messager.confirm("提示", msg, function (r) {
           if (r) {
               $.messager.progress();
-              $.post(ctx + "/device/deleteDeviceCategory?id=" + selected.id, null, function (data) {
-                  if (data.result == 1) {
+              $.post("attribute/deleteDeviceCategory?id=" + selected.id, null, function (data) {
+                  if (data.result == true) {
                       $.messager.alert("提示", "删除成功", "info");
                       reloadDeviceCategory();
                   } else {
@@ -225,12 +200,12 @@
     $("#device_category_dlg_div").dialog({
       title:"选择基本属性",
       width : 700,
-      height : getDlgHeight(),
+      height : $.o2m.centerHeight,
       cache: false,
       modal : true,
       maximizable:true,
       resizable :true,
-      href : ctx+"/device/selectAttribute?categoryid="+selected.id+ "&type=" + type,
+      href : "category/selectAttribute?categoryid="+selected.id+ "&type=" + type,
 //      buttons:[
 //        {
 //          text:"关闭",
@@ -252,5 +227,4 @@
   function closeCategoryDlg(){
     $("#device_category_dlg_div").dialog("close");
   }
-
 </script>

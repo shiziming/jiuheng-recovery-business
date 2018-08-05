@@ -16,11 +16,11 @@ public interface BranchMapper {
 
     Brand getBrandById(@Param("brandReq")BrandReq brandReq);
 
-    void saveBrand(@Param("brandReq")BrandReq brand);
-
     void insertBrandCategory(@Param("brandCategory")BrandCategory brandCategory);
 
     void updateBrand(@Param("brand")BrandReq brand);
 
     void deleteBrandCategory(@Param("brandCategory")BrandCategory brandCategory);
+
+    void insertBrands(@Param("brand")BrandReq brand);
 }

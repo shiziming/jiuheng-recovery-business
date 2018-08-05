@@ -10,10 +10,6 @@
         http://www.springframework.org/schema/aop   
        	http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<aop:aspectj-autoproxy />
-<!--
-	<context:component-scan base-package="com.jiuheng.order" />
--->
 	<import resource="spring-datasource.xml"/>
-	<!--<import resource="spring-dubbo-client.xml"/>-->
 	<import resource="spring-dubbo-server.xml"/>
 </beans>

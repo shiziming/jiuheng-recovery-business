@@ -22,4 +22,8 @@
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 	<dubbo:service interface="com.jiuheng.order.dubbo.DubboBrandService" ref="dubboBrandService"
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboAttributeService" ref="dubboAttributeService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.order.dubbo.DubboGoodsService" ref="dubboGoodsService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 </beans>

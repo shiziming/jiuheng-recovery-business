@@ -39,8 +39,7 @@
 <div id="device_data_div"></div>
 <div id="device_dlg_div"></div>
 <div id="device_Service_div"></div>
-<script type="text/javascript" src="${ctx}/resources/js/common/prototype.js"></script>
-<script type="text/javascript" src="${ctx}/resources/js/common/uploadFile.js"></script>
+<script type="text/javascript" src="common/js/common/prototype.js"></script>
 <%--<script type="text/javascript" src="${ctx}/resources/easyui/jquery-1.9.0.min.js"></script>--%>
 <%--<script type="text/javascript" src="${ctx}/resources/easyui/easyui-lang-zh_CN.js"></script>--%>
 <%--<script type="text/javascript" src="${ctx}/resources/easyui/jquery.easyui.min.js"></script>--%>
@@ -56,35 +55,17 @@
     });
 
     $("#device_data_div").datagrid({
-      url : ctx + "/device/getDeviceList.json",
+      url : "goods/getGoodsList",
       pagination : true,
       fitColumns : true,
       singleSelect:true,
-        pageSize:20,
+      pageSize:20,
       toolbar : "device_search_form",
       columns : [[
         {title : "ID", field :"id", align:"center", width:30},
         {title:"分类",field:"categoryPathName",width:100},
         {title :"品牌",field:"brandName", width:200},
         {title:"型号",field:"model",width:100},
-        {title:"是否支持维修",field:"supportRepair",width:80,align:"center",formatter:function(val,row,indx){
-          var text = "";
-          if(row.supportRepair==1) {
-            text="是";
-          }else {
-            text="否";
-          }
-          return text;
-        }},
-        {title:"是否支持回收",field:"supportRecycle",width:80,align:"center",formatter:function(val,row,indx){
-          var text = "";
-          if(row.supportRecycle==1) {
-            text="是";
-          }else {
-            text="否";
-          }
-          return text;
-        }},
         {title:"排序",field:"sequence",align:"center",width:50},
         {title:"操作",field:"ss", width:200,align:"center",formatter:function(val, row,indx){
           var link = null;
@@ -123,7 +104,7 @@
     $("#device_dlg_div").dialog({
       title:title,
       width : 700,
-      height : getDlgHeight(),
+      height : $.o2m.centerHeight,
       cache: false,
       modal : true,
       maximizable:true,
@@ -147,25 +128,13 @@
 
   function saveDevice(){
     $("#device_data_form").form("submit",{
-      url : ctx +"/device/saveDevice",
+      url : "goods/saveGoods",
       onSubmit:function(param){
         renameDeviceAttributes();
         var isValid = $(this).form('validate');
  	   	var reg = new RegExp("^[0-9]*$");
 	   	var supplierPhone =	$('#supplierPhone').val();
-	   if(supplierPhone!=''&&!reg.test(supplierPhone)){
-	   	$.messager.alert("错误提示", "请输入正确的厂商电话号码!"); 
-	   	isValid=false;
-	   };
-	   if(supplierPhone!=''&&supplierPhone.length<5){
-			$.messager.alert("错误提示", "请输入正确的厂商电话号码!"); 
-		   	isValid=false;   
-	   }
-	   if(supplierPhone!=''&&supplierPhone.length>15){
-			$.messager.alert("错误提示", "请输入正确的厂商电话号码!"); 
-		   	isValid=false;   
-	   }
-        if (!isValid){
+	    if (!isValid){
           $.messager.progress('close');	// 如果表单是无效的则隐藏进度条
         }
         return isValid;	// 返回false终止表单提交
@@ -174,20 +143,10 @@
       success:function(data){
         $.messager.progress('close');	// 如果提交成功则隐藏进度条
         data = $.parseJSON(data);
-        if(data.result == 1){
+        if(data.result == true){
           $.messager.alert("提示","保存成功","info");
           reloadDeviceList();
           closeDevieDlg();
-        }
-        else if(data.result == 2){
-          $.messager.confirm("警告","设备属性已在方案中使用<br>修改可能统计数据失真，请确认是否强制修改?",function(r){
-            if(r){
-              $("#device_data_form").append('<input type="hidden" name="updateToken" value="'+ data.updateToken +'" />');
-              saveDevice();
-              $("#device_data_form").children("[name=updateToken]").remove();
-            }
-
-          });
         }
         else {
           $.messager.alert("警告", "保存失败", "warning");
@@ -270,7 +229,7 @@
       return;
     }
 
-    var url = ctx +"/device/editDevice?id="+selected.id;
+    var url = "goods/editGoods?id="+selected.id;
     showBrandDialog(url, selected.id);
   }
 

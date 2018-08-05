@@ -26,4 +26,12 @@ public class BrandReq implements Serializable{
      * 状态
      */
     private Integer status;
+    /**
+     * 创建时间
+     */
+    private String createTime;
+    /**
+     * 图片地址
+     */
+    private String pic;
 }

@@ -28,7 +28,7 @@
 	</context:component-scan>
 
 	<context:property-placeholder
-		location="classpath:application-${activatedProfile}.properties"/>
+		location="classpath:application-${activatedProfile}.properties,classpath:config.properties"/>
 
 	<!--<bean class="com.gome.o2m.web.util.ImagesPathUtil">
 		<property name="basePath" value="${images-base-path}"></property>

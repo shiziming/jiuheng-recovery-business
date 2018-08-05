@@ -5,7 +5,7 @@
  * 使用ajaxupload上传文件<br>
  * 只引入这个js和jquery就可以
  */
-document.write(decodeURIComponent('%3Cscript type="text/javascript" src="'+window.ctx+'/common/js/common/ajaxupload.js"%3E%3C/script%3E'));
+document.write(decodeURIComponent('%3Cscript type="text/javascript" src="common/js/common/ajaxupload.js"%3E%3C/script%3E'));
 /**
  * ajaxupload的封装，在ajaxupload的基础上添加了文件后缀验证。
  * @param opts - name : 上传文件的表单名称，对象后台接收对象，默认为file

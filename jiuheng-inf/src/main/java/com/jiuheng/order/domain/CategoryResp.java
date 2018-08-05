@@ -1,6 +1,7 @@
 package com.jiuheng.order.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -13,11 +14,11 @@ public class CategoryResp implements Serializable{
     /**
      * 品类id
      */
-    private int id;
+    private Integer id;
     /**
      * 父级id,root为-1
      */
-    private int fid;
+    private Integer fid;
     /**
      * 分类名称
      */
@@ -54,4 +55,7 @@ public class CategoryResp implements Serializable{
      * 最近更新人名称
      */
     private String updator;
+
+    private List<CategoryResp> subCategories;
+
 }

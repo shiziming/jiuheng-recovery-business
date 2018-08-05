@@ -1,6 +1,7 @@
 package com.jiuheng.order.dubbo;
 
 import com.jiuheng.order.domain.CategoryReq;
+import com.jiuheng.order.domain.CategoryResp;
 import com.jiuheng.order.respResult.Response;
 import com.jiuheng.order.respResult.SearchResult;
 
@@ -10,4 +11,8 @@ import com.jiuheng.order.respResult.SearchResult;
 public interface DubboCategoryService {
 
     Response<SearchResult> getCategoryList(CategoryReq categoryReq, int pageNo, int pageSize);
+
+    Response<Boolean> deleteDeviceCategory(CategoryReq categoryReq);
+
+    Response<Boolean> saveCategory(CategoryReq categoryReq);
 }
