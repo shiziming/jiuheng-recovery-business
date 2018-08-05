@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.order.repository.AttributeMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.order.domain.AttributeResp">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="type" property="type" />
+  </resultMap>
+  <select id="getAttributeList" parameterType="com.jiuheng.order.domain.AttributeReq" resultMap="BaseResultMap">
+    SELECT * FROM recovery_attribute
+    <where>
+      <include refid="query_params" />
+    </where>
+  </select>
+  <sql id="query_params">
+    <if test="attribute.name != null and attribute.name != ''">AND name like "%"#{attribute.name }"%"</if>
+    <if test="attribute.type != null and attribute.type != ''">AND type =#{attribute.type}</if>
+  </sql>
+  <select id="getCategoryAttributesByCategory" resultMap="BaseResultMap">
+    SELECT * FROM recovery_attribute a, recovery_category_attribute b
+    <where>
+      a.id = b.attribute_id
+      AND b.category_id = #{categoryId}
+    </where>
+  </select>
+
+  <insert id="insertCategoryAttribute" parameterType="map">
+    INSERT INTO recovery_category_attribute(attribute_id , category_id)
+    VALUES (#{attributeId}, #{categoryId})
+  </insert>
+
+  <delete id="deleteCategoryAttribute" parameterType="map">
+    DELETE FROM recovery_category_attribute
+    <where>
+      <if test="categoryId != null and categoryId > 0"> AND category_id = #{categoryId}</if>
+      <if test="attributeId != null and attributeId > 0"> AND attribute_id = #{attributeId}</if>
+      <if test="type != null"> and exists(select 1 from recovery_attribute where type=#{type} and recovery_category_attribute.attribute_id=recovery_attribute.id)</if>
+      <if test="categoryId == null and attributeId == null">AND 1=0</if>
+    </where>
+  </delete>
+  <insert id="insertGoodsAttributeValue" parameterType="com.jiuheng.order.domain.GoodsAttribute">
+     INSERT INTO recovery_goods_attribute ( goods_id, attribute_id, attribute_value, can_choose)
+              VALUES (#{goodsAttribute.goodsId}, #{goodsAttribute.attributeId}, #{goodsAttribute.attributeValue}, #{goodsAttribute.canChoose})
+  </insert>
+  <update id="updateGoodsAttributeValue" parameterType="com.jiuheng.order.domain.GoodsAttribute">
+    UPDATE recovery_goods_attribute
+    <set>
+      <if test="goodsAttribute.attributeValue != null">attribute_value = #{goodsAttribute.attributeValue},</if>
+      <if test="goodsAttribute.canChoose != null">can_choose = #{goodsAttribute.canChoose}, </if>
+      <if test="goodsAttribute.canChoose == null">can_choose = 0, </if>
+    </set>
+    WHERE id = #{goodsAttribute.id}
+  </update>
+</mapper>

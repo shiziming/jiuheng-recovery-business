@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.order.repository.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.order.domain.GoodsResp">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="model" jdbcType="VARCHAR" property="model"/>
+    <result column="pic" jdbcType="VARCHAR" property="pic"/>
+    <result column="brandId" jdbcType="INTEGER" property="brandId"/>
+    <result column="categoryId" jdbcType="INTEGER" property="categoryId"/>
+    <result column="indexPath" jdbcType="VARCHAR" property="indexPath"/>
+    <result column="property" jdbcType="VARCHAR" property="property"/>
+    <result column="sequence" jdbcType="INTEGER" property="sequence"/>
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="createTime" jdbcType="VARCHAR" property="createTime"/>
+    <result column="updateTime" jdbcType="VARCHAR" property="updateTime"/>
+    <result column="brandName" jdbcType="VARCHAR" property="brandName"/>
+    <result column="categoryPathName" jdbcType="VARCHAR" property="categoryPathName"/>
+    <collection property="attrs" resultMap="RMDeviceAttributeValue" column="goods_id" />
+  </resultMap>
+
+  <resultMap id="RMDeviceAttributeValue" type="com.jiuheng.order.domain.GoodsAttribute">
+    <id column="valueId" property="id" />
+    <result column="goods_id" property="goodsId" />
+    <result column="attribute_id" property="attributeId" />
+    <result column="attribute_value" property="attributeValue" />
+    <result column="can_choose" property="canChoose" />
+    <result column="name" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    a.skuId as id,a.goodsName as model,a.pic,a.brandId,a.categoryId,a.indexPath,a.property,a.sequence,a.status,a.createTime,a.updateTime,b.name as brandName,c.path_name as categoryPathName
+  </sql>
+  <sql id="Goods_Column">
+    a.skuId as id,a.goodsName as model,a.pic,a.brandId,a.categoryId,a.indexPath,a.property,a.sequence,a.status,a.createTime,a.updateTime
+  </sql>
+  <select id="getGoodsList" parameterType="com.jiuheng.order.domain.GoodsReq" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM
+      recovery_goods a,
+      recovery_brand b,
+      recovery_category c
+    <where>
+      a.brandId = b.id
+    AND a.categoryId = c.id
+      <include refid="query_params" />
+    </where>
+    ORDER BY
+      a.categoryId,
+      a.brandId,
+    IF (
+      a.goodsName = '其他型号',
+      0,
+      1
+    ) DESC,
+      sequence,
+      a.goodsName
+  </select>
+
+  <sql id="query_params">
+    <if test="goodsReq.categoryId != null">
+      AND a.categoryId = #{goodsReq.categoryId}
+    </if>
+    <if test="goodsReq.ids != null">
+      AND a.skuId in
+      <foreach collection="goodsReq.ids" close=")" item="item" open="(" separator="," >
+        #{item}
+      </foreach>
+    </if>
+
+    <if test="goodsReq.status != null and goodsReq.status != -2">
+      AND a.status = #{goodsReq.status}
+    </if>
+
+    <if test="goodsReq.status != null and goodsReq.status == -2">
+      AND a.status != -1
+    </if>
+
+    <if test="goodsReq.status == null">
+      AND a.status = 1
+    </if>
+    <if test="goodsReq.brandId != null">AND brandId = #{goodsReq.brandId }</if>
+    <if test="goodsReq.categoryId != null">AND categoryId = #{goodsReq.categoryId }</if>
+    <if test="goodsReq.model != null and goodsReq.model != ''">AND goodsName like "%"#{goodsReq.model}"%"</if>
+  </sql>
+  <select id="getGoodsById" parameterType="int" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Goods_Column"/>, b. NAME AS brandName,
+      c.path_name AS categoryPathName,
+      f.id AS valueId,
+      f.goods_id,
+      f.attribute_id,
+      f.attribute_value,
+      f.can_choose,
+      f. NAME,
+      (
+        SELECT
+          NAME
+        FROM
+          recovery_category
+        WHERE
+          id = a.categoryId
+      ) categoryName
+    FROM
+      recovery_goods a,
+      recovery_brand b,
+      recovery_category c,
+      (
+        SELECT
+          d.*, e. NAME
+        FROM
+          recovery_goods_attribute d,
+          recovery_attribute e
+        WHERE
+          d.attribute_id = e.id
+        AND d.goods_id = #{id}
+      ) f
+    WHERE
+      a.brandId = b.id
+    AND a.categoryId = c.id
+    AND f.goods_id = a.skuId
+    AND a.skuId = #{id}
+    ORDER BY
+      a.sequence,
+      f.goods_id,
+      f.attribute_id
+  </select>
+  <insert id="insertGoods" parameterType="com.jiuheng.order.domain.GoodsReq" useGeneratedKeys="true" keyProperty="goodsReq.id">
+    INSERT INTO recovery_goods (goodsName, pic, brandId, categoryId, indexPath, createTime, updateTime, updator, status)
+    VALUES (#{goodsReq.model} ,#{goodsReq.pic} ,#{goodsReq.brandId} ,#{goodsReq.categoryId} ,#{goodsReq.indexPath} ,SYSDATE(), SYSDATE(),null, #{goodsReq.status})
+  </insert>
+
+  <update id="updateGoods" parameterType="com.jiuheng.order.domain.GoodsReq">
+    UPDATE recovery_goods
+    <set>
+      <if test="goodsReq.model != null and goodsReq.model != '' "> goodsName = #{goodsReq.model} ,</if>
+      <if test="goodsReq.pic != null "> pic = #{goodsReq.pic} ,</if>
+      <if test="goodsReq.brandId != null "> brandId = #{goodsReq.brandId} ,</if>
+      <if test="goodsReq.categoryId != null "> categoryId = #{goodsReq.categoryId} ,</if>
+      <if test="goodsReq.indexPath != null "> indexPath = #{goodsReq.indexPath} ,</if>
+      updateTime = sysdate(),
+      <if test="goodsReq.status != null "> status = #{goodsReq.status} ,</if>
+      <if test="goodsReq.sequence != null "> sequence = #{goodsReq.sequence} ,</if>
+    </set>
+    WHERE skuId = #{goodsReq.id}
+  </update>
+</mapper>
