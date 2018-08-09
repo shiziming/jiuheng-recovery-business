@@ -204,18 +204,18 @@
             });
         });
 
-        //$("#device_upload_pic_btn").ajaxUpload({
-        //    fileType:'pic',
-        //    action:ctx+"/imgFileUpload",
-        //    onComplete:function(file,response){
-        //        alert(response.url);
-        //        $("input:hidden[name=pic]").val(response.url);
-        //        if($("input:hidden[name=pic]").siblings("img")[0] != undefined){
-        //            $("input:hidden[name=pic]").siblings("img").remove();
-        //        }
-        //        $('<img src="${uploadFilePath}'+ response.url+'" width="90" height="90">').insertAfter("input:hidden[name=pic]");
-        //    }
-        //});
+        $("#device_upload_pic_btn").ajaxUpload({
+            fileType:'pic',
+            action:ctx+"/imgFileUpload",
+            onComplete:function(file,response){
+                alert(response.url);
+                $("input:hidden[name=pic]").val(response.url);
+                if($("input:hidden[name=pic]").siblings("img")[0] != undefined){
+                    $("input:hidden[name=pic]").siblings("img").remove();
+                }
+                $('<img src="${uploadFilePath}'+ response.url+'" width="90" height="90">').insertAfter("input:hidden[name=pic]");
+            }
+        });
 
         $(".add_device_attribute").click(function(){
             var $this = $(this);

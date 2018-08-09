@@ -19,4 +19,9 @@ public interface DubboGoodsService {
 
     Response<Boolean> updateGoods(GoodsReq goodsReq);
 
+    Response<Boolean> updateGoodsStatus(GoodsReq goodsReq);
+
+    Response<Boolean> deleteGoods(GoodsReq goodsReq);
+
+    Response<Boolean> duplicateGoods(Integer goodsId, String userName);
 }

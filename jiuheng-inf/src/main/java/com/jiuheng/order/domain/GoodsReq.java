@@ -55,4 +55,12 @@ public class GoodsReq implements Serializable{
      * 排序
      */
     private Integer sequence;
+    /**
+     * 修改/创建人
+     */
+    private String updator;
+    /**
+     * 修改时间
+     */
+    private String updateTime;
 }

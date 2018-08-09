@@ -9,6 +9,7 @@ import com.jiuheng.order.dubbo.DubboCategoryService;
 import com.jiuheng.order.dubbo.DubboGoodsService;
 import com.jiuheng.order.respResult.Response;
 import com.jiuheng.order.respResult.SearchResult;
+import com.jiuheng.web.utils.SysUser;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,8 @@ public class GoodsController {
     @ResponseBody
     public Response<Boolean> saveDevice(GoodsReq goodsReq, String updateToken, HttpServletRequest request){
         Response<Boolean> result = null;
+        SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
+        goodsReq.setUpdator(sysUser.getUserName());
         if(goodsReq.getId() == null){
             result = dubboGoodsService.saveGoods(goodsReq);
         }else{
@@ -103,6 +106,45 @@ public class GoodsController {
                 }
             }*/
         }
+        return result;
+    }
+
+    @RequestMapping("editStatus")
+    @ResponseBody
+    public Response<Boolean> editStatus(Integer id, Integer status, HttpServletRequest request) {
+        Response<Boolean> result = null;
+        GoodsReq goodsReq = new GoodsReq();
+        SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
+        goodsReq.setId(id);
+        goodsReq.setStatus(status);
+        goodsReq.setUpdator(sysUser.getUserAccount());
+        result = dubboGoodsService.updateGoodsStatus(goodsReq);
+        return result;
+    }
+
+    @RequestMapping("deleteGoods")
+    @ResponseBody
+    public Response<Boolean> deleteGoods(Integer id ,HttpServletRequest request){
+        Response<Boolean> result = null;
+        if(id == null || id <= 0){
+            throw new IllegalArgumentException("未找到设备");
+        }
+        SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
+        GoodsReq goodsReq = new GoodsReq();
+        goodsReq.setId(id);
+        goodsReq.setStatus(-1);
+        goodsReq.setUpdator(sysUser.getUserName());
+        result = dubboGoodsService.deleteGoods(goodsReq);
+        return result;
+    }
+
+    @RequestMapping("duplicateGoods")
+    public Response<Boolean> duplicateGoods(Integer id,HttpServletRequest request){
+        if(id == null || id <= 0){
+            throw new IllegalArgumentException("未找到设备");
+        }
+        SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
+        Response<Boolean> result = dubboGoodsService.duplicateGoods(id,sysUser.getUserName());
         return result;
     }
 }

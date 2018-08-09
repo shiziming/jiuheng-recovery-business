@@ -18,6 +18,8 @@ import com.jiuheng.order.utils.EasyUiDataGridUtil;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,11 +58,16 @@ public class DubboGoodsServiceImp implements DubboGoodsService{
 
     @Override
     public Response<GoodsResp> getGoodsById(Integer goodsId) {
-        GoodsResp resp = null;
-        if (goodsId > 0) {
-            resp = goodsMapper.getGoodsById(goodsId);
+        try {
+            GoodsResp resp = null;
+            if (goodsId > 0) {
+                resp = goodsMapper.getGoodsById(goodsId);
+            }
+            return Response.ok(resp);
+        } catch (Exception e) {
+            log.error("DubboGoodsService.getGoodsById",e);
+            return Response.fail(e.getMessage());
         }
-        return Response.ok(resp);
 
     }
 
@@ -133,4 +140,56 @@ public class DubboGoodsServiceImp implements DubboGoodsService{
 
         goodsReq.setIndexPath(categoryResp.getPathName() + " >> " + brand.getName() + " >> " + goodsReq.getModel());
     }
+
+    @Override
+    public Response<Boolean> updateGoodsStatus(GoodsReq goodsReq) {
+        try {
+            goodsMapper.updateGoods(goodsReq);
+            return Response.ok(Boolean.TRUE);
+        } catch (Exception e) {
+            log.error("DubboGoodsService.updateGoodsStatus",e);
+            return Response.fail(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public Response<Boolean> deleteGoods(GoodsReq goodsReq) {
+        try {
+            goodsMapper.updateGoods(goodsReq);
+            return Response.ok(Boolean.TRUE);
+        } catch (Exception e) {
+            log.error("DubboGoodsService.deleteGoods",e);
+            return Response.fail(e.getMessage());
+        }
+    }
+
+    @Override
+    public Response<Boolean> duplicateGoods(Integer goodsId,String userName){
+
+        try {
+            GoodsResp resp = goodsMapper.getGoodsById(goodsId);
+            GoodsReq rep = new GoodsReq();
+            BeanUtils.copyProperties(resp, rep);
+
+            rep.setId(null);
+            rep.setModel(resp.getModel() + "_副本");
+            rep.setCreateTime(null);
+            rep.setUpdateTime(null);
+            rep.setUpdator(userName);
+            List<AttributeResp> attrs = resp.getAttrs();
+            if (attrs != null && !attrs.isEmpty()) {
+                for (AttributeResp attr : attrs) {
+                    attr.setId(null);
+                }
+            }
+
+            saveGoods(rep);
+            return Response.ok(Boolean.TRUE);
+        } catch (BeansException e) {
+            log.error("DubboGoodsService.duplicateGoods",e);
+            return Response.fail(e.getMessage());
+        }
+    }
+
 }

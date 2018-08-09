@@ -40,6 +40,8 @@
 <div id="device_dlg_div"></div>
 <div id="device_Service_div"></div>
 <script type="text/javascript" src="common/js/common/prototype.js"></script>
+<script type="text/javascript" src="common/js/common/ajaxupload.js"></script>
+<script type="text/javascript" src="common/js/common/uploadFile.js"></script>
 <%--<script type="text/javascript" src="${ctx}/resources/easyui/jquery-1.9.0.min.js"></script>--%>
 <%--<script type="text/javascript" src="${ctx}/resources/easyui/easyui-lang-zh_CN.js"></script>--%>
 <%--<script type="text/javascript" src="${ctx}/resources/easyui/jquery.easyui.min.js"></script>--%>
@@ -166,9 +168,9 @@
 
     $.messager.confirm("提示","确定删除这条记录？",function(r){
       if(r){
-        var url = ctx +"/device/deleteDevice?id="+selected.id;
+        var url = "goods/deleteGoods?id="+selected.id;
         $.post(url, null, function(data){
-          if(data.result == 1){
+          if(data.result == true){
             $.messager.alert("提示","删除设备成功","info");
             reloadDeviceList();
           }
@@ -207,9 +209,9 @@
 
     $.messager.confirm("提示","确定"+op+"这条记录？",function(r){
       if(r){
-        var url = ctx +"/device/editStatus?id="+selected.id + "&status=" + s;
+        var url = "goods/editStatus?id="+selected.id + "&status=" + s;
         $.post(url, null, function(data){
-          if(data.result == 1){
+          if(data.result == true){
             $.messager.alert("提示",op+"设备成功","info");
             reloadDeviceList();
           }
@@ -243,10 +245,12 @@
 
     $.messager.confirm("提示", "确定复制设备信息吗？", function(r){
       if(r){
-        $.post(ctx +"/device/duplicateDevice?id="+selected.id , null ,function(data){
-          if(data.result ==1){
+        $.post("goods/duplicateGoods?id="+selected.id , null ,function(data){
+          if(data.result ==true){
             $.messager.alert("提示","复制成功", "info");
             reloadDeviceList();
+          }else{
+            $.messager.alert("提示","复制失败","info");
           }
         },"json");
       }

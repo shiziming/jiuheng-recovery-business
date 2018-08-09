@@ -65,4 +65,8 @@ public class GoodsResp implements Serializable{
      * 属性值
      */
     private List<AttributeResp> attrs;
+    /**
+     * 修改/创建人
+     */
+    private String updator;
 }

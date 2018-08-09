@@ -10,7 +10,9 @@
 </form>
 <table id="device_category_data_div"></table>
 <div id="device_category_dlg_div"></div>
+<script type="text/javascript" src="common/js/common/ajaxupload.js"></script>
 <script type="text/javascript" src="common/js/common/prototype.js"></script>
+<script type="text/javascript" src="common/js/common/uploadFile.js"></script>
 <script type="text/javascript">
     $(function(){
     var dg, currentRow;

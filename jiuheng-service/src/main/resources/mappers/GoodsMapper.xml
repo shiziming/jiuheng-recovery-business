@@ -13,6 +13,7 @@
     <result column="status" jdbcType="INTEGER" property="status"/>
     <result column="createTime" jdbcType="VARCHAR" property="createTime"/>
     <result column="updateTime" jdbcType="VARCHAR" property="updateTime"/>
+    <result column="updator" jdbcType="VARCHAR" property="updator"/>
     <result column="brandName" jdbcType="VARCHAR" property="brandName"/>
     <result column="categoryPathName" jdbcType="VARCHAR" property="categoryPathName"/>
     <collection property="attrs" resultMap="RMDeviceAttributeValue" column="goods_id" />
@@ -27,10 +28,10 @@
     <result column="name" property="name" />
   </resultMap>
   <sql id="Base_Column_List">
-    a.skuId as id,a.goodsName as model,a.pic,a.brandId,a.categoryId,a.indexPath,a.property,a.sequence,a.status,a.createTime,a.updateTime,b.name as brandName,c.path_name as categoryPathName
+    a.skuId as id,a.goodsName as model,a.pic,a.brandId,a.categoryId,a.indexPath,a.property,a.sequence,a.status,a.createTime,a.updateTime,a.updator,b.name as brandName,c.path_name as categoryPathName
   </sql>
   <sql id="Goods_Column">
-    a.skuId as id,a.goodsName as model,a.pic,a.brandId,a.categoryId,a.indexPath,a.property,a.sequence,a.status,a.createTime,a.updateTime
+    a.skuId as id,a.goodsName as model,a.pic,a.brandId,a.categoryId,a.indexPath,a.property,a.sequence,a.status,a.createTime,a.updateTime,a.updator
   </sql>
   <select id="getGoodsList" parameterType="com.jiuheng.order.domain.GoodsReq" resultMap="BaseResultMap">
     SELECT
@@ -126,7 +127,7 @@
   </select>
   <insert id="insertGoods" parameterType="com.jiuheng.order.domain.GoodsReq" useGeneratedKeys="true" keyProperty="goodsReq.id">
     INSERT INTO recovery_goods (goodsName, pic, brandId, categoryId, indexPath, createTime, updateTime, updator, status)
-    VALUES (#{goodsReq.model} ,#{goodsReq.pic} ,#{goodsReq.brandId} ,#{goodsReq.categoryId} ,#{goodsReq.indexPath} ,SYSDATE(), SYSDATE(),null, #{goodsReq.status})
+    VALUES (#{goodsReq.model} ,#{goodsReq.pic} ,#{goodsReq.brandId} ,#{goodsReq.categoryId} ,#{goodsReq.indexPath} ,SYSDATE(), SYSDATE(),#{goodsReq.updator}, #{goodsReq.status})
   </insert>
 
   <update id="updateGoods" parameterType="com.jiuheng.order.domain.GoodsReq">
@@ -140,6 +141,7 @@
       updateTime = sysdate(),
       <if test="goodsReq.status != null "> status = #{goodsReq.status} ,</if>
       <if test="goodsReq.sequence != null "> sequence = #{goodsReq.sequence} ,</if>
+      <if test="goodsReq.updator != null "> updator = #{goodsReq.updator} ,</if>
     </set>
     WHERE skuId = #{goodsReq.id}
   </update>
