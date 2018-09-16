@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.domain.Menu">
+    <id column="id" jdbcType="VARCHAR" property="id"/>
+    <result column="pId" jdbcType="VARCHAR" property="pId"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="lnkUrl" jdbcType="VARCHAR" property="lnkUrl"/>
+    <result column="icon" jdbcType="VARCHAR" property="icon"/>
+  </resultMap>
+
+  <select id="queryMenu" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      menu;
+  </select>
+</mapper>

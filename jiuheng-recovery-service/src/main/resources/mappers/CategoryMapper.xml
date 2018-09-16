@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.domain.CategoryResp">
+    <id property="id" jdbcType="INTEGER" column="id"/>
+    <result property="fid" jdbcType="INTEGER" column="fid"/>
+    <result property="name" jdbcType="VARCHAR" column="name"/>
+    <result property="categoryPic" jdbcType="VARCHAR" column="category_pic"/>
+    <result property="sort" jdbcType="INTEGER" column="sort"/>
+    <result property="status" jdbcType="INTEGER" column="status"/>
+    <result property="pathId" jdbcType="VARCHAR" column="path_id"/>
+    <result property="pathName" jdbcType="VARCHAR" column="path_name"/>
+    <result property="createTime" jdbcType="VARCHAR" column="create_time"/>
+    <result property="updateTime" jdbcType="VARCHAR" column="update_time"/>
+    <result property="updator" jdbcType="VARCHAR" column="updator"/>
+    <collection property="subCategories" columnPrefix="sub_" resultMap="RMSubDeviceCategory"/>
+  </resultMap>
+  <resultMap id="RMSubDeviceCategory" type="com.jiuheng.service.domain.CategoryResp">
+    <id property="id" jdbcType="INTEGER" column="id"/>
+    <result property="fid" jdbcType="INTEGER" column="fid"/>
+    <result property="name" jdbcType="VARCHAR" column="name"/>
+    <result property="categoryPic" jdbcType="VARCHAR" column="category_pic"/>
+    <result property="sort" jdbcType="INTEGER" column="sort"/>
+    <result property="status" jdbcType="INTEGER" column="status"/>
+    <result property="pathId" jdbcType="VARCHAR" column="path_id"/>
+    <result property="pathName" jdbcType="VARCHAR" column="path_name"/>
+    <result property="createTime" jdbcType="VARCHAR" column="create_time"/>
+    <result property="updateTime" jdbcType="VARCHAR" column="update_time"/>
+    <result property="updator" jdbcType="VARCHAR" column="updator"/>
+  </resultMap>
+
+  <select id="getCategoryList" parameterType="com.jiuheng.service.domain.CategoryReq" resultMap="BaseResultMap">
+    SELECT
+      a.*, b.id AS sub_id,
+      b.fid AS sub_fid,
+      b. NAME AS sub_name,
+      b.path_id as sub_path_id
+    FROM
+      recovery_category a
+    LEFT JOIN recovery_category b ON a.id = b.fid
+    AND b. STATUS = 1
+    WHERE
+      a.fid =- 1
+    AND a. STATUS = 1
+  </select>
+  <select id="getCategoryById" parameterType="com.jiuheng.service.domain.CategoryReq" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      recovery_category
+    WHERE
+      id = #{id}
+  </select>
+
+  <update id="updateDeviceCategory" parameterType="com.jiuheng.service.domain.CategoryReq">
+    UPDATE recovery_category
+    <set>
+      <if test="category.fid != null">fid = #{category.fid },</if>
+      <if test="category.name != null and category.name != ''">name = #{category.name },</if>
+      <if test="category.categoryPic != null"> category_pic = #{category.categoryPic },</if>
+      <if test="category.sort != null">sort = #{category.sort },</if>
+      <if test="category.status != null">status = #{category.status },</if>
+      <if test="category.pathId != null">path_id = #{category.pathId },</if>
+      <if test="category.pathName != null"> path_name = #{category.pathName },</if>
+      update_time = SYSDATE(),
+      updator = #{category.updator }
+    </set>
+    WHERE ID = #{category.id}
+  </update>
+
+  <insert id="insertDeviceCategory" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO recovery_category(
+    fid,name,category_pic,sort,status,path_id,path_name,create_time,update_time,updator
+    )VALUES(
+    #{fid},#{name},#{categoryPic},#{sort},#{status},#{pathId},#{pathName},SYSDATE(),SYSDATE(),#{updator}
+    )
+  </insert>
+
+  <select id="getDeviceCategory" parameterType="map" resultMap="BaseResultMap">
+    SELECT *
+    from recovery_category dc
+    WHERE id = #{id}
+  </select>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.AttributeMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.domain.AttributeResp">
+    <id column="id" property="id" />
+    <result column="name" property="name" />
+    <result column="type" property="type" />
+  </resultMap>
+
+  <resultMap id="CategoryRecycleAttributeMap" type="com.jiuheng.service.domain.CategoryRecycleAttribute">
+    <id column="id" property="id" />
+    <result column="type" property="type" />
+    <result column="name" property="name" />
+    <collection property="goodsRecycleAttributeValueList" resultMap="goodsAttributeMap" column="attribute_id" />
+  </resultMap>
+
+  <resultMap id="goodsAttributeMap" type="com.jiuheng.service.domain.GoodsAttribute">
+    <id column="dev_rec_attr_id" property="id" />
+    <result column="goods_id" property="goodsId" />
+    <result column="attribute_id" property="attributeId" />
+    <result column="attribute_value" property="attributeValue" />
+    <result column="attribute_type" property="attributeType" />
+  </resultMap>
+  <select id="getAttributeList" parameterType="com.jiuheng.service.domain.AttributeReq" resultMap="BaseResultMap">
+    SELECT * FROM recovery_attribute
+    <where>
+      <include refid="query_params" />
+    </where>
+  </select>
+  <sql id="query_params">
+    <if test="attribute.name != null and attribute.name != ''">AND name like "%"#{attribute.name }"%"</if>
+    <if test="attribute.type != null and attribute.type != ''">AND type =#{attribute.type}</if>
+  </sql>
+  <select id="getCategoryAttributesByCategory" resultMap="BaseResultMap">
+    SELECT * FROM recovery_attribute a, recovery_category_attribute b
+    <where>
+      a.id = b.attribute_id
+      AND b.category_id = #{categoryId}
+    </where>
+  </select>
+
+  <insert id="insertCategoryAttribute" parameterType="map">
+    INSERT INTO recovery_category_attribute(attribute_id , category_id)
+    VALUES (#{attributeId}, #{categoryId})
+  </insert>
+
+  <delete id="deleteCategoryAttribute" parameterType="map">
+    DELETE FROM recovery_category_attribute
+    <where>
+      <if test="categoryId != null and categoryId > 0"> AND category_id = #{categoryId}</if>
+      <if test="attributeId != null and attributeId > 0"> AND attribute_id = #{attributeId}</if>
+      <if test="type != null"> and exists(select 1 from recovery_attribute where type=#{type} and recovery_category_attribute.attribute_id=recovery_attribute.id)</if>
+      <if test="categoryId == null and attributeId == null">AND 1=0</if>
+    </where>
+  </delete>
+  <insert id="insertGoodsAttributeValue" parameterType="com.jiuheng.service.domain.GoodsAttribute">
+     INSERT INTO recovery_goods_attribute ( goods_id, attribute_id, attribute_value, can_choose)
+              VALUES (#{goodsAttribute.goodsId}, #{goodsAttribute.attributeId}, #{goodsAttribute.attributeValue}, #{goodsAttribute.canChoose})
+  </insert>
+  <update id="updateGoodsAttributeValue" parameterType="com.jiuheng.service.domain.GoodsAttribute">
+    UPDATE recovery_goods_attribute
+    <set>
+      <if test="goodsAttribute.attributeValue != null">attribute_value = #{goodsAttribute.attributeValue},</if>
+      <if test="goodsAttribute.canChoose != null">can_choose = #{goodsAttribute.canChoose}, </if>
+      <if test="goodsAttribute.canChoose == null">can_choose = 0, </if>
+    </set>
+    WHERE id = #{goodsAttribute.id}
+  </update>
+
+  <insert id="insertGoodsRecycleAttributeValue" parameterType="com.jiuheng.service.domain.GoodsAttribute">
+    INSERT INTO recovery_recycle_attribute_value ( goods_id, attribute_id, attribute_value, attribute_type)
+    VALUES (#{goodsAttribute.goodsId}, #{goodsAttribute.attributeId}, #{goodsAttribute.attributeValue}, #{goodsAttribute.attributeType})
+  </insert>
+
+  <update id="updateGoodsRecycleAttributeValue" parameterType="com.jiuheng.service.domain.GoodsAttribute">
+    UPDATE recovery_recycle_attribute_value
+    <set>
+      <if test="goodsAttribute.attributeValue != null">attribute_value = #{goodsAttribute.attributeValue},</if>
+      <if test="goodsAttribute.attributeType != null">attribute_type = #{goodsAttribute.attributeType}, </if>
+    </set>
+    WHERE id = #{goodsAttribute.id}
+  </update>
+
+  <select id="getAllRecycleAttibuteWithValue" parameterType="map" resultMap="CategoryRecycleAttributeMap">
+    SELECT  a.id,a.name,a.type,d.id dev_rec_attr_id,d.goods_id,d.attribute_id,d.attribute_value,d.attribute_type FROM
+    (SELECT  * FROM  recovery_attribute a WHERE EXISTS( SELECT 1  FROM recovery_category_attribute ca WHERE a.id = ca.attribute_id and ca.category_id=#{categoryId})
+    <if test="attributeType!=null and attributeType >0 "> AND a.type = #{attributeType}</if>
+    ) a
+    LEFT JOIN (select * from recovery_recycle_attribute_value where goods_id = #{goodsId}) d ON d.attribute_id = a.id
+  </select>
+
+  <update id="updateAttribute" parameterType="com.jiuheng.service.domain.AttributeReq">
+    UPDATE recovery_attribute
+    set name = #{attribute.name},
+    type =#{attribute.type}
+    WHERE id = #{attribute.id}
+  </update>
+
+  <insert id="saveAttribute" parameterType="com.jiuheng.service.domain.AttributeReq">
+    INSERT INTO recovery_attribute (name,type) VALUES ( #{attribute.name},#{attribute.type})
+  </insert>
+</mapper>

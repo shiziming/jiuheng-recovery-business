@@ -64,7 +64,8 @@
 		<div id="closeright">当前页右侧全部关闭</div>
 		<div id="closeleft">当前页左侧全部关闭</div>
 	</div>
-  	<script type="text/javascript" src="common/js/index.js"></script>
+	<div id="center_tabs" class="easyui-tabs" data-options="tools:'#tab-tools',onContextMenu:function(e, title, index){window.tabsOnContextMenu(e, title, index);}"  fit="true" border="false"></div>
+	<script type="text/javascript" src="common/js/index.js"></script>
   	<script type="text/javascript" src="common/js/dateFormat.js"></script>
 </body>
 

@@ -7,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div id="device_window">
 <form id="device_search_form" name="device_search_form">
   <div>
     <span>分类</span>
@@ -39,6 +40,9 @@
 <div id="device_data_div"></div>
 <div id="device_dlg_div"></div>
 <div id="device_Service_div"></div>
+<div id="device_attr_search" class="easyui-panel"
+     data-options="closed:true, cache:false,border:false"></div>
+</div>
 <script type="text/javascript" src="common/js/common/prototype.js"></script>
 <script type="text/javascript" src="common/js/common/ajaxupload.js"></script>
 <script type="text/javascript" src="common/js/common/uploadFile.js"></script>
@@ -91,13 +95,11 @@
 
   function openRecycleAttrEdit(){
     var selected = $("#device_data_div").datagrid("getSelected");
-    var url = ctx +"/device/recycle?id="+selected.id;
+    var url = "goods/recycle?id="+selected.id;
     var title=selected.brandName+selected.model+'回收属性设置';
-    try{
-      window.parent.parent.addTabIframe(url,title);
-    }catch(e){
-      <%--processOrder('${info.sourceOrderId}');--%>
-    }
+    $("#device_window").hide();
+    $("#device_attr_search").panel({title:title, href:url});
+    $("#device_attr_search").panel('open');
   }
 
   var showBrandDialog = function (url, id) {
@@ -268,4 +270,5 @@
   function closeDevieDlg(){
     $("#device_dlg_div").dialog("close");
   }
+
 </script>

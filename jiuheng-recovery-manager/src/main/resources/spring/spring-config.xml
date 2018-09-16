@@ -40,5 +40,5 @@
 		<property name="baseDir" value="${images-base-path}"></property>
 	</bean>-->
 	
-	<import resource="spring-dubbo-client.xml" />
+	<import resource="../../../../../jiuheng-api/src/main/resources/META-INF/spring-dubbo-client.xml" />
 </beans>

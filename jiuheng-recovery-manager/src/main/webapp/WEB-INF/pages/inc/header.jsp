@@ -9,5 +9,4 @@
 <script type="text/javascript">
 	var ctx="${ctx}";
 	var picUrl="${picUrl}";
-	/* var ewmUrl="${ewmUrl}"; */
 </script>

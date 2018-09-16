@@ -1,22 +1,19 @@
 package com.jiuheng.web.controller;
 
-import com.jiuheng.order.domain.AttributeReq;
-import com.jiuheng.order.domain.AttributeResp;
-import com.jiuheng.order.domain.CategoryReq;
-import com.jiuheng.order.domain.CategoryResp;
-import com.jiuheng.order.dubbo.DubboAttributeService;
-import com.jiuheng.order.dubbo.DubboCategoryService;
-import com.jiuheng.order.respResult.Response;
-import com.jiuheng.order.respResult.SearchResult;
+import com.jiuheng.service.domain.AttributeReq;
+import com.jiuheng.service.domain.CategoryReq;
+import com.jiuheng.service.dubbo.DubboAttributeService;
+import com.jiuheng.service.dubbo.DubboCategoryService;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
 import com.jiuheng.web.utils.StringUtils;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -49,6 +46,7 @@ public class AttributeController {
         model.put("exist", attrByCateResult.getResult().getRows());
         return model;
     }
+
     @RequestMapping("saveCategoryAttributes")
     @ResponseBody
     public Response<Boolean> saveCategoryAttributes(Long categoryId, String attributes,String type){
@@ -83,6 +81,26 @@ public class AttributeController {
         deviceCategory.setUpdator(user.getPin());*/
         categoryReq.setStatus((byte)-1);
         Response<Boolean> result = dubboCategoryService.deleteDeviceCategory(categoryReq);
+        return result;
+    }
+
+
+    /**
+     * 保存分类属性
+     * @param attribute
+     * @param model
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("saveAttribute")
+    @ResponseBody
+    public Response<Boolean> saveAttribute(AttributeReq attribute){
+        Response<Boolean> result = null;
+        if(attribute.getId()!=null && attribute.getId()>0){
+            result = dubboAttributeService.updateAttribute(attribute);
+        }else{
+            result = dubboAttributeService.saveAttribute(attribute);
+        }
         return result;
     }
 }

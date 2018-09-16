@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.IndexMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.dto.BannerImage">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="linkUrl" jdbcType="VARCHAR" property="linkUrl"/>
+    <result column="imageUrl" jdbcType="VARCHAR" property="imageUrl"/>
+    <result column="sort" jdbcType="INTEGER" property="sort"/>
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="createUser" jdbcType="VARCHAR" property="createUser"/>
+  </resultMap>
+  <resultMap id="HotGoodsResultMap" type="com.jiuheng.service.dto.HotGoods">
+    <id column="goodsId" jdbcType="INTEGER" property="skuId"/>
+    <result column="goodsName" jdbcType="VARCHAR" property="goodsName"/>
+    <result column="imageUrl" jdbcType="VARCHAR" property="pic"/>
+    <result column="recoveryAveragePrice" jdbcType="DECIMAL" property="recoveryAveragePrice"/>
+  </resultMap>
+  <select id="getBannerImage" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      recovery_banner_image
+    WHERE
+      STATUS = 1
+  </select>
+  <select id="getHotGoodsList" resultMap="HotGoodsResultMap">
+    SELECT
+      a.skuId,
+      a.recoveryAveragePrice,
+      b.goodsName,
+     	b.pic
+    FROM
+      recovery_hot_goods a
+    LEFT JOIN recovery_goods b ON a.skuId = b.skuId
+    AND a. STATUS = 1
+  </select>
+</mapper>

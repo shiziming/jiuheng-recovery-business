@@ -1,14 +1,16 @@
 package com.jiuheng.web.controller;
 
-import com.jiuheng.order.domain.BrandReq;
-import com.jiuheng.order.domain.CategoryReq;
-import com.jiuheng.order.domain.GoodsReq;
-import com.jiuheng.order.domain.GoodsResp;
-import com.jiuheng.order.dubbo.DubboBrandService;
-import com.jiuheng.order.dubbo.DubboCategoryService;
-import com.jiuheng.order.dubbo.DubboGoodsService;
-import com.jiuheng.order.respResult.Response;
-import com.jiuheng.order.respResult.SearchResult;
+import com.jiuheng.service.domain.BrandReq;
+import com.jiuheng.service.domain.CategoryReq;
+import com.jiuheng.service.domain.GoodsAttribute;
+import com.jiuheng.service.domain.GoodsReq;
+import com.jiuheng.service.domain.GoodsResp;
+import com.jiuheng.service.dubbo.DubboAttributeService;
+import com.jiuheng.service.dubbo.DubboBrandService;
+import com.jiuheng.service.dubbo.DubboCategoryService;
+import com.jiuheng.service.dubbo.DubboGoodsService;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
 import com.jiuheng.web.utils.SysUser;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +34,9 @@ public class GoodsController {
     @Autowired
     private DubboCategoryService dubboCategoryService;
     @Autowired
-    DubboBrandService dubboBrandService;
+    private DubboBrandService dubboBrandService;
+    @Autowired
+    private DubboAttributeService dubboAttributeService;
 
     @RequestMapping("/index")
     @ResponseBody
@@ -68,7 +72,7 @@ public class GoodsController {
         return model;
     }
 
-    @RequestMapping("saveGoods")
+    @RequestMapping("/saveGoods")
     @ResponseBody
     public Response<Boolean> saveDevice(GoodsReq goodsReq, String updateToken, HttpServletRequest request){
         Response<Boolean> result = null;
@@ -122,7 +126,7 @@ public class GoodsController {
         return result;
     }
 
-    @RequestMapping("deleteGoods")
+    @RequestMapping("/deleteGoods")
     @ResponseBody
     public Response<Boolean> deleteGoods(Integer id ,HttpServletRequest request){
         Response<Boolean> result = null;
@@ -138,7 +142,8 @@ public class GoodsController {
         return result;
     }
 
-    @RequestMapping("duplicateGoods")
+    @RequestMapping("/duplicateGoods")
+    @ResponseBody
     public Response<Boolean> duplicateGoods(Integer id,HttpServletRequest request){
         if(id == null || id <= 0){
             throw new IllegalArgumentException("未找到设备");
@@ -146,5 +151,65 @@ public class GoodsController {
         SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
         Response<Boolean> result = dubboGoodsService.duplicateGoods(id,sysUser.getUserName());
         return result;
+    }
+
+    @RequestMapping("/recycle")
+    @ResponseBody
+    public ModelAndView recycle(Integer id,Integer type){
+        GoodsReq goods=new GoodsReq();
+        goods.setId(id);
+        if(goods.getId() == null || goods.getId() <= 0){
+            throw new IllegalArgumentException("修改设备信息出错：参数不正确");
+        }
+        Response<GoodsResp> result = dubboGoodsService.getGoodsById(goods.getId());
+        ModelAndView model = new ModelAndView("goods/goodsRecycleAttribute");
+        model.addObject("device", result.getResult());
+        return model;
+    }
+
+    @RequestMapping("/saveRecycle")
+    public ModelAndView saveRecycle(GoodsReq goods, String updateToken, HttpServletRequest request){
+        ModelMap model = new ModelMap();
+        List<GoodsAttribute> attrs = goods.getAttrs();
+        //移除掉value为空的值
+        for(int i = attrs.size()-1;i>=0;i--){
+            if(attrs.get(i).getId()==null){
+                if(attrs.get(i).getAttributeValue()==""){
+                    attrs.remove(i);
+                }
+            }
+        }
+
+        if(goods.getId() != null){
+            if(attrs!=null&&attrs.size()>0){
+                for (int i = 0; i <attrs.size() ; i++) {
+                    GoodsAttribute goodsAttribute = attrs.get(i);
+                    goodsAttribute.setGoodsId(goods.getId());
+                    if(goodsAttribute.getId()== null){
+                        dubboAttributeService.insertGoodsRecycleAttributeValue(goodsAttribute);
+                    }else{
+                        dubboAttributeService.updateGoodsRecycleAttributeValue(goodsAttribute);
+                    }
+                }
+            }
+        }
+        return new ModelAndView("jsonView", model);
+    }
+
+    @RequestMapping("goodsRecycleAttributeValue")
+    @ResponseBody
+    public ModelAndView goodsRecycleAttributeValue(Integer id,Integer type){
+        GoodsReq goods=new GoodsReq();
+        goods.setId(id);
+        if(goods.getId() == null || goods.getId() <= 0){
+            throw new IllegalArgumentException("修改设备信息出错：参数不正确");
+        }
+        Response<GoodsResp> goodsResp = dubboGoodsService.getGoodsById(goods.getId());
+        Response<SearchResult> recycleAttributeList = dubboAttributeService.getAllRecycleAttibuteWithValue(goodsResp.getResult().getCategoryId(), goodsResp.getResult().getId(), type);
+        ModelAndView model = new ModelAndView("goods/goodsRecycleAttributeValue");
+        model.addObject("recycleAttributeList",recycleAttributeList.getResult().getRows());
+        model.addObject("device", goodsResp.getResult());
+        model.addObject("type", type);
+        return model;
     }
 }

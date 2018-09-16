@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<dubbo:application name="jiuheng-api"/>
+	<dubbo:registry id="clientZk" protocol="zookeeper" address="${dubbo.zookeeper.client}"/>
+
+	<!-- 订单服务 -->
+	<dubbo:reference id="dubboLoginService" interface="com.jiuheng.service.dubbo.DubboLoginService"
+		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+</beans>

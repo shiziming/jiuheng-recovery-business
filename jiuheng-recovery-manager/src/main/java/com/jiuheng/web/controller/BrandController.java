@@ -1,13 +1,13 @@
 package com.jiuheng.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.jiuheng.order.domain.Brand;
-import com.jiuheng.order.domain.BrandReq;
-import com.jiuheng.order.domain.BrandResp;
-import com.jiuheng.order.respResult.Response;
-import com.jiuheng.order.respResult.SearchResult;
-import com.jiuheng.order.dubbo.DubboBrandService;
-import com.jiuheng.order.dubbo.DubboCategoryService;
+import com.jiuheng.service.domain.Brand;
+import com.jiuheng.service.domain.BrandReq;
+import com.jiuheng.service.domain.BrandResp;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
+import com.jiuheng.service.dubbo.DubboBrandService;
+import com.jiuheng.service.dubbo.DubboCategoryService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

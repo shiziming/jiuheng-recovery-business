@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.UserMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.dto.login.MemberInfo">
+    <id column="id" property="userId" />
+    <result column="name" property="name" />
+    <result column="phone" property="phone" />
+    <result column="password" property="password" />
+  </resultMap>
+  <resultMap id="UserInfoMap" type="com.jiuheng.service.dto.UserInfo">
+    <id column="id" property="userId" />
+    <result column="name" property="name" />
+    <result column="phone" property="phone" />
+    <result column="password" property="password" />
+    <result column="bankCard" property="bankCard" />
+    <result column="bank" property="bank" />
+    <result column="userName" property="userName" />
+    <result column="createTime" property="createTime" />
+  </resultMap>
+  <resultMap id="UserAddrMap" type="com.jiuheng.service.dto.UserAddr">
+    <id column="id" property="id" />
+    <result column="userId" property="userId" />
+    <result column="userName" property="userName" />
+    <result column="phone" property="phone" />
+    <result column="province" property="province" />
+    <result column="provinceName" property="provinceName" />
+    <result column="city" property="city" />
+    <result column="cityName" property="cityName" />
+    <result column="district" property="district" />
+    <result column="districtName" property="districtName" />
+    <result column="detailed" property="detailed" />
+    <result column="zipCode" property="zipCode" />
+    <result column="isDefault" property="isDefault" />
+  </resultMap>
+  <select id="checkUserLogin" parameterType="com.jiuheng.service.dto.login.LoginRequest" resultMap="BaseResultMap">
+    SELECT
+      id,
+      name,
+      phone,
+      password
+    FROM
+      user_info
+    WHERE
+      phone = #{loginRequest.phone}
+  </select>
+  <insert id="registerLogin" parameterType="com.jiuheng.service.dto.login.LoginRequest" >
+    INSERT INTO user_info (
+      id,
+      NAME,
+      phone,
+      password,
+      createTime
+      )
+      VALUES
+      (
+      #{loginRequest.id},
+      #{loginRequest.phone},
+      #{loginRequest.phone},
+      #{loginRequest.password},
+      NOW()
+      )
+  </insert>
+  <select id="getUserInfo" parameterType="long" resultMap="UserInfoMap">
+    SELECT
+      id,
+      name,
+      username,
+      phone,
+      password,
+      bank_card,
+      bank,
+      createTime
+    FROM
+      user_info
+    WHERE
+      id = #{userId}
+  </select>
+  <update id="updateUserInfo" parameterType="com.jiuheng.service.dto.UserInfo">
+    UPDATE user_info
+    SET
+      username = #{userName},
+      bank_card = #{bankCard},
+      phone = #{phone}
+    WHERE
+      id = #{phone}
+  </update>
+  <select id="getUserAddr" parameterType="long" resultMap="UserAddrMap">
+    SELECT
+      id,
+      userId,
+      userName,
+      phone,
+      province,
+      provinceName,
+      city,
+      cityName,
+      district,
+      districtName,
+      detailed,
+      zipCode,
+      isDefault
+    FROM
+      user_addr
+    WHERE
+      userId = #{userId}
+  </select>
+  <delete id="delUserAddr" parameterType="com.jiuheng.service.dto.UserAddr">
+    DELETE
+    FROM
+      user_addr
+    WHERE
+      id = #{userAddr.id}
+    AND useId = #{userAddr.userId}
+  </delete>
+  <update id="editAddress" parameterType="com.jiuheng.service.dto.UserAddr">
+    UPDATE user_addr
+    SET userName = #{userAddr.userName},
+     phone = #{userAddr.phone},
+     province = #{userAddr.province},
+     city = #{userAddr.city},
+     district = #{userAddr.district},
+     detailed = #{userAddr.detailed},
+     isDefault = #{userAddr.isDefault}
+    WHERE
+      id = #{userAddr.id}
+    AND userId = #{userAddr.userId}
+  </update>
+  <insert id="addAddress" parameterType="com.jiuheng.service.dto.UserAddr">
+    INSERT INTO user_addr (
+      userId,
+      userName,
+      phone,
+      province,
+      city,
+      district,
+      detailed,
+      isDefault,
+      createTime
+    )
+    VALUES
+      (
+        #{userAddr.userId},
+        #{userAddr.userName},
+        #{userAddr.phone},
+        #{userAddr.province},
+        #{userAddr.city},
+        #{userAddr.district},
+        #{userAddr.detailed},
+        #{userAddr.isDefault},
+        NOW()
+      );
+  </insert>
+</mapper>

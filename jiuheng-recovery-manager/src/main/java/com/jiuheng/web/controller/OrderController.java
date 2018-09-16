@@ -1,9 +1,9 @@
 package com.jiuheng.web.controller;
 
-import com.jiuheng.order.domain.RecoveryOrderReq;
-import com.jiuheng.order.respResult.Response;
-import com.jiuheng.order.respResult.SearchResult;
-import com.jiuheng.order.dubbo.DubboOrderService;
+import com.jiuheng.service.domain.RecoveryOrderReq;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
+import com.jiuheng.service.dubbo.DubboOrderService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

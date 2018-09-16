@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.BranchMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.domain.BrandResp">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="fid" jdbcType="INTEGER" property="fid"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="pic" jdbcType="VARCHAR" property="pic"/>
+    <result column="sort" jdbcType="INTEGER" property="sort"/>
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="createTime" jdbcType="VARCHAR" property="create_time"/>
+    <result column="updateTime" jdbcType="VARCHAR" property="update_time"/>
+    <result column="updator" jdbcType="VARCHAR" property="updator"/>
+    <collection property="categories" resultMap="RMBrandCategory" foreignColumn="brand_id"/>
+  </resultMap>
+  <resultMap id="RMBrandCategory" type="com.jiuheng.service.domain.BrandCategory">
+    <result column="brand_id" property="brandId"/>
+    <result column="category_id" property="categoryId"/>
+    <result column="brand_name" property="brandName"/>
+    <result column="category_Name" property="categoryName"/>
+  </resultMap>
+  <resultMap id="BrandsMap" type="com.jiuheng.service.domain.CategoryResp">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <collection property="brands" resultMap="CategoryBrandMap" columnPrefix="brand_" />
+  </resultMap>
+  <resultMap id="CategoryBrandMap" type="com.jiuheng.service.domain.Brand">
+    <id column="id" property="id"/>
+    <result column="name" property="name"/>
+    <result column="pic" property="pic"/>
+  </resultMap>
+
+  <resultMap id="GoodsMap" type="com.jiuheng.service.domain.BrandResp">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <collection property="goods" resultMap="BrandGoodsMap" columnPrefix="goods_" />
+  </resultMap>
+  <resultMap id="BrandGoodsMap" type="com.jiuheng.service.domain.GoodsResp">
+    <id column="skuId" property="id"/>
+    <result column="goodsName" property="model"/>
+    <result column="pic" property="pic"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    b.id,b.fid,b.name,b.pic,b.status,b.sort,b.create_time,b.update_time,b.updator,b.id as brand_id,b.name as brand_name,d.id as category_id,d.name as category_Name
+  </sql>
+  <sql id="query_params">
+    status != - 1
+    <if test="brandReq.id != null">
+      AND id=#{brandReq.id}
+    </if>
+    <if test="brandReq.name != null and brandReq.name != ''">
+      AND name=#{brandReq.name}
+    </if>
+    <if test="brandReq.status != null and brandReq.status == -2">
+      AND status != - 1
+    </if>
+    <if test="brandReq.status != null and brandReq.status != -2">
+      AND status=#{brandReq.status}
+    </if>
+    ORDER BY id,sort
+  </sql>
+  <select id="getAllBranch" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List"/>
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          recovery_brand
+        <where>
+          <include refid="query_params"/>
+        </where>
+        <if test="start >= 0 and row > 0">
+          limit #{start}, #{row}
+        </if>
+      ) b,
+      recovery_brand_category c,
+      recovery_category d
+    WHERE
+      b.id = c.brand_id
+    AND c.category_id = d.id
+  </select>
+  <select id="getBrandById" parameterType="com.jiuheng.service.domain.BrandReq" resultType="com.jiuheng.service.domain.Brand">
+    SELECT
+      *
+    FROM
+      recovery_brand
+    WHERE
+      id = #{brandReq.id}
+  </select>
+  <update id="updateBrand" parameterType="com.jiuheng.service.domain.BrandReq">
+    UPDATE recovery_brand
+    <set>
+      <if test="brand.name != null and brand.name != ''">name = #{brand.name },</if>
+      <if test="brand.status != null">status = #{brand.status },</if>
+    </set>
+    WHERE id = #{brand.id}
+  </update>
+  <delete id="deleteBrandCategory" parameterType="com.jiuheng.service.domain.BrandCategory">
+    DELETE FROM recovery_brand_category
+    WHERE brand_id = #{brandCategory.brandId}
+    <if test="brandCategory.categoryId != null">
+      AND category_id = #{brandCategory.categoryId}
+    </if>
+  </delete>
+  <insert id="insertBrandCategory" parameterType="com.jiuheng.service.domain.BrandCategory">
+    INSERT INTO recovery_brand_category (brand_id, category_id)
+    VALUES (#{brandCategory.brandId}, #{brandCategory.categoryId})
+  </insert>
+
+  <insert id="insertBrands" useGeneratedKeys="true" keyProperty="brand.id"
+    parameterType="com.jiuheng.service.domain.BrandReq">
+    INSERT INTO recovery_brand(name, pic, status, create_time)
+    VALUES (#{brand.name}, #{brand.pic}, #{brand.status}, #{brand.createTime})
+  </insert>
+
+  <select id="getBrandByCategory" resultMap="BrandsMap">
+  SELECT
+    a.category_id as id,
+    c. name as name,
+    a.brand_id as brand_id,
+    b. name as brand_name,
+    b.pic as brand_pic
+  FROM
+    recovery_brand_category a
+  LEFT JOIN recovery_brand b ON a.brand_id = b.id
+  LEFT JOIN recovery_category c ON a.category_id = c.id
+  WHERE
+    a.category_id = #{categoryId}
+  AND
+    b.status = 1
+  </select>
+  <select id="getGoodsByBrand">
+  SELECT
+    b.id,
+    b.name,
+    g.skuId AS goods_skuId,
+    g.goodsName AS goods_goodsName,
+    g.pic AS goods_pic
+  FROM
+    recovery_brand b
+  LEFT JOIN recovery_goods g ON b.id = g.brandId
+  WHERE
+    b.id = #{brandId}
+  </select>
+</mapper>

@@ -1,7 +1,7 @@
 package com.jiuheng.web.controller;
 
-import com.jiuheng.order.domain.Menu;
-import com.jiuheng.order.dubbo.DubboMenuService;
+import com.jiuheng.service.domain.Menu;
+import com.jiuheng.service.dubbo.DubboMenuService;
 import com.jiuheng.web.utils.SysUser;
 import java.util.List;
 import javax.annotation.Resource;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
