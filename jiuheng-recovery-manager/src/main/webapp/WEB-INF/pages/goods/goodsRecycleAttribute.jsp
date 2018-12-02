@@ -24,13 +24,13 @@
 <div style="margin:0px 0 10px 0;"></div>
 <div  id="tt" class="easyui-tabs" style="width:1100px;height:800px">
     <div title="基本属性" style="padding:10px" id="bean">
-        <iframe src="goods/goodsRecycleAttributeValue?id=${device.id}&type=1" width="100%" height="100%" style="border: 0px"></iframe>
+        <iframe src="/jiuheng-recovery-manager/goods/goodsRecycleAttributeValue?id=${device.id}&type=1" width="100%" height="100%" style="border: 0px"></iframe>
     </div>
     <div title="功能属性" style="padding:10px" id="action">
-        <iframe src="goods/goodsRecycleAttributeValue?id=${device.id}&type=2" width="100%" height="100%" style="border: 0px"></iframe>
+        <iframe src="/jiuheng-recovery-manager/goods/goodsRecycleAttributeValue?id=${device.id}&type=2" width="100%" height="100%" style="border: 0px"></iframe>
     </div>
     <div title="外观属性"  style="padding:10px"  id="appearance">
-        <iframe src="goods/goodsRecycleAttributeValue?id=${device.id}&type=3" width="100%" height="100%" style="border: 0px"></iframe>
+        <iframe src="/jiuheng-recovery-manager/goods/goodsRecycleAttributeValue?id=${device.id}&type=3" width="100%" height="100%" style="border: 0px"></iframe>
     </div>
 </div>
 <input type="hidden" value="${device.id}" id="deviceId">

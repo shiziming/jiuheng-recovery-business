@@ -44,6 +44,7 @@ public class AttributeController {
         Response<SearchResult> attrByCateResult= dubboAttributeService.getCategoryAttributesByCategory(categoryId);
         model.put("rows", attrResult.getResult().getRows());
         model.put("exist", attrByCateResult.getResult().getRows());
+        model.put("total",0);
         return model;
     }
 
@@ -88,7 +89,6 @@ public class AttributeController {
     /**
      * 保存分类属性
      * @param attribute
-     * @param model
      * @return
      * @throws IOException
      */

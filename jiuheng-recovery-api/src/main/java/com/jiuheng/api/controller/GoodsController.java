@@ -1,8 +1,10 @@
 package com.jiuheng.api.controller;
 
+import com.jiuheng.service.domain.AttributeResp;
 import com.jiuheng.service.domain.Brand;
 import com.jiuheng.service.domain.BrandResp;
 import com.jiuheng.service.domain.CategoryResp;
+import com.jiuheng.service.domain.GoodsAttribute;
 import com.jiuheng.service.dubbo.DubboBrandService;
 import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.service.respResult.CommonResult;
@@ -59,5 +61,22 @@ public class GoodsController {
         response = new UnknowResponse();
     }
     return response;
+    }
+
+    @RequestMapping(value = "/getAttrByGoodsId", method = RequestMethod.GET)
+    public CommonResponse getAttrByGoodsId(int goodsId){
+        CommonResponse response = null;
+        try {
+            CommonResult<List<GoodsAttribute>> result =  dubboBrandService.getAttrByGoodsId(goodsId);
+            if(null != result && result.getData() != null){
+                response = new WebResponse<>(result.getData());
+            }else{
+                response = new CommonResponse();
+            }
+        } catch (Exception e) {
+            log.error("getAttrByGoodsId.error",e);
+            response = new UnknowResponse();
+        }
+        return response;
     }
 }

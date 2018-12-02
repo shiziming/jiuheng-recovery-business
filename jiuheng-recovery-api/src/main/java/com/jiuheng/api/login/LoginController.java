@@ -4,15 +4,20 @@ import static com.jiuheng.api.utils.RsaUtils.decryptBASE64;
 import static com.jiuheng.api.utils.RsaUtils.decryptByPrivateKey;
 
 import com.alibaba.fastjson.JSON;
+import com.jiuheng.api.utils.CookieCode;
+import com.jiuheng.api.utils.CookieOperator;
+import com.jiuheng.api.utils.SsoUserCookieTools;
 import com.jiuheng.service.dto.login.LoginError;
 import com.jiuheng.service.dto.login.LoginRequest;
 import com.jiuheng.service.dubbo.DubboLoginService;
 import com.jiuheng.service.dubbo.DubboValidCodeService;
 import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.service.respResult.ErrorNode;
+import com.jiuheng.service.respResult.WebResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("login")
+@Slf4j
 public class LoginController {
-
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private DubboLoginService dubboLoginService;
@@ -48,21 +52,27 @@ public class LoginController {
      * @return
      */
     @RequestMapping(value = "/lg", method = RequestMethod.POST)
-    public CommonResponse login(@RequestBody LoginRequest loginRequest,
+    public WebResponse<Long> login(@RequestBody LoginRequest loginRequest,
         HttpSession httpSession,HttpServletRequest request,HttpServletResponse response){
-        CommonResponse resp = null;
+        WebResponse<Long> resp = null;
+        String domain = request.getServerName();
         try {
             ErrorNode node = this.validParams(loginRequest);
             if(node!=null){
-                return new CommonResponse(node.getCode(),node.getMsg());
+                return new WebResponse<Long>(node.getCode(),node.getMsg());
             }
-            decodeLoginRequest(loginRequest);
-            logger.info("decodeLoginRequest account: {} pwd: {}",loginRequest.getPhone(),loginRequest.getPassword());
+            //decodeLoginRequest(loginRequest);
+            log.info("decodeLoginRequest account: {} pwd: {}",loginRequest.getPhone(),loginRequest.getPassword());
             resp = dubboLoginService.checkUserLogin(loginRequest);
+            if(200 == resp.getRpco()){
+                CookieOperator.updateCookie(response,null, domain,
+                    CookieCode.encode(resp.getBody(), SsoUserCookieTools.createRand(),System.currentTimeMillis()),
+                    604800);
+            }
             return resp;
         } catch (Exception e) {
-            logger.error("Unknow.login", e);
-            resp = new CommonResponse(LoginError.LOGIN_ERROR.getCode(),LoginError.LOGIN_ERROR.getMsg());
+            log.error("Unknow.login", e);
+            resp = new WebResponse<Long>(LoginError.LOGIN_ERROR.getCode(),LoginError.LOGIN_ERROR.getMsg());
             return resp;
         }
 
@@ -84,7 +94,7 @@ public class LoginController {
             resp = new CommonResponse(node.getCode(),node.getMsg());
             return resp;
         }
-        long phone = dubboValidCodeService.checkVaildCode(loginRequest.getValidrand(),loginRequest.getValidCode())
+        long phone = dubboValidCodeService.checkVaildCode(loginRequest.getValidrand(),loginRequest.getValidCode());
         if(phone<0L){
             resp = new CommonResponse(LoginError.VAILD_CODE_ERROR.getCode(),LoginError.VAILD_CODE_ERROR.getMsg());
             return resp;
@@ -106,15 +116,15 @@ public class LoginController {
     private LoginRequest decodeLoginRequest(LoginRequest loginRequest)throws Exception{
         if(!StringUtils.isBlank(loginRequest.getPhone())){
             String decode = new String(decryptByPrivateKey(decryptBASE64(loginRequest.getPhone()), rsaKey));
-            logger.info("decode account {} ",decode);
+            log.info("decode account {} ",decode);
             loginRequest.setPhone(decode);
         }
         if(!StringUtils.isBlank(loginRequest.getPassword())){
             String pwd = new String(decryptByPrivateKey(decryptBASE64(loginRequest.getPassword()), rsaKey));
-            logger.info("decode pwd {} ",pwd);
+            log.info("decode pwd {} ",pwd);
             loginRequest.setPassword(new String(decryptByPrivateKey(decryptBASE64(loginRequest.getPassword()), rsaKey)));
         }
-        logger.info("decode account {} ", JSON.toJSONString(loginRequest));
+        log.info("decode account {} ", JSON.toJSONString(loginRequest));
         return loginRequest;
     }
 }

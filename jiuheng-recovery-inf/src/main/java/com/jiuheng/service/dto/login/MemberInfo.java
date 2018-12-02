@@ -12,7 +12,7 @@ public class MemberInfo implements Serializable {
     /**
      * 用户id
      */
-    private long userId;
+    private Long userId;
     /**
      * 昵称
      */
@@ -20,7 +20,7 @@ public class MemberInfo implements Serializable {
     /**
      * 手机号
      */
-    private long phone;
+    private Long phone;
     /**
      * 密码
      */

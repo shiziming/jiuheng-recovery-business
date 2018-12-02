@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.jiuheng.service.domain.Brand;
 import com.jiuheng.service.domain.BrandReq;
 import com.jiuheng.service.domain.BrandResp;
+import com.jiuheng.service.domain.CategoryResp;
+import com.jiuheng.service.respResult.CommonResult;
 import com.jiuheng.service.respResult.Response;
 import com.jiuheng.service.respResult.SearchResult;
 import com.jiuheng.service.dubbo.DubboBrandService;
@@ -40,6 +42,12 @@ public class BrandController {
     @ResponseBody
     public SearchResult getAllBranch(BrandReq req,HttpServletRequest request){
         Response<SearchResult> result=dubboBrandService.getAllBranch(req,Integer.parseInt(request.getParameter("page")), Integer.parseInt(request.getParameter("rows")));
+        return result.getResult();
+    }
+    @RequestMapping("/getBranchByCategoryId")
+    @ResponseBody
+    public SearchResult getBranchByCategoryId(Integer id){
+        Response<SearchResult> result=dubboBrandService.getBrandByCategory(id);
         return result.getResult();
     }
     @RequestMapping("/editBrand")

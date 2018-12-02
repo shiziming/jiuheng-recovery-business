@@ -67,7 +67,7 @@
       username,
       phone,
       password,
-      bank_card,
+      bank_card AS bankCard,
       bank,
       createTime
     FROM
@@ -82,7 +82,7 @@
       bank_card = #{bankCard},
       phone = #{phone}
     WHERE
-      id = #{phone}
+      id = #{userId}
   </update>
   <select id="getUserAddr" parameterType="long" resultMap="UserAddrMap">
     SELECT
@@ -110,7 +110,7 @@
       user_addr
     WHERE
       id = #{userAddr.id}
-    AND useId = #{userAddr.userId}
+    AND userId = #{userAddr.userId}
   </delete>
   <update id="editAddress" parameterType="com.jiuheng.service.dto.UserAddr">
     UPDATE user_addr
@@ -150,4 +150,30 @@
         NOW()
       );
   </insert>
+  <select id="getUserList" parameterType="com.jiuheng.service.dto.UserInfo" resultMap="UserInfoMap">
+    SELECT
+      id,
+      username AS userName,
+      name,
+      phone,
+      bank_card AS bankCard,
+      createTime
+    FROM
+      user_info
+    WHERE 1=1
+    <if test="userInfo.name != null and userInfo.name != ''">
+      AND
+        name = #{userInfo.name}
+    </if>
+    <if test="userInfo.phone != null and userInfo.phone != ''">
+      AND
+        phone = #{userInfo.phone}
+    </if>
+    <if test="userInfo.createStartTime != null and userInfo.createStartTime != ''">
+      <![CDATA[ AND DATE_FORMAT(createTime,'%Y-%m-%d') >= #{userInfo.createStartTime} ]]>
+    </if>
+    <if test="userInfo.createEndTime != null and userInfo.createEndTime != ''">
+      <![CDATA[ AND DATE_FORMAT(createTime,'%Y-%m-%d') <= #{userInfo.createEndTime} ]]>
+    </if>
+  </select>
 </mapper>

@@ -386,7 +386,21 @@
 		});
 		return arr;
 	}
-	
+
+	this.addTabIframe = function(url, title) {
+		if ($('#tabs').tabs('exists', title)) {
+			$('#tabs').tabs('select', title);
+		} else {
+			$('#tabs').tabs('add', {
+				title : title,
+				content:"<div class='easyui-panel' href='"+url+"' border='false'  " +
+				" style='overflow: hidden;'></div>",
+				closable : true
+			});
+			tabClose();
+		}
+	}
+
 	jQuery.o2m = this;
 	return jQuery;
 })(jQuery);
@@ -411,4 +425,6 @@ $(function(){
 	$.o2m.init(); 
 	
 	$.o2m.closeProgressing();
-});  
+
+	$.o2m.closeProgressing();
+});

@@ -14,7 +14,7 @@
     <id column="goodsId" jdbcType="INTEGER" property="skuId"/>
     <result column="goodsName" jdbcType="VARCHAR" property="goodsName"/>
     <result column="imageUrl" jdbcType="VARCHAR" property="pic"/>
-    <result column="recoveryAveragePrice" jdbcType="DECIMAL" property="recoveryAveragePrice"/>
+    <result column="recoveryAveragePrice" jdbcType="BIGINT" property="recoveryAveragePrice"/>
   </resultMap>
   <select id="getBannerImage" resultMap="BaseResultMap">
     SELECT

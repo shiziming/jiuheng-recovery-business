@@ -1,10 +1,15 @@
 package com.jiuheng.service.dubbo;
 
+import com.github.pagehelper.PageHelper;
+import com.jiuheng.service.domain.RecoveryOrderResp;
 import com.jiuheng.service.dto.UserAddr;
 import com.jiuheng.service.dto.UserInfo;
 import com.jiuheng.service.dto.login.MemberInfo;
 import com.jiuheng.service.repository.UserMapper;
 import com.jiuheng.service.respResult.CommonResponse;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
+import com.jiuheng.service.utils.EasyUiDataGridUtil;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,5 +94,17 @@ public class DubboUserInfoServiceImpl implements DubboUserInfoService{
         }
         return resp;
     }
+
+    public Response<SearchResult> getUserList(UserInfo userInfo, Integer page, Integer size){
+        try{
+            PageHelper.startPage(page, size);
+            List<UserInfo> list= userMapper.getUserList(userInfo,page,size);
+            return Response.ok(EasyUiDataGridUtil.convertToResult(list));
+        }catch (Exception e){
+            log.error("DubboUserInfoService.getUserList",e);
+            return Response.fail(e.getMessage());
+        }
+    }
+
 
 }

@@ -1,10 +1,12 @@
 package com.jiuheng.service.repository;
 
+import com.jiuheng.service.domain.AttributeResp;
 import com.jiuheng.service.domain.Brand;
 import com.jiuheng.service.domain.BrandCategory;
 import com.jiuheng.service.domain.BrandResp;
 import com.jiuheng.service.domain.BrandReq;
 import com.jiuheng.service.domain.CategoryResp;
+import com.jiuheng.service.domain.GoodsAttribute;
 import com.jiuheng.service.respResult.CommonResult;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -16,6 +18,9 @@ public interface BranchMapper {
 
     List<BrandResp> getAllBranch(@Param("brandReq") BrandReq req,@Param("start")int start,@Param("row")int row);
 
+    List<BrandResp> getBranchByCategoryId();
+
+    int getAllBranchCount(@Param("brandReq") BrandReq req);
     Brand getBrandById(@Param("brandReq")BrandReq brandReq);
 
     void insertBrandCategory(@Param("brandCategory")BrandCategory brandCategory);
@@ -29,5 +34,7 @@ public interface BranchMapper {
     CategoryResp getBrandByCategory(int categoryId);
 
     BrandResp getGoodsByBrand(int brandId);
+
+    List<GoodsAttribute> getAttrByGoodsId(int goodsId);
 
 }

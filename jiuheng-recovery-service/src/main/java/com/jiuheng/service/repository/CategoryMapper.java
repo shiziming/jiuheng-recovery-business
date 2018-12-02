@@ -12,6 +12,8 @@ public interface CategoryMapper {
 
     List<CategoryResp> getCategoryList(CategoryReq categoryReq);
 
+    int getCategoryListCount(CategoryReq categoryReq);
+
     CategoryResp getCategoryById(CategoryReq categoryReq);
 
     void updateDeviceCategory(@Param("category") CategoryReq categoryReq);

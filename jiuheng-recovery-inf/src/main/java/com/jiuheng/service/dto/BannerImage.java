@@ -33,4 +33,8 @@ public class BannerImage implements Serializable{
      * 创建人
      */
     private String createUser;
+    /**
+     * 创建人
+     */
+    private String createTime;
 }

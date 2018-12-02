@@ -43,6 +43,18 @@
       a.fid =- 1
     AND a. STATUS = 1
   </select>
+  <select id="getCategoryListCount" parameterType="com.jiuheng.service.domain.CategoryReq" resultType="int">
+  SELECT
+      count(a.id)
+    FROM
+      recovery_category a
+    LEFT JOIN recovery_category b ON a.id = b.fid
+    AND b. STATUS = 1
+    WHERE
+      a.fid =- 1
+    AND a. STATUS = 1
+  </select>
+
   <select id="getCategoryById" parameterType="com.jiuheng.service.domain.CategoryReq" resultMap="BaseResultMap">
     SELECT
       *

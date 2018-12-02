@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="../inc/resource.inc"%>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -31,7 +32,7 @@
             </c:if>
             <b>${recycleAttribute.name}</b>
             <br/>
-            <c:if test="${empty recycleAttribute.deviceRecycleAttributeValueList}">
+            <c:if test="${empty recycleAttribute.goodsRecycleAttributeValueList}">
                 <div>
                     <input type="hidden" value="${recycleAttribute.id}" name="attrs.attributeId">
                     <input type="hidden" value="" name="attrs.id">
@@ -42,9 +43,9 @@
             </c:if>
         </div>
 
-        <c:if test="${not empty recycleAttribute.deviceRecycleAttributeValueList}">
+        <c:if test="${not empty recycleAttribute.goodsRecycleAttributeValueList}">
             <div class="editbox">
-                <c:forEach items="${recycleAttribute.deviceRecycleAttributeValueList}" var="recycleAttributeValue">
+                <c:forEach items="${recycleAttribute.goodsRecycleAttributeValueList}" var="recycleAttributeValue">
                     <%--<c:if test="${x.index!=0}">--%>
                     <%--<hr style="height: 1px;width: 250px;float: left">--%>
                     <%--<br/>--%>
@@ -67,7 +68,7 @@
 </form>
 <script type="text/javascript">
     function saveDevice(){
-        $("#device_data_form").form("submit",{url : "goods/saveRecycle", onSubmit:function(param){
+        $("#device_data_form").form("submit",{url : "saveRecycle", onSubmit:function(param){
             renameDeviceAttributes();
             var isValid = $(this).form('validate');
             if (!isValid){
@@ -80,11 +81,8 @@
             success:function(data){
                 $.messager.progress('close');
                 // 如果提交成功则隐藏进度条
-                data = $.parseJSON(data);
                 if(1 == 1){
                     $.messager.alert("提示","保存成功","info");
-                    var url = ctx +"/device/recycle?id="+${device.id};
-                    window.location.reload();
                 }
             }
         });
@@ -249,7 +247,7 @@
             if (r){
                 if(id!=""){
                     $.ajax({
-                        url:ctx+"/device/deleteRecycleAttributeValue",
+                        url:"deleteRecycleAttributeValue",
                         method:"post",
                         data:{id:id},
                         dataType:"json",

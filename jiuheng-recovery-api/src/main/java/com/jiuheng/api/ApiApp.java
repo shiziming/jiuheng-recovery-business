@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 
 
 @SpringBootApplication
-//@ImportResource("classpath*:META-INF/applicationContext.xml")
+@ImportResource("classpath:/META-INF/spring-dubbo-client.xml")
 public class ApiApp {
 	final static Logger logger = LoggerFactory.getLogger(ApiApp.class);
     public static void main(String[] args) {

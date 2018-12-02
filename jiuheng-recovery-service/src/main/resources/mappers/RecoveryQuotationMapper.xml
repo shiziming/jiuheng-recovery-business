@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.RecoveryQuotationMapper">
+  <resultMap id="RMRecycleQuotationVo" type="com.jiuheng.service.domain.RecycleQuotationVo">
+    <id column="id" property="id" />
+    <result column="category_id" property="categoryId" />
+    <result column="brand_id" property="brandId" />
+    <result column="device_id" property="deviceId" />
+    <result column="cp_id" property="cpId" />
+    <result column="basic_price" property="basicPrice" />
+    <result column="status" property="status" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="operator_td" property="operatorId" />
+  </resultMap>
+  <resultMap id="RMRecycleQuotationItemVo" type="com.jiuheng.service.domain.RecycleQuotationItemVo">
+    <id column="id" property="id" />
+    <result column="quotation_id" property="quotationId" />
+    <result column="attribute_id" property="attributeId" />
+    <result column="attribute_value_id" property="attributeValueId" />
+    <result column="type" property="type" />
+    <result column="price" property="price" />
+    <result column="attribute_name" property="attributeName" />
+    <result column="attribute_value" property="attributeValue" />
+    <result column="attribute_type" property="attributeType" />
+  </resultMap>
+
+  <select id="getRecycleQuotation" parameterType="map" resultMap="RMRecycleQuotationVo">
+    select *  from t_recycle_quotation where device_id=#{deviceId} and status = 1 limit 1
+  </select>
+  <select id="getRecycleQuotationById" parameterType="long" resultMap="RMRecycleQuotationVo">
+    select *  from t_recycle_quotation where id=#{id}
+  </select>
+  <select id="getRecycleQuotationCount" resultType="int">
+    select count(*)  from t_recycle_quotation
+    <where>
+      1=1
+      <if test="recycleQuotation.categoryId != null and recycleQuotation.categoryId>0">
+        AND category_id=#{recycleQuotation.categoryId}
+      </if>
+      <if test="recycleQuotation.brandId != null and recycleQuotation.brandId>0">
+        AND brand_id=#{recycleQuotation.brandId}
+      </if>
+      <if test="recycleQuotation.deviceId != null and recycleQuotation.deviceId>0">
+        AND device_id=#{recycleQuotation.deviceId}
+      </if>
+      <if test="recycleQuotation.status != null and recycleQuotation.status>=0">
+        AND status=#{recycleQuotation.status}
+      </if>
+      <if test="recycleQuotation.cpId != null and recycleQuotation.cpId>0">
+        AND cp_id=#{recycleQuotation.cpId}
+      </if>
+    </where>
+  </select>
+  <select id="getRecycleQuotationList" parameterType="com.jiuheng.service.domain.RecycleQuotation" resultMap="RMRecycleQuotationVo">
+    select *  from t_recycle_quotation
+    <where>
+      <if test="recycleQuotation.categoryId != null and recycleQuotation.categoryId>0">
+        AND category_id=#{recycleQuotation.categoryId}
+      </if>
+      <if test="recycleQuotation.brandId != null and recycleQuotation.brandId>0">
+        AND brand_id=#{recycleQuotation.brandId}
+      </if>
+      <if test="recycleQuotation.deviceId != null and recycleQuotation.deviceId>0">
+        AND device_id=#{recycleQuotation.deviceId}
+      </if>
+      <if test="recycleQuotation.status != null and recycleQuotation.status>=0">
+        AND status=#{recycleQuotation.status}
+      </if>
+      <if test="recycleQuotation.cpId != null and recycleQuotation.cpId>0">
+        AND cp_id=#{recycleQuotation.cpId}
+      </if>
+    </where>
+    ORDER BY id desc
+    <if test="start >= 0 and pageSize > 0">
+      limit #{start}, #{pageSize}
+    </if>
+  </select>
+
+
+  <select id="getRecycleQuotationItem" parameterType="map" resultMap="RMRecycleQuotationItemVo">
+    select a.*,i.id,i.quotation_id,i.price,i.type from
+    (select a.id attribute_id,a.name attribute_name,v.attribute_type,v.attribute_value,v.id attribute_value_id from t_attribute a , t_device_recycle_attribute_value v
+    where  a.id=v.attribute_id and  device_id=#{deviceId}
+    )a
+    left join
+    (select * from t_recycle_quotation_item where
+    <if test="quotationId != null and quotationId >0 ">
+      quotation_id= #{quotationId}
+    </if>
+    <if test="quotationId == null or quotationId==0">
+      1 &lt;&gt; 1
+    </if>
+    ) i
+    on a.attribute_value_id= i.attribute_value_id
+    ORDER BY attribute_type asc ,attribute_id asc
+  </select>
+
+
+  <insert id="addRecycleQuotation" useGeneratedKeys="true" keyProperty="recycleQuotation.id" parameterType="com.jiuheng.service.domain.RecycleQuotation">
+    INSERT INTO t_recycle_quotation (category_id,brand_id,device_id,cp_id,basic_price,status,create_time,update_time,operator_id)
+    VALUES (#{recycleQuotation.categoryId},#{recycleQuotation.brandId},#{recycleQuotation.deviceId},#{recycleQuotation.cpId},#{recycleQuotation.basicPrice},#{recycleQuotation.status},#{recycleQuotation.createTime},#{recycleQuotation.updateTime},#{recycleQuotation.operatorId})
+  </insert>
+  <update id="updateRecycleQuotation" parameterType="com.jiuheng.service.domain.RecycleQuotation">
+    UPDATE t_recycle_quotation
+    <set>
+      id = #{recycleQuotation.id}
+      <if test="recycleQuotation.basicPrice != null">
+        ,basic_price = #{recycleQuotation.basicPrice}
+      </if>
+      <if test="recycleQuotation.status!=null">
+        ,status =#{recycleQuotation.status}
+      </if>
+      <if test="recycleQuotation.updateTime!=null">
+        ,update_time =#{recycleQuotation.updateTime}
+      </if>
+      <if test="recycleQuotation.operatorId!=null">
+        ,operator_id =#{recycleQuotation.operatorId}
+      </if>
+    </set>
+    <where>
+      id = #{recycleQuotation.id}
+    </where>
+  </update>
+  <insert id="addRecycleQuotationItem"  useGeneratedKeys="true" keyProperty="recycleQuotationItem.id" parameterType="com.jiuheng.service.domain.RecycleQuotationItem">
+    INSERT INTO t_recycle_quotation_item (quotation_id,attribute_id,attribute_value_id,price,type) VALUES (#{recycleQuotationItem.quotationId},#{recycleQuotationItem.attributeId},#{recycleQuotationItem.attributeValueId},#{recycleQuotationItem.price},#{recycleQuotationItem.type})
+  </insert>
+  <update id="updateRecycleQuotationItem" parameterType="com.jiuheng.service.domain.RecycleQuotationItem">
+    UPDATE t_recycle_quotation_item
+    <set>
+      id = #{recycleQuotationItem.id}
+      <if test="recycleQuotationItem.price != null">
+        ,price = #{recycleQuotationItem.price}
+      </if>
+      <if test="recycleQuotationItem.type != null">
+        ,type = #{recycleQuotationItem.type}
+      </if>
+    </set>
+    <where>
+      id = #{recycleQuotationItem.id}
+    </where>
+  </update>
+
+</mapper>

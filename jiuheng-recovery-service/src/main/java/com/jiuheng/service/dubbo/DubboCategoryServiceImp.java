@@ -1,5 +1,6 @@
 package com.jiuheng.service.dubbo;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jiuheng.service.domain.CategoryReq;
 import com.jiuheng.service.domain.CategoryResp;
@@ -28,13 +29,21 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
     @Override
     public Response<SearchResult> getCategoryList(CategoryReq categoryReq, int pageNo, int pageSize){
         try {
-            if(pageSize != 0){
-                PageHelper.startPage(pageNo, pageSize);
-            }
+            List<CategoryResp> list = null;
+            int count=0;
             if(categoryReq == null){
                 categoryReq = new CategoryReq();
             }
-            List<CategoryResp> list=categoryMapper.getCategoryList(categoryReq);
+            if(pageSize != 0){
+                PageHelper.startPage(pageNo, pageSize,true);
+                list = categoryMapper.getCategoryList(categoryReq);
+                count = categoryMapper.getCategoryListCount(categoryReq);
+            }else{
+                list=categoryMapper.getCategoryList(categoryReq);
+                count = categoryMapper.getCategoryListCount(categoryReq);
+            }
+            Page<CategoryResp>  page = PageHelper.startPage(pageNo, pageSize);
+            list=categoryMapper.getCategoryList(categoryReq);
             //按子父级排序
             List<CategoryResp> queryList = null;
             if(list != null && !list.isEmpty()){
@@ -48,7 +57,9 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
                 }
 
             }
-            return Response.ok(EasyUiDataGridUtil.convertToResult(queryList));
+            SearchResult searchResult = EasyUiDataGridUtil.convertToResult(queryList);
+            searchResult.setTotal(count);
+            return Response.ok(searchResult);
         } catch (Exception e) {
             log.error("DubboCategoryService.getCategoryList",e);
             return Response.fail(e.getMessage());
@@ -101,6 +112,18 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
             log.error("DubboCategoryService.saveCategory",e);
             return Response.fail(e.getMessage());
         }
+    }
+    @Override
+    public Response<CategoryResp> getDeviceCategory(long id){
+        CategoryResp parentCategory = null;
+        try {
+            parentCategory = categoryMapper.getDeviceCategory(id);
+            return Response.ok(parentCategory);
+        } catch (Exception e) {
+            log.error("DubboCategoryService.getDeviceCategory",e);
+            return Response.fail(e.getMessage());
+        }
+
     }
 
 }

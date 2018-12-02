@@ -1,10 +1,12 @@
 package com.jiuheng.service.dubbo;
 
+import com.jiuheng.service.domain.AttributeResp;
 import com.jiuheng.service.domain.Brand;
 import com.jiuheng.service.domain.BrandCategory;
 import com.jiuheng.service.domain.BrandResp;
 import com.jiuheng.service.domain.BrandReq;
 import com.jiuheng.service.domain.CategoryResp;
+import com.jiuheng.service.domain.GoodsAttribute;
 import com.jiuheng.service.repository.CategoryMapper;
 import com.jiuheng.service.respResult.CommonResult;
 import com.jiuheng.service.respResult.Response;
@@ -36,7 +38,10 @@ public class DubboBrandServiceImp implements DubboBrandService{
     public Response<SearchResult> getAllBranch(BrandReq req,int page,int row){
         try{
             List<BrandResp> list= branchMapper.getAllBranch(req,(page-1)*row,row);
-            return Response.ok(EasyUiDataGridUtil.convertToResult(list));
+            int count =branchMapper.getAllBranchCount(req);
+            SearchResult result= EasyUiDataGridUtil.convertToResult(list);
+            result.setTotal(count);
+            return Response.ok(result);
         }catch (Exception e){
             log.error("DubboBrandService.getAllBranch",e);
             return Response.fail(e.getMessage());
@@ -134,15 +139,17 @@ public class DubboBrandServiceImp implements DubboBrandService{
         }
     }
     @Override
-    public CommonResult<CategoryResp> getBrandByCategory(int categoryId){
-        CommonResult<CategoryResp> result = null;
+    public Response<SearchResult> getBrandByCategory(int categoryId){
+        SearchResult result = new SearchResult(0, null);
         try {
             CategoryResp resp= branchMapper.getBrandByCategory(categoryId);
-            result = new CommonResult<CategoryResp>(resp);
-            return result;
+            if(null != resp){
+                result= EasyUiDataGridUtil.convertToResult(resp.getBrands());
+            }
+            return Response.ok(result);
         } catch (Exception e) {
             log.error("DubboBrandService.getBrandByCategory",e);
-            return result;
+            return Response.fail(e.getMessage());
         }
     }
     @Override
@@ -158,5 +165,17 @@ public class DubboBrandServiceImp implements DubboBrandService{
         }
     }
 
+    @Override
+    public CommonResult<List<GoodsAttribute>> getAttrByGoodsId(int goodsId){
+        CommonResult<List<GoodsAttribute>> result = null;
+        try {
+            List<GoodsAttribute> resp= branchMapper.getAttrByGoodsId(goodsId);
+            result = new CommonResult<List<GoodsAttribute>>(resp);
+            return result;
+        } catch (Exception e) {
+            log.error("DubboBrandService.getGoodsByBrand",e);
+            return result;
+        }
+    }
 
 }

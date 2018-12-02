@@ -2,6 +2,7 @@ package com.jiuheng.service.repository;
 
 import com.jiuheng.service.domain.GoodsReq;
 import com.jiuheng.service.domain.GoodsResp;
+import com.jiuheng.service.dto.Goods;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +18,6 @@ public interface GoodsMapper {
     void insertGoods(@Param("goodsReq")GoodsReq goodsReq);
 
     void updateGoods(@Param("goodsReq")GoodsReq goodsReq);
+
+    Goods queryGoodsByGoodId(Integer goodsId);
 }

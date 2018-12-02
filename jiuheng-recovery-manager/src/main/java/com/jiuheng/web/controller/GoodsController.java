@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,7 +58,13 @@ public class GoodsController {
         if(goodsReq.getStatus()==null){
             goodsReq.setStatus(-2);
         }
-        Response<SearchResult> result = dubboGoodsService.getGoodsList(goodsReq, Integer.parseInt(request.getParameter("page")), Integer.parseInt(request.getParameter("rows")));
+        String page = request.getParameter("page");
+        String rows = request.getParameter("rows");
+        if(null ==page  || null ==rows ){
+            page ="0";
+            rows ="0";
+        }
+        Response<SearchResult> result = dubboGoodsService.getGoodsList(goodsReq, Integer.parseInt(page), Integer.parseInt(rows));
         return result.getResult();
     }
 
@@ -168,8 +175,8 @@ public class GoodsController {
     }
 
     @RequestMapping("/saveRecycle")
-    public ModelAndView saveRecycle(GoodsReq goods, String updateToken, HttpServletRequest request){
-        ModelMap model = new ModelMap();
+    @ResponseBody
+    public Response<Boolean> saveRecycle(GoodsReq goods, String updateToken, HttpServletRequest request){
         List<GoodsAttribute> attrs = goods.getAttrs();
         //移除掉value为空的值
         for(int i = attrs.size()-1;i>=0;i--){
@@ -193,7 +200,7 @@ public class GoodsController {
                 }
             }
         }
-        return new ModelAndView("jsonView", model);
+        return Response.ok(Boolean.TRUE);
     }
 
     @RequestMapping("goodsRecycleAttributeValue")

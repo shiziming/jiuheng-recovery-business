@@ -43,6 +43,6 @@ public class GoodsAttribute implements Serializable{
     /**
      * 属性集合
      */
-    private List<Long> attributeValueList;
+    private List<AttributeValue> attributeValueList;
 
 }

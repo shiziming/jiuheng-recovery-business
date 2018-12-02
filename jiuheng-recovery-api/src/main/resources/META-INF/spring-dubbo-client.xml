@@ -11,5 +11,26 @@
 
 	<!-- 订单服务 -->
 	<dubbo:reference id="dubboLoginService" interface="com.jiuheng.service.dubbo.DubboLoginService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboGoodsService" interface="com.jiuheng.service.dubbo.DubboGoodsService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboBrandService" interface="com.jiuheng.service.dubbo.DubboBrandService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboIndexService" interface="com.jiuheng.service.dubbo.DubboIndexService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboOrderService" interface="com.jiuheng.service.dubbo.DubboOrderService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboTmpOrderService" interface="com.jiuheng.service.dubbo.DubboTmpOrderService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboUserInfoService" interface="com.jiuheng.service.dubbo.DubboUserInfoService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
+	<dubbo:reference id="dubboValidCodeService" interface="com.jiuheng.service.dubbo.DubboValidCodeService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 </beans>

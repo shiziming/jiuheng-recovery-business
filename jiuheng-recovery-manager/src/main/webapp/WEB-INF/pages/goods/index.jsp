@@ -97,9 +97,10 @@
     var selected = $("#device_data_div").datagrid("getSelected");
     var url = "goods/recycle?id="+selected.id;
     var title=selected.brandName+selected.model+'回收属性设置';
-    $("#device_window").hide();
+    $.o2m.addTabIframe(url,title);
+    /*$("#device_window").hide();
     $("#device_attr_search").panel({title:title, href:url});
-    $("#device_attr_search").panel('open');
+    $("#device_attr_search").panel('open');*/
   }
 
   var showBrandDialog = function (url, id) {

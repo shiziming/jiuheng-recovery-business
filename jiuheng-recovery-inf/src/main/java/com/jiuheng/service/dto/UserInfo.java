@@ -26,4 +26,12 @@ public class UserInfo extends MemberInfo {
      * 创建时间
      */
     private String createTime;
+    /**
+     * 创建开始时间
+     */
+    private String createStartTime;
+    /**
+     * 创建结束时间
+     */
+    private String createEndTime;
 }

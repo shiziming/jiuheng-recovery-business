@@ -2,6 +2,7 @@ package com.jiuheng.service.repository;
 
 import com.jiuheng.service.domain.AttributeReq;
 import com.jiuheng.service.domain.AttributeResp;
+import com.jiuheng.service.domain.AttributeValue;
 import com.jiuheng.service.domain.CategoryRecycleAttribute;
 import com.jiuheng.service.domain.GoodsAttribute;
 import java.util.List;
@@ -33,5 +34,7 @@ public interface AttributeMapper {
     void updateAttribute(@Param("attribute")AttributeReq attribute);
 
     void saveAttribute(@Param("attribute")AttributeReq attribute);
+
+    AttributeValue getAttributeValueById(Integer id);
 
 }

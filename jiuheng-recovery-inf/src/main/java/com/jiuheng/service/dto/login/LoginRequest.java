@@ -1,12 +1,13 @@
 package com.jiuheng.service.dto.login;
 
+import java.io.Serializable;
 import lombok.Data;
 
 /**
  * Created by shiziming on 2017/11/9.
  */
 @Data
-public class LoginRequest {
+public class LoginRequest implements Serializable{
 
     /**
      * 用户id

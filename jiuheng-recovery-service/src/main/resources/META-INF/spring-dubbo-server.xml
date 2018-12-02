@@ -24,8 +24,16 @@
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 	<dubbo:service interface="com.jiuheng.service.dubbo.DubboAttributeService" ref="dubboAttributeService"
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
-	<dubbo:service interface="com.jiuheng.service.dubbo.DubboGoodsService" ref="dubboGoodsService"
-		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 	<dubbo:service interface="com.jiuheng.service.dubbo.DubboLoginService" ref="dubboLoginService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboIndexService" ref="dubboIndexService"
+	registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboTmpOrderService" ref="dubboTmpOrderService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboUserInfoService" ref="dubboUserInfoService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboValidCodeService" ref="dubboValidCodeService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboRecoveryQuotationService" ref="dubboRecoveryQuotationService"
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 </beans>

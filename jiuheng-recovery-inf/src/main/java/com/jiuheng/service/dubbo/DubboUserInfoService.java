@@ -4,6 +4,8 @@ import com.jiuheng.service.dto.UserAddr;
 import com.jiuheng.service.dto.UserInfo;
 import com.jiuheng.service.dto.login.MemberInfo;
 import com.jiuheng.service.respResult.CommonResponse;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
 import java.util.List;
 
 /**
@@ -22,4 +24,7 @@ public interface DubboUserInfoService {
     CommonResponse editAddress(UserAddr userAddr);
 
     CommonResponse addAddress(UserAddr userAddr);
+
+    Response<SearchResult> getUserList(UserInfo userInfo, Integer page, Integer size);
+
 }

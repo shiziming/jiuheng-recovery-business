@@ -21,6 +21,10 @@
     <result column="attribute_value" property="attributeValue" />
     <result column="attribute_type" property="attributeType" />
   </resultMap>
+  <resultMap id="AttributeValueMap" type="com.jiuheng.service.domain.AttributeValue">
+    <id column="attributeValueId" property="attributeValueId"/>
+    <result column="attributeValueName" property="attributeValueName"/>
+  </resultMap>
   <select id="getAttributeList" parameterType="com.jiuheng.service.domain.AttributeReq" resultMap="BaseResultMap">
     SELECT * FROM recovery_attribute
     <where>
@@ -30,6 +34,7 @@
   <sql id="query_params">
     <if test="attribute.name != null and attribute.name != ''">AND name like "%"#{attribute.name }"%"</if>
     <if test="attribute.type != null and attribute.type != ''">AND type =#{attribute.type}</if>
+    <if test="attribute.id != null and attribute.id != 0">AND id =#{attribute.id}</if>
   </sql>
   <select id="getCategoryAttributesByCategory" resultMap="BaseResultMap">
     SELECT * FROM recovery_attribute a, recovery_category_attribute b
@@ -99,4 +104,13 @@
   <insert id="saveAttribute" parameterType="com.jiuheng.service.domain.AttributeReq">
     INSERT INTO recovery_attribute (name,type) VALUES ( #{attribute.name},#{attribute.type})
   </insert>
+  <select id="getAttributeValueById" parameterType="int" resultMap="AttributeValueMap">
+    SELECT
+      id AS attributeValueId,
+      attribute_value AS attributeValueName
+    FROM
+      recovery_recycle_attribute_value
+    WHERE
+      id = #{id}
+  </select>
 </mapper>

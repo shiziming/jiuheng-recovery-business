@@ -1,17 +1,18 @@
 package com.jiuheng.service.dto;
 
+import java.io.Serializable;
 import lombok.Data;
 
 /**
  * Created by shiziming on 2018/9/12.
  */
 @Data
-public class UserAddr {
+public class UserAddr implements Serializable{
 
     /**
      * 地址id
      */
-    private int id;
+    private Integer id;
     /**
      * 用户id
      */

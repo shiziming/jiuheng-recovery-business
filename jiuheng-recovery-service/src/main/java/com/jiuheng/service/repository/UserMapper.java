@@ -4,16 +4,19 @@ import com.jiuheng.service.dto.UserAddr;
 import com.jiuheng.service.dto.UserInfo;
 import com.jiuheng.service.dto.login.LoginRequest;
 import com.jiuheng.service.dto.login.MemberInfo;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * Created by shiziming on 2018/9/9.
  */
 public interface UserMapper {
 
-    MemberInfo checkUserLogin(LoginRequest loginRequest);
+    MemberInfo checkUserLogin(@Param("loginRequest") LoginRequest loginRequest);
 
-    void registerLogin(LoginRequest loginRequest);
+    void registerLogin(@Param("loginRequest") LoginRequest loginRequest);
 
     MemberInfo getUserInfo(long userId);
 
@@ -21,9 +24,12 @@ public interface UserMapper {
 
     List<UserAddr> getUserAddr(long userId);
 
-    void delUserAddr(UserAddr userAddr);
+    void delUserAddr(@Param("userAddr") UserAddr userAddr);
 
-    void editAddress(UserAddr userAddr);
+    void editAddress(@Param("userAddr") UserAddr userAddr);
 
-    void addAddress(UserAddr userAddr);
+    void addAddress(@Param("userAddr") UserAddr userAddr);
+
+    List<UserInfo> getUserList(@Param("userInfo") UserInfo userInfo, Integer page, Integer size);
+
 }

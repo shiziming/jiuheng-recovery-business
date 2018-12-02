@@ -5,6 +5,7 @@ import com.jiuheng.service.dto.login.LoginRequest;
 import com.jiuheng.service.dto.login.MemberInfo;
 import com.jiuheng.service.repository.UserMapper;
 import com.jiuheng.service.respResult.CommonResponse;
+import com.jiuheng.service.respResult.WebResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,26 +22,28 @@ public class DubboLoginServiceImpl implements DubboLoginService {
     @Autowired
     private UserMapper userMapper;
 
-    public CommonResponse checkUserLogin(LoginRequest loginRequest){
-        CommonResponse resp = null;
+    @Override
+    public WebResponse<Long> checkUserLogin(LoginRequest loginRequest){
+        WebResponse<Long> resp = null;
         try {
             MemberInfo memberInfo = userMapper.checkUserLogin(loginRequest);
             if(null == memberInfo){
-                resp = new CommonResponse(4001,"account is null");
+                resp = new WebResponse<Long>(4001,"account is null");
                 return resp;
             }
-            if(loginRequest.getPassword().equals(memberInfo.getPassword())){
-                resp = new CommonResponse(4000,"password error");
+            if(!loginRequest.getPassword().equals(memberInfo.getPassword())){
+                resp = new WebResponse<Long>(4000,"password error");
                 return resp;
             }
-            resp = new CommonResponse(200,"");
+            resp = new WebResponse<Long>(memberInfo.getUserId());
             return resp;
         } catch (Exception e) {
             log.error("DubboLoginService.checkUserLogin",e);
-            resp = new CommonResponse(500,"unknow error");
+            resp = new WebResponse<Long>(500,"unknow error");
             return resp;
         }
     }
+    @Override
     public CommonResponse registerLogin(LoginRequest loginRequest){
         CommonResponse resp = null;
         try {

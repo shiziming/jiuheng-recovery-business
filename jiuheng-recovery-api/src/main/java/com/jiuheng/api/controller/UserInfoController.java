@@ -14,8 +14,10 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -55,7 +57,7 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/addUserInfo", method = RequestMethod.POST)
-    public CommonResponse addUserInfo(String userName,long phone,String bankCard,HttpSession httpSession){
+    public CommonResponse addUserInfo(@RequestBody UserInfo userInfo,HttpSession httpSession){
         CommonResponse response = null;
         try {
             Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
@@ -63,10 +65,6 @@ public class UserInfoController {
             if (userId == null) {
                 throw new LoginException();
             }
-            UserInfo userInfo = new UserInfo();
-            userInfo.setPhone(phone);
-            userInfo.setUserName(userName);
-            userInfo.setBankCard(bankCard);
             userInfo.setUserId(userId);
             response = dubboUserInfoService.updateUserInfo(userInfo);
         } catch (LoginException e) {
@@ -87,7 +85,7 @@ public class UserInfoController {
     public CommonResponse getUserAddr(HttpSession httpSession){
         CommonResponse response = null;
         try {
-            Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
+            Long userId = 1L;//(Long) httpSession.getAttribute(CommonValues.SESSION_UID);
             // 检查登录
             if (userId == null) {
                 throw new LoginException();
@@ -106,7 +104,7 @@ public class UserInfoController {
     public CommonResponse delAddress(int addrId,HttpSession httpSession) {
         CommonResponse response = null;
         try {
-            Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
+            Long userId = 1L;//(Long) httpSession.getAttribute(CommonValues.SESSION_UID);
             // 检查登录
             if (userId == null) {
                 throw new LoginException();
@@ -125,7 +123,7 @@ public class UserInfoController {
     }
 
     @RequestMapping(value = "/editAddress", method = RequestMethod.POST)
-    public CommonResponse editAddress(UserAddr userAddr,Integer addrId,Integer provinceCode,Integer cityCode,Integer districtCode,HttpSession httpSession) {
+    public CommonResponse editAddress(@RequestBody UserAddr userAddr,HttpSession httpSession) {
         CommonResponse response = null;
         try {
             Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
@@ -134,14 +132,11 @@ public class UserInfoController {
                 throw new LoginException();
             }
             userAddr.setUserId(userId);
-            userAddr.setProvince(provinceCode);
-            userAddr.setCity(cityCode);
-            userAddr.setDistrict(districtCode);
-            if(addrId == null || addrId.equals(0) ){
-                userAddr.setId(addrId);
-                response = dubboUserInfoService.editAddress(userAddr);
+
+            if(userAddr.getId() == null || userAddr.getId().equals(0) ){
+                response = dubboUserInfoService.addAddress(userAddr);
             }else {
-                dubboUserInfoService.addAddress(userAddr);
+                response = dubboUserInfoService.editAddress(userAddr);
             }
         } catch (LoginException e) {
             response = new LoginErrorResponse();

@@ -1,5 +1,6 @@
 package com.jiuheng.service.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
  * Created by shiziming on 2018/9/10.
  */
 @Data
-public class HotGoods {
+public class HotGoods implements Serializable{
 
     /**
      * 商品Id
@@ -24,5 +25,5 @@ public class HotGoods {
     /**
      * 回收均价
      */
-    private BigDecimal recoveryAveragePrice;
+    private long recoveryAveragePrice;
 }

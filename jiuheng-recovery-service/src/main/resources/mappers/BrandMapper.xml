@@ -40,6 +40,18 @@
     <result column="goodsName" property="model"/>
     <result column="pic" property="pic"/>
   </resultMap>
+
+  <resultMap id="AttrMap" type="com.jiuheng.service.domain.GoodsAttribute">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="goodsId" jdbcType="INTEGER" property="goodsId"/>
+    <result column="attributeId" jdbcType="INTEGER" property="attributeId"/>
+    <result column="attributeValue" jdbcType="VARCHAR" property="attributeValue"/>
+    <collection property="attributeValueList" resultMap="GoodsAttrMap" columnPrefix="attr_" />
+</resultMap>
+  <resultMap id="GoodsAttrMap" type="com.jiuheng.service.domain.AttributeValue">
+    <result column="attribute_id" jdbcType="VARCHAR" property="attributeValueId"/>
+    <result column="attribute_value" jdbcType="VARCHAR" property="attributeValueName"/>
+  </resultMap>
   <sql id="Base_Column_List">
     b.id,b.fid,b.name,b.pic,b.status,b.sort,b.create_time,b.update_time,b.updator,b.id as brand_id,b.name as brand_name,d.id as category_id,d.name as category_Name
   </sql>
@@ -74,12 +86,25 @@
         <if test="start >= 0 and row > 0">
           limit #{start}, #{row}
         </if>
-      ) b,
-      recovery_brand_category c,
-      recovery_category d
-    WHERE
+      ) b
+    LEFT JOIN
+      recovery_brand_category c
+    ON
       b.id = c.brand_id
-    AND c.category_id = d.id
+    LEFT JOIN
+      recovery_category d
+    ON
+      c.category_id = d.id
+  </select>
+
+  <select id="getAllBranchCount" resultType="int">
+    SELECT
+      COUNT(id)
+    FROM
+      recovery_brand
+    <where>
+      <include refid="query_params"/>
+    </where>
   </select>
   <select id="getBrandById" parameterType="com.jiuheng.service.domain.BrandReq" resultType="com.jiuheng.service.domain.Brand">
     SELECT
@@ -115,7 +140,7 @@
     VALUES (#{brand.name}, #{brand.pic}, #{brand.status}, #{brand.createTime})
   </insert>
 
-  <select id="getBrandByCategory" resultMap="BrandsMap">
+  <select id="getBrandByCategory" resultMap="BrandsMap" parameterType="int">
   SELECT
     a.category_id as id,
     c. name as name,
@@ -131,7 +156,7 @@
   AND
     b.status = 1
   </select>
-  <select id="getGoodsByBrand">
+  <select id="getGoodsByBrand" resultMap="GoodsMap" parameterType="int">
   SELECT
     b.id,
     b.name,
@@ -143,5 +168,21 @@
   LEFT JOIN recovery_goods g ON b.id = g.brandId
   WHERE
     b.id = #{brandId}
+  </select>
+
+  <select id="getAttrByGoodsId" resultMap="AttrMap" parameterType="int">
+  SELECT
+    ra.id,
+    rg.skuId AS goodsId,
+    ra. name AS attributeValue,
+    ra.id AS attributeId,
+    rgav.id AS attr_attribute_id,
+    rgav.attribute_value AS attr_attribute_value
+  FROM
+    recovery_goods rg
+	LEFT JOIN recovery_recycle_attribute_value rgav ON rg.skuId = rgav.goods_id
+  LEFT JOIN recovery_attribute ra ON rgav.attribute_id = ra.id
+  WHERE
+	rg.skuId = #{goodsId}
   </select>
 </mapper>

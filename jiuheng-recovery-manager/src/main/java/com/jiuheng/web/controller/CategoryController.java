@@ -30,7 +30,14 @@ public class CategoryController {
     @RequestMapping("/getCategoryList")
     @ResponseBody
     public SearchResult getCategoryList(CategoryReq categoryReq,HttpServletRequest request){
-        Response<SearchResult> result = dubboCategoryService.getCategoryList(categoryReq,Integer.parseInt(request.getParameter("page")), Integer.parseInt(request.getParameter("rows")));
+        String page = request.getParameter("page");
+        String rows = request.getParameter("rows");
+        Response<SearchResult> result = null;
+        if(page == null || rows == null){
+            result = dubboCategoryService.getCategoryList(categoryReq,0,0);
+        }else{
+            result = dubboCategoryService.getCategoryList(categoryReq,Integer.parseInt(page),Integer.parseInt(rows));
+        }
         return result.getResult();
     }
 

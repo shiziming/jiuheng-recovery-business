@@ -1,6 +1,8 @@
 package com.jiuheng.service.dubbo;
 
 import com.jiuheng.service.domain.RecoveryOrderReq;
+import com.jiuheng.service.dto.TemplateOrder;
+import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.service.respResult.Response;
 import com.jiuheng.service.respResult.SearchResult;
 
@@ -9,4 +11,6 @@ import com.jiuheng.service.respResult.SearchResult;
  */
 public interface DubboOrderService {
     Response<SearchResult> getOrderList(RecoveryOrderReq req,int page,int size);
+
+
 }

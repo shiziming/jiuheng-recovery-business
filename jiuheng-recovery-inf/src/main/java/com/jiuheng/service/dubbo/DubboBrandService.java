@@ -1,9 +1,11 @@
 package com.jiuheng.service.dubbo;
 
+import com.jiuheng.service.domain.AttributeResp;
 import com.jiuheng.service.domain.Brand;
 import com.jiuheng.service.domain.BrandReq;
 import com.jiuheng.service.domain.BrandResp;
 import com.jiuheng.service.domain.CategoryResp;
+import com.jiuheng.service.domain.GoodsAttribute;
 import com.jiuheng.service.respResult.CommonResult;
 import com.jiuheng.service.respResult.Response;
 import com.jiuheng.service.respResult.SearchResult;
@@ -26,7 +28,9 @@ public interface DubboBrandService {
 
     Response<Boolean> deleteBrand(BrandReq brand);
 
-    CommonResult<CategoryResp> getBrandByCategory(int categoryId);
+    Response<SearchResult> getBrandByCategory(int categoryId);
 
     CommonResult<BrandResp> getGoodsByBrand(int brandId);
+
+    CommonResult<List<GoodsAttribute>> getAttrByGoodsId(int goodsId);
 }

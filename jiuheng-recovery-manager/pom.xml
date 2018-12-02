@@ -89,7 +89,7 @@
     </dependency>
     <dependency>
       <groupId>com.jiuheng</groupId>
-      <artifactId>jiuheng-inf</artifactId>
+      <artifactId>jiuheng-recovery-inf</artifactId>
       <version>${project.version}</version>
     </dependency>
     <!-- dubbo start -->
@@ -138,9 +138,15 @@
       </properties>
     </profile>
     <profile>
-      <id>product</id>
+      <id>pre</id>
       <properties>
-        <activatedProfile>product</activatedProfile>
+        <activatedProfile>pre</activatedProfile>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <activatedProfile>prod</activatedProfile>
       </properties>
     </profile>
   </profiles>

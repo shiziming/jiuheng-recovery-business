@@ -1,6 +1,7 @@
 package com.jiuheng.service.dubbo;
 
 import com.jiuheng.service.domain.CategoryReq;
+import com.jiuheng.service.domain.CategoryResp;
 import com.jiuheng.service.respResult.Response;
 import com.jiuheng.service.respResult.SearchResult;
 
@@ -14,4 +15,7 @@ public interface DubboCategoryService {
     Response<Boolean> deleteDeviceCategory(CategoryReq categoryReq);
 
     Response<Boolean> saveCategory(CategoryReq categoryReq);
+
+    Response<CategoryResp> getDeviceCategory(long id);
+
 }

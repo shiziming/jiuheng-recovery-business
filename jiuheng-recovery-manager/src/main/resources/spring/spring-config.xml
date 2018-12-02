@@ -39,6 +39,6 @@
 	<bean id="zipCompressor" class="com.gome.o2m.web.util.ZipCompressor">
 		<property name="baseDir" value="${images-base-path}"></property>
 	</bean>-->
-	
-	<import resource="../../../../../jiuheng-api/src/main/resources/META-INF/spring-dubbo-client.xml" />
+
+	<import resource="spring-dubbo-client.xml" />
 </beans>
