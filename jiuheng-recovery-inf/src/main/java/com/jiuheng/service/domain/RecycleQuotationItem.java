@@ -9,11 +9,11 @@ import lombok.Data;
  */
 @Data
 public class RecycleQuotationItem extends Base {
-    private Integer id;
-    private Integer quotationId;//报价id
-    private Integer attributeId;//属性id
-    private Integer attributeValueId;//设备id
-    private Integer type;//报价项类型  参考 RecycleQuotationItemTypeConstant
+    private Long id;
+    private Long quotationId;//报价id
+    private Long attributeId;//属性id
+    private Long attributeValueId;//设备id
+    private Long type;//报价项类型  参考 RecycleQuotationItemTypeConstant
     private BigDecimal price;//报价
 
 }

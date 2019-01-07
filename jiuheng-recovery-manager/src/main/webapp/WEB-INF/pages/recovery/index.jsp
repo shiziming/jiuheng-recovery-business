@@ -80,10 +80,10 @@
     }
     function openSourceOrder(){
 //        var selected = $("#device_data_div").datagrid("getSelected");
-        var url = ctx +"/recycle/quotation/editRecycleQuotation";
+        var url = "recovery/editRecycleQuotation";
         var title='报价方案';
         try{
-            window.parent.parent.addTabIframe(url,title);
+            $.o2m.addTabIframe(url,title);
         }catch(e){
             <%--processOrder('${info.sourceOrderId}');--%>
         }
@@ -178,19 +178,29 @@
 
     function static(id){
         $.ajax({
-            url:ctx+ '/recycle/quotation/updateStatus?id='+id+'&status='+1,
+            url:'recovery/updateStatus?id='+id+'&status='+1,
             method:'post',
-            success : function() {
-                location.reload()
+            success : function(data) {
+                if(data.result == true){
+                    $("#data_div").datagrid("reload");
+                    $.messager.alert("提示","启用成功","info");//                data = $.parseJSON(data);
+                }else{
+                    $.messager.alert("提示","启用失败","info");//                data = $.parseJSON(data);
+                }
             }
         });
     }
     function stop(id){
         $.ajax({
-            url:ctx+ '/recycle/quotation/updateStatus?id='+id+'&status='+0,
+            url:'recovery/updateStatus?id='+id+'&status='+0,
             method:'post',
-            success : function() {
-                location.reload()
+            success : function(data) {
+                if(data.result == true){
+                    $("#data_div").datagrid("reload");
+                    $.messager.alert("提示","停用成功","info");//                data = $.parseJSON(data);
+                }else{
+                    $.messager.alert("提示","停用失败","info");//                data = $.parseJSON(data);
+                }
             }
         });
     }

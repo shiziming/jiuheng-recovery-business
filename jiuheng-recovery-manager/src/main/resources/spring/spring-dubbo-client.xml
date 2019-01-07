@@ -27,4 +27,8 @@
 		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
 	<dubbo:reference id="dubboRecoveryQuotationService" interface="com.jiuheng.service.dubbo.DubboRecoveryQuotationService"
 		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+	<dubbo:reference id="dubboTmpOrderService" interface="com.jiuheng.service.dubbo.DubboTmpOrderService"
+		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+	<dubbo:reference id="dubboRegionService" interface="com.jiuheng.service.dubbo.DubboRegionService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 </beans>

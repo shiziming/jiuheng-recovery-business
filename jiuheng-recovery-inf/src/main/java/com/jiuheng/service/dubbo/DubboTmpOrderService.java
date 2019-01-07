@@ -1,5 +1,6 @@
 package com.jiuheng.service.dubbo;
 
+import com.jiuheng.service.dto.RecoveryProp;
 import com.jiuheng.service.dto.TemplateOrder;
 import com.jiuheng.service.respResult.CommonResponse;
 import java.util.List;
@@ -12,4 +13,6 @@ public interface DubboTmpOrderService {
     CommonResponse saveTemplateOrder(TemplateOrder tmpOrder);
 
     List<TemplateOrder> getTemplateOrder(long userId);
+
+    List<RecoveryProp> getTemplateOrderByOrderId(String orderId);
 }

@@ -73,9 +73,9 @@
     <bean id="defaultJsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
     
     <!-- 文件上传相关 -->
-    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
-        <!--one of the properties available;the maximum file size in bytes-->
-        <!--<property name="maxUploadSize" value="20000000"/>
-    </bean>-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!--one of the properties available;the maximum file size in bytes-->
+		<property name="maxUploadSize" value="20000000"/>
+	</bean>
 
 </beans>

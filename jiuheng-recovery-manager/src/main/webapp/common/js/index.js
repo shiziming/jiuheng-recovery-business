@@ -245,7 +245,10 @@
 	            break;
 	    }
 	}
-	
+
+	this.closeTabIframe = function(title) {
+		$('#tabs').tabs('close', title);
+	}
 	/**
 	 * 处理服务器端返回的处理结果 服务器端返回的数据结构为:ActionResult
 	 * 

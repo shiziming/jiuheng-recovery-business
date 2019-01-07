@@ -46,7 +46,7 @@ public class BrandController {
     }
     @RequestMapping("/getBranchByCategoryId")
     @ResponseBody
-    public SearchResult getBranchByCategoryId(Integer id){
+    public SearchResult getBranchByCategoryId(Long id){
         Response<SearchResult> result=dubboBrandService.getBrandByCategory(id);
         return result.getResult();
     }

@@ -32,4 +32,8 @@ public class LoginRequest implements Serializable{
      *验证码
      */
     private String validCode;
+    /**
+     * 名称
+     */
+    private String name;
 }

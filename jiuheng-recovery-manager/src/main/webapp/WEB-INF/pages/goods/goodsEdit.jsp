@@ -206,14 +206,15 @@
 
         $("#device_upload_pic_btn").ajaxUpload({
             fileType:'pic',
-            action:ctx+"/imgFileUpload",
+            action:"imgFileUpload",
             onComplete:function(file,response){
-                alert(response.url);
+                alert(JSON.stringify(response));
+                alert(picUrl+response.url);
                 $("input:hidden[name=pic]").val(response.url);
                 if($("input:hidden[name=pic]").siblings("img")[0] != undefined){
                     $("input:hidden[name=pic]").siblings("img").remove();
                 }
-                $('<img src="${uploadFilePath}'+ response.url+'" width="90" height="90">').insertAfter("input:hidden[name=pic]");
+                $('<img src="'+picUrl+ response.url+'" width="90" height="90">').insertAfter("input:hidden[name=pic]");
             }
         });
 

@@ -8,6 +8,8 @@ import com.jiuheng.service.domain.GoodsAttribute;
 import com.jiuheng.service.dubbo.DubboBrandService;
 import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.service.respResult.CommonResult;
+import com.jiuheng.service.respResult.Response;
+import com.jiuheng.service.respResult.SearchResult;
 import com.jiuheng.service.respResult.UnknowResponse;
 import com.jiuheng.service.respResult.WebResponse;
 import java.util.List;
@@ -29,12 +31,12 @@ public class GoodsController {
     private DubboBrandService dubboBrandService;
 
     @RequestMapping(value = "/getBrandByCategory", method = RequestMethod.GET)
-    public CommonResponse getBrandByCategory(int categoryId){
+    public CommonResponse getBrandByCategory(Long categoryId){
         CommonResponse response = null;
         try {
-            CommonResult<CategoryResp> result =  dubboBrandService.getBrandByCategory(categoryId);
-            if(null != result && result.getData() != null){
-                response = new WebResponse<>(result.getData());
+            Response<SearchResult> result =  dubboBrandService.getBrandByCategory(categoryId);
+            if(result.getResult() != null && result.getResult().getRows() != null && result.getResult().getRows().size()>0){
+                response = new WebResponse<>(result.getResult().getRows());
             }else{
                 response = new CommonResponse();
             }

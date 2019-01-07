@@ -36,18 +36,13 @@ orderquery.inits = function() {
 				return '<a href="#" onclick="orderquery.view(\'' + value + '\');">'+value+'</a>';
 			}*/
 		},{
-			field : 'orderType',
-			title : '订单类型',
+			field : 'status',
+			title : '订单状态',
 			align:'center',
 			width:50,
 			formatter:function(value){
 				return orderquery.changeOrderTypeToName(value);
 			}
-		},{
-				field : 'status',
-				title : '状态',
-				align:'center',
-				width:100
 		},{
 			field : 'userName',
 			title : '用户名',
@@ -126,9 +121,9 @@ orderquery.inits = function() {
 			width : 120,
 			align:'left',
 			formatter : function(value, row, index) {
-					return '<a href="#" onclick="indexGoodsManage.view(\'' + row.orderNum + '\');">查看</a>'+
+					return '<a href="#" onclick="orderquery.view(\'' + row.orderId + '\');">查看</a>'/*+
 							' <a href="#" onclick="indexGoodsManage.editGoods(\'' + row.orderNum + '\');">修改</a>'+
-							' <a href="#" onclick="indexGoodsManage.del(\'' + row.orderNum + '\');">删除</a>';
+							' <a href="#" onclick="indexGoodsManage.del(\'' + row.orderNum + '\');">删除</a>'*/;
 			}
 		}] ],
 		toolbar:orderquery.tb,
@@ -153,26 +148,22 @@ orderquery.inits = function() {
 	});
 	
 	
-	orderquery.view = function(xsfdh){
-		$(orderquery.list_panel).hide();
-		$(orderquery.viewpanel).panel({title:'订单详情查看',href:"order/viewOrderInfo?xsfdh="+xsfdh});
-		$(orderquery.viewpanel).panel('open');
+	orderquery.view = function(orderId){
+		var url = "order/viewOrderInfo?orderId="+orderId;
+		var title='订单详情查看';
+		$.o2m.addTabIframe(url,title);
 	};
 	
 	orderquery.changeOrderTypeToName= function(value){
 		if(value==0){
-			return "销售";
+			return "邮寄中";
 		}else if(value==1){
-			return "退款";
+			return "已完成";
 		}else if(value==2){
-			return "冲红";
+			return "已下单";
 		}else if(value==3){
-			return "拒收";
-		}else if(value==4){
-			return "退货";
-		}else if(value==5){
-			return "换货";
-		} 
+			return "已退货";
+		}
 	};
 	orderquery.changeOrderStatusToName= function(xsfdlx,status){
 		
@@ -200,6 +191,8 @@ orderquery.inits = function() {
 	    window.location.href = 'order/export?version='+version+"&"+ encodeURI($(orderquery.searchForm).serialize());
 	    $('#order_index_exportWin').window('close');
 	};
-	
-	
+
+	orderquery.reload=function(){
+		$(orderquery.dgId).datagrid('reload');
+	}
 orderquery.inits();

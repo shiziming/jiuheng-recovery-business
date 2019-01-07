@@ -1,9 +1,21 @@
 package com.jiuheng.web.controller;
 
 import com.jiuheng.service.domain.RecoveryOrderReq;
+import com.jiuheng.service.domain.RecoveryOrderResp;
+import com.jiuheng.service.dto.Order;
+import com.jiuheng.service.dto.PropsView;
+import com.jiuheng.service.dto.RecoveryProp;
+import com.jiuheng.service.dto.Region;
+import com.jiuheng.service.dto.RegionList;
+import com.jiuheng.service.dto.TemplateOrder;
+import com.jiuheng.service.dubbo.DubboRegionService;
+import com.jiuheng.service.dubbo.DubboTmpOrderService;
+import com.jiuheng.service.respResult.CommonResult;
 import com.jiuheng.service.respResult.Response;
 import com.jiuheng.service.respResult.SearchResult;
 import com.jiuheng.service.dubbo.DubboOrderService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +32,10 @@ public class OrderController {
 
     @Autowired
     private DubboOrderService dubboOrderService;
+    @Autowired
+    private DubboTmpOrderService dubboTmpOrderService;
+    @Autowired
+    private DubboRegionService dubboRegionService;
     @RequestMapping("/index")
     public ModelAndView index(){
             ModelAndView m = new ModelAndView("order/index");
@@ -30,6 +46,67 @@ public class OrderController {
     public SearchResult list(RecoveryOrderReq req,HttpServletRequest request){
         Response<SearchResult> result = dubboOrderService.getOrderList(req, Integer.parseInt(request.getParameter("page")), Integer.parseInt(request.getParameter("rows")));
         return result.getResult();
+    }
+    @RequestMapping("/viewOrderInfo")
+    public ModelAndView viewOrderInfo(String orderId){
+        ModelAndView m = new ModelAndView("order/view");
+        Response<RecoveryOrderResp> result = dubboOrderService.getOrderDetail(orderId);
+        List<RecoveryProp> props = dubboTmpOrderService.getTemplateOrderByOrderId(orderId);
+        m.addObject("order",result.getResult());
+        List<PropsView> viewList = new ArrayList<PropsView>();
+        if(null != props && props.size()>0){
+            int time = props.size()%3 == 0 ? props.size()/3:props.size()/3+1;
+            for (int i =0;i<time;i++){
+                PropsView view = new PropsView();
+                int k=i*3;
+                int l=0;
+                for (int j = k;j < props.size();j++) {
+                    if(l==3){
+                        break;
+                    }
+                    if(l==0){
+                        view.setProp1(props.get(j));
+                    }
+                    if(l==1){
+                        view.setProp2(props.get(j));
+                    }
+                    if(l==2){
+                        view.setProp3(props.get(j));
+                    }
+                    l++;
+                }
+                viewList.add(view);
+            }
+            m.addObject("props",viewList);
+        }
+        return m;
+    }
+
+    @RequestMapping("/update")
+    public ModelAndView update(String orderId){
+        ModelAndView m = new ModelAndView("order/update");
+        Response<RecoveryOrderResp> result = dubboOrderService.getOrderDetail(orderId);
+        //省
+        CommonResult<RegionList> pRegionList = dubboRegionService.getProvinces();
+        //市
+        CommonResult<RegionList> cRegionList = dubboRegionService.getCitys(String.valueOf(result.getResult().getProvince()));
+        //区
+        CommonResult<RegionList> dRegionList = dubboRegionService.getCountys(String.valueOf(result.getResult().getCity()));
+        m.addObject("order",result.getResult());
+        m.addObject("provinces",pRegionList.getData().getProvinces());
+        m.addObject("citys",cRegionList.getData().getCitys());
+        m.addObject("countys",dRegionList.getData().getCountys());
+        return m;
+    }
+
+    @RequestMapping("/updateOrder")
+    @ResponseBody
+    public Response<Boolean> updateOrder(RecoveryOrderReq orderReq){
+        Response<Boolean> result = null;
+        orderReq.setDealPrice(orderReq.getDealPrice()*100);
+        orderReq.setFreightPrice(orderReq.getFreightPrice()*100);
+        result = dubboOrderService.updateOrder(orderReq);
+        return result;
     }
     /*private final String[] headers={"分单号","类型","状态","订单号","特殊订单类型","预售商品标记","店主ID","店主名称","国美员工ID","员工信息","销售组织代码","销售组织名称","门店代码","门店名称","销售公司代码","销售公司名称","成交金额","运费",
         "原分单号","物流确定配送日期","收货人","电话","收货地址","SKUID","商品价格","发放佣金标记","商品佣金","佣金审核否","支付方式","订单提交时间","订单支付时间","收款凭证状态"};

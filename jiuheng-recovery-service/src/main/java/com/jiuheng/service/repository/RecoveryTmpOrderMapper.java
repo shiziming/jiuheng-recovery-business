@@ -13,4 +13,11 @@ public interface RecoveryTmpOrderMapper {
     void saveTemplateOrder(@Param("tmpOrder") TemplateOrder tmpOrder);
 
     List<TemplateOrder> getTemplateOrder(long userId);
+
+    TemplateOrder getTemplateOrderId(String orderId);
+
+    TemplateOrder getTemplateOrderIds(String orderId);
+
+    void updateTemplateOrder(String orderId);
+
 }

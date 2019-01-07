@@ -153,7 +153,7 @@
             }
 
         });
-        for(var i=0;i<myarr1.length;i++){// 只支持正数，不支持小数
+       for(var i=0;i<myarr1.length;i++){// 只支持正数，不支持小数
             if(myarr1[i]==""||myarr1[i]==null||myarr1[i]==undefined||myarr1[i]==''){
                 flag1=false;
                 break;
@@ -275,13 +275,13 @@
         $("#updateBrandId option").remove()
         $("#updateDeviceId option").remove()
         $.ajax({
-            url:ctx+"/device/loadBrand?supportRecycle=1&categoryId="+categoryId,
+            url:"brand/getBranchByCategoryId?id="+categoryId,
             dataType : 'json',
             method:'post',
             success : function(data) {
                 $("#updateBrandId option").remove();
-                for (var i=0;i<data.json.length;i++){
-                    $("#updateBrandId").append("<option value="+data.json[i].id+">"+data.json[i].name+"</option>");
+                for (var i=0;i<data.rows.length;i++){
+                    $("#updateBrandId").append("<option value="+data.rows[i].id+">"+data.rows[i].name+"</option>");
                 }
             }
         });
@@ -290,20 +290,20 @@
         var brandId = $('#updateBrandId').val();
         var categoryId = $("#updateCategoryId").val();
         $.ajax({
-            url:ctx+ '/order/showDevice?supportRecycle=1&brandId='+brandId+"&categoryId="+categoryId,
+            url:'goods/getGoodsList?brandId='+brandId+"&categoryId="+categoryId,
             dataType : 'json',
             method:'post',
             success : function(data) {
                 $("#updateDeviceId option").remove();
-                for (var i=0;i<data.deviceList.length;i++){
-                    $("#updateDeviceId").append("<option value="+data.deviceList[i].id+">"+data.deviceList[i].model+"</option>");
+                for (var i=0;i<data.rows.length;i++){
+                    $("#updateDeviceId").append("<option value="+data.rows[i].id+">"+data.rows[i].model+"</option>");
                 }
             }
         });
     });
     function saveQuotation(){
         var id = $("#id").val();
-        $("#device_data_form").form("submit",{url : ctx +"/recycle/quotation/saveRecycleQuotation", onSubmit:function(param){
+        $("#device_data_form").form("submit",{url : "recovery/saveRecycleQuotation", onSubmit:function(param){
             renameDeviceAttributes();
             var isValid = $(this).form('validate');
             if (!isValid){
@@ -315,8 +315,7 @@
         },
             success:function(data){
                 $.messager.progress('close');
-                    window.location.href= window.ctx+"/recycle/quotation/list";
-//                data = $.parseJSON(data);
+                $.messager.alert("提示","保存成功","info");//                data = $.parseJSON(data);
                 <%--if(1 == 1){--%>
                     <%--$.messager.alert("提示","保存成功","info");--%>
                     <%--var url = ctx +"/device/recycle?id="+${device.id};--%>

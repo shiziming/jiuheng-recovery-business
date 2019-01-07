@@ -3,6 +3,7 @@ package com.jiuheng.api.controller;
 import com.jiuheng.api.domain.CommonValues;
 import com.jiuheng.api.exception.LoginException;
 import com.jiuheng.service.domain.CategoryResp;
+import com.jiuheng.service.dto.Order;
 import com.jiuheng.service.dto.TemplateOrder;
 import com.jiuheng.service.dto.error.LoginErrorResponse;
 import com.jiuheng.service.dubbo.DubboOrderService;
@@ -85,8 +86,8 @@ public class OrderController {
         return response;
     }
 
-    /*@RequestMapping(value = "/saveOrder", method = RequestMethod.GET)
-    public CommonResponse saveOrder(HttpSession httpSession){
+    @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
+    public CommonResponse saveOrder(HttpSession httpSession,@RequestBody Order order){
         CommonResponse response = null;
         try {
             Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
@@ -94,8 +95,8 @@ public class OrderController {
             if (userId == null) {
                 throw new LoginException();
             }
-            List<TemplateOrder> list = dubboOrderService.saveOrder();
-            response = new WebResponse<List<TemplateOrder>>(list);
+            order.setUserId(userId);
+            response = dubboOrderService.saveOrder(order);
         } catch (LoginException e) {
             response = new LoginErrorResponse();
         } catch (Exception e) {
@@ -103,5 +104,5 @@ public class OrderController {
             response = new UnknowResponse();
         }
         return response;
-    }*/
+    }
 }

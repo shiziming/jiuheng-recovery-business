@@ -140,5 +140,12 @@
       id = #{recycleQuotationItem.id}
     </where>
   </update>
-
+  <select id="getRecycleQuotationItemByQuotationId" parameterType="map" resultMap="RMRecycleQuotationItemVo">
+    SELECT
+      *
+    FROM
+      t_recycle_quotation_item
+    WHERE
+      quotation_id = #{quotationId}
+  </select>
 </mapper>

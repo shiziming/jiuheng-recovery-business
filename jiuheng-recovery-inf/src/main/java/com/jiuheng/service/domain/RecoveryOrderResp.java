@@ -13,6 +13,10 @@ public class RecoveryOrderResp implements Serializable{
      */
     private String orderId;
     /**
+     * 用户id
+     */
+    private Long userId;
+    /**
      * 状态
      */
     private int status;
@@ -33,9 +37,17 @@ public class RecoveryOrderResp implements Serializable{
      */
     private String userAdd;
     /**
+     * 用户地址Id
+     */
+    private int addId;
+    /**
      * 商品
      */
     private String goodsName;
+    /**
+     * 商品Id
+     */
+    private int goodsId;
     /**
      * 估价金额
      */
@@ -55,22 +67,37 @@ public class RecoveryOrderResp implements Serializable{
     /**
      * 上门时间
      */
-    private int onDoorTime;
+    private String onDoorTime;
     /**
      * 提交时间
      */
-    private int subTime;
+    private String subTime;
     /**
      * 支付时间
      */
-    private int payTime;
+    private String payTime;
     /**
      * 备注
      */
-    private int message;
+    private String message;
     /**
      * 回收方式(1:上门;2:邮寄)
      */
     private int recoveryType;
-
+    /**
+     * 省编码
+     */
+    private int province;
+    /**
+     * 市编码
+     */
+    private int city;
+    /**
+     * 区编码
+     */
+    private int district;
+    /**
+     * 详细地址
+     */
+    private String detailed;
 }

@@ -24,6 +24,10 @@ public class RecoveryOrderReq implements Serializable{
      */
     private String userName;
     /**
+     * 用户id
+     */
+    private String userId;
+    /**
      * 用户手机号
      */
     private Long userPhone;
@@ -39,6 +43,44 @@ public class RecoveryOrderReq implements Serializable{
      * 订单查询结束日期
      */
     private String subEndTime;
-
-
+    /**
+     * 回收方式
+     */
+    private int recoveryType;
+    /**
+     * 顾客留言
+     */
+    private String message;
+    /**
+     * 成交金额
+     */
+    private double dealPrice;
+    /**
+     * 运费
+     */
+    private double freightPrice;
+    /**
+     * 预约上门时间
+     */
+    private String onDoorTime;
+    /**
+     * 地址id
+     */
+    private int addId;
+    /**
+     * 省编码
+     */
+    private String province;
+    /**
+     * 市编码
+     */
+    private String city;
+    /**
+     * 乡镇编码
+     */
+    private String county;
+    /**
+     * 详细地址
+     */
+    private String detailed;
 }

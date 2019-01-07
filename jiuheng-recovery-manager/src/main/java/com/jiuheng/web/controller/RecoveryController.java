@@ -17,9 +17,11 @@ import com.jiuheng.service.respResult.Response;
 import com.jiuheng.web.domain.CurrentSysUser;
 import com.jiuheng.web.utils.SysUser;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,7 +51,13 @@ public class RecoveryController {
     }
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> list(RecycleQuotation recycleQuotation,int page, int rows){
+    public Map<String, Object> list(RecycleQuotation recycleQuotation,Integer page, Integer rows){
+        if(null == page){
+            page = 0;
+        }
+        if(null == rows){
+            rows = 0;
+        }
         Map model = new HashMap();
         List<RecycleQuotationVo> list = dubboRecoveryQuotationService.getRecycleQuotationList(recycleQuotation, page, rows);
         model.put("rows", list);
@@ -148,5 +156,67 @@ public class RecoveryController {
         model.put("recycleQuotation",recycleQuotation);
         model.put("recycleQuotationItemList",recycleQuotationItemList);
         return model;
+    }
+
+    /**
+     * 保存回收报价
+     * @param recycleQuotationVo
+     * @param request
+     * @return
+     */
+    @RequestMapping("saveRecycleQuotation")
+    public Map saveRecycleQuotation(RecycleQuotationVo recycleQuotationVo ,HttpServletRequest request) {
+        Map model = new HashMap();
+        SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
+        //添加
+        if(recycleQuotationVo.getId()==null){
+            try {
+                recycleQuotationVo.setOperatorId(Long.valueOf(sysUser.getUserId()));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            recycleQuotationVo.setCreateTime(new Date());
+            recycleQuotationVo.setStatus(1);
+            dubboRecoveryQuotationService.saveRecycleQuotation((RecycleQuotation) recycleQuotationVo);
+            if(recycleQuotationVo.getRecycleQuotationItemList()!=null&&recycleQuotationVo.getRecycleQuotationItemList().size()!=0){
+                for (int i = 0; i <recycleQuotationVo.getRecycleQuotationItemList().size(); i++) {
+                    recycleQuotationVo.getRecycleQuotationItemList().get(i).setQuotationId(recycleQuotationVo.getId());
+                    dubboRecoveryQuotationService.saveRecycleQuotationItem(recycleQuotationVo.getRecycleQuotationItemList().get(i));
+                }
+            }
+        }else{
+            for (int i = 0; i <recycleQuotationVo.getRecycleQuotationItemList().size(); i++) {
+                recycleQuotationVo.getRecycleQuotationItemList().get(i).setQuotationId(recycleQuotationVo.getId());
+                dubboRecoveryQuotationService.saveRecycleQuotationItem(recycleQuotationVo.getRecycleQuotationItemList().get(i));
+            }
+            try {
+                recycleQuotationVo.setOperatorId(Long.valueOf(sysUser.getUserId()));//最后一次更新人
+                recycleQuotationVo.setUpdateTime(new Date());//更新时间
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            dubboRecoveryQuotationService.saveRecycleQuotation((RecycleQuotation) recycleQuotationVo);
+        }
+//        recycleQuotationService.
+        model.put("id",recycleQuotationVo.getId());
+        return model;
+    }
+
+    /**
+     * 修改状态
+     * @return
+     */
+    @RequestMapping("updateStatus")
+    @ResponseBody
+    public Response<Boolean> updateStatus(Long id,Integer status) {
+        try {
+            RecycleQuotation recycleQuotation = new RecycleQuotation();
+            recycleQuotation.setId(id);
+            recycleQuotation.setStatus(status);
+            dubboRecoveryQuotationService.saveRecycleQuotation((RecycleQuotation) recycleQuotation);
+            return Response.ok(Boolean.TRUE);
+        } catch (Exception e) {
+            return Response.fail(e.getMessage());
+        }
     }
 }

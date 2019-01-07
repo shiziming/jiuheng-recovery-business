@@ -31,10 +31,10 @@ public interface BranchMapper {
 
     void insertBrands(@Param("brand")BrandReq brand);
 
-    CategoryResp getBrandByCategory(int categoryId);
+    CategoryResp getBrandByCategory(@Param("categoryId")Long categoryId);
 
-    BrandResp getGoodsByBrand(int brandId);
+    BrandResp getGoodsByBrand(@Param("brandId")int brandId);
 
-    List<GoodsAttribute> getAttrByGoodsId(int goodsId);
+    List<GoodsAttribute> getAttrByGoodsId(@Param("goodsId")int goodsId);
 
 }

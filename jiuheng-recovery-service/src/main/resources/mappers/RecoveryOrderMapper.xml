@@ -7,9 +7,16 @@
     <result column="status" jdbcType="INTEGER" property="status"/>
     <result column="recoveryType" jdbcType="INTEGER" property="recoveryType"/>
     <result column="userName" jdbcType="VARCHAR" property="userName"/>
+    <result column="userId" jdbcType="BIGINT" property="userId"/>
     <result column="userPhone" jdbcType="BIGINT" property="userPhone"/>
     <result column="userAdd" jdbcType="VARCHAR" property="userAdd"/>
+    <result column="addId" jdbcType="VARCHAR" property="addId"/>
+    <result column="province" jdbcType="INTEGER" property="province"/>
+    <result column="city" jdbcType="INTEGER" property="city"/>
+    <result column="district" jdbcType="INTEGER" property="district"/>
+    <result column="detailed" jdbcType="VARCHAR" property="detailed"/>
     <result column="goodsName" jdbcType="VARCHAR" property="goodsName"/>
+    <result column="skuId" jdbcType="VARCHAR" property="goodsId"/>
     <result column="valuationPrice" jdbcType="INTEGER" property="valuationPrice"/>
     <result column="dealPrice" jdbcType="INTEGER" property="dealPrice"/>
     <result column="freightPrice" jdbcType="INTEGER" property="freightPrice"/>
@@ -20,8 +27,8 @@
     <result column="message" jdbcType="VARCHAR" property="message"/>
   </resultMap>
   <sql id="Base_Column_List">
-    o.orderId,o.orderType,o.status,o.recoveryType,a.userName,a.userPhone,CONCAT(a.provinceName,a.cityName,a.countryName,a.addr) as userAdd,
-	  g.goodsName,o.valuationPrice,o.dealPrice,o.freightPrice,o.payType,o.onDoorTime,o.subTime,o.payTime,o.message
+    o.orderId,o.orderType,o.status,o.recoveryType,o.userName,o.userId,o.userPhone,CONCAT(a.DIVISION_NAME,b.DIVISION_NAME,c.DIVISION_NAME,o.detailed) as userAdd,a.DIVISION_CODE as province,b.DIVISION_CODE as city,c.DIVISION_CODE as district,o.detailed,
+	  g.skuId,g.goodsName,o.valuationPrice,o.dealPrice,o.freightPrice,o.payType,o.onDoorTime,o.subTime,o.payTime,o.message
   </sql>
   <select id="getOrderList" parameterType="com.jiuheng.service.domain.RecoveryOrderReq" resultMap="BaseResultMap">
     SELECT
@@ -29,6 +36,90 @@
     FROM
       recovery_order o
     LEFT JOIN recovery_goods g ON o.skuId = g.skuId
-    LEFT JOIN user_addr a ON o.addrId = a.addrId
+    LEFT JOIN recovery_region a ON o.provinceCode = a.DIVISION_CODE
+    LEFT JOIN recovery_region b ON o.cityCode = b.DIVISION_CODE
+    LEFT JOIN recovery_region c ON o.districtCode = c.DIVISION_CODE
   </select>
+  <insert id="saveOrder" parameterType="com.jiuheng.service.domain.RecoveryOrderDto">
+    INSERT INTO recovery_order(
+    orderId,
+    orderType,
+    status,
+    recoveryType,
+    userId,
+    provinceCode,
+    cityCode,
+    districtCode,
+    detailed,
+    skuId,
+    valuationPrice,
+    dealPrice,
+    freightPrice,
+    payType,
+    onDoorTime,
+    subTime,
+    payTime,
+    message,
+    userName,
+    userPhone,
+    createTime,
+    updateTime
+
+    )
+    VALUES
+    (
+    #{recoveryOrderDto.orderId},
+    #{recoveryOrderDto.orderType},
+    #{recoveryOrderDto.status},
+    #{recoveryOrderDto.recoveryType},
+    #{recoveryOrderDto.userId},
+    #{recoveryOrderDto.provinceCode},
+    #{recoveryOrderDto.cityCode},
+    #{recoveryOrderDto.districtCode},
+    #{recoveryOrderDto.detailed},
+    #{recoveryOrderDto.model},
+    #{recoveryOrderDto.valuationPrice},
+    #{recoveryOrderDto.dealPrice},
+    #{recoveryOrderDto.freightPrice},
+    #{recoveryOrderDto.payType},
+    #{recoveryOrderDto.onDoorTime},
+    #{recoveryOrderDto.subTime},
+    #{recoveryOrderDto.payTime},
+    #{recoveryOrderDto.message},
+    #{recoveryOrderDto.userName},
+    #{recoveryOrderDto.userPhone}
+    now(),
+    now()
+    )
+
+  </insert>
+  <select id="getOrderDetail" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM
+    recovery_order o
+    LEFT JOIN recovery_goods g ON o.skuId = g.skuId
+    LEFT JOIN recovery_region a ON o.provinceCode = a.DIVISION_CODE
+    LEFT JOIN recovery_region b ON o.cityCode = b.DIVISION_CODE
+    LEFT JOIN recovery_region c ON o.districtCode = c.DIVISION_CODE
+    WHERE o.orderId =#{orderId}
+  </select>
+  <update id="updateOrder" parameterType="com.jiuheng.service.domain.RecoveryOrderReq">
+    UPDATE recovery_order
+    SET STATUS = #{recoveryOrderReq.orderStatus},
+     recoveryType = #{recoveryOrderReq.recoveryType},
+     message = #{recoveryOrderReq.message},
+     payType = #{recoveryOrderReq.payType},
+     dealPrice = #{recoveryOrderReq.dealPrice},
+     freightPrice = #{recoveryOrderReq.freightPrice},
+     onDoorTime = #{recoveryOrderReq.onDoorTime},
+     userName=#{recoveryOrderReq.userName},
+     userPhone=#{recoveryOrderReq.userPhone},
+     provinceCode=#{recoveryOrderReq.province},
+     cityCode=#{recoveryOrderReq.city},
+     districtCode=#{recoveryOrderReq.county},
+     detailed=#{recoveryOrderReq.detailed}
+    WHERE
+      orderId = #{recoveryOrderReq.orderId}
+  </update>
 </mapper>

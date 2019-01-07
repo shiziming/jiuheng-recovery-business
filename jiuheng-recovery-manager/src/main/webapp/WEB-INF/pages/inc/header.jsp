@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctx" value="<%=request.getContextPath()%>" ></c:set>
-<c:set var="picUrl" value='<%=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/images/"%>' ></c:set>
+<c:set var="picUrl" value='<%=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()%>' ></c:set>
 <%-- <c:set var="ewmUrl" value='<%=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()%>' ></c:set> --%>
 
 <script type="text/javascript">

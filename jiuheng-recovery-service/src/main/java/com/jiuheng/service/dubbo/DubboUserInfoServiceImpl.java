@@ -39,7 +39,12 @@ public class DubboUserInfoServiceImpl implements DubboUserInfoService{
    public CommonResponse updateUserInfo(UserInfo userInfo){
        CommonResponse response = null;
        try {
-           userMapper.updateUserInfo(userInfo);
+           MemberInfo info = userMapper.getUserInfo(userInfo.getUserId());
+           if(null == info){
+               userMapper.addUserInfo(userInfo);
+           }else {
+               userMapper.updateUserInfo(userInfo);
+           }
            response = new CommonResponse(200,"");
            return response;
        } catch (Exception e) {

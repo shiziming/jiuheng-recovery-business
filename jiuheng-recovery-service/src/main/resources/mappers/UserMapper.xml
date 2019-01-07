@@ -35,26 +35,23 @@
   <select id="checkUserLogin" parameterType="com.jiuheng.service.dto.login.LoginRequest" resultMap="BaseResultMap">
     SELECT
       id,
-      name,
       phone,
       password
     FROM
-      user_info
+      user_account
     WHERE
       phone = #{loginRequest.phone}
   </select>
   <insert id="registerLogin" parameterType="com.jiuheng.service.dto.login.LoginRequest" >
-    INSERT INTO user_info (
-      id,
-      NAME,
+    INSERT INTO user_account (
+      name,
       phone,
       password,
       createTime
       )
       VALUES
       (
-      #{loginRequest.id},
-      #{loginRequest.phone},
+      #{loginRequest.name},
       #{loginRequest.phone},
       #{loginRequest.password},
       NOW()
@@ -62,18 +59,20 @@
   </insert>
   <select id="getUserInfo" parameterType="long" resultMap="UserInfoMap">
     SELECT
-      id,
-      name,
-      username,
-      phone,
-      password,
-      bank_card AS bankCard,
-      bank,
-      createTime
+      account.id,
+      account. NAME,
+      info.username,
+      info.phone,
+      account. PASSWORD,
+      info.bank_card AS bankCard,
+      info.bank,
+      account.createTime
     FROM
-      user_info
+      user_info info,
+      user_account account
     WHERE
-      id = #{userId}
+      info.id = account.id
+    AND account.id = #{userId}
   </select>
   <update id="updateUserInfo" parameterType="com.jiuheng.service.dto.UserInfo">
     UPDATE user_info
@@ -83,6 +82,25 @@
       phone = #{phone}
     WHERE
       id = #{userId}
+  </update>
+  <update id="addUserInfo" parameterType="com.jiuheng.service.dto.UserInfo">
+    INSERT INTO user_info (
+      id,
+      username,
+      phone,
+      bank_card,
+      bank,
+      createTime
+    )
+    VALUES
+      (
+      #{userId},
+      #{userName},
+      #{phone},
+      #{bankCard},
+      #{bank},
+      NOW()
+      );
   </update>
   <select id="getUserAddr" parameterType="long" resultMap="UserAddrMap">
     SELECT
@@ -152,28 +170,28 @@
   </insert>
   <select id="getUserList" parameterType="com.jiuheng.service.dto.UserInfo" resultMap="UserInfoMap">
     SELECT
-      id,
-      username AS userName,
-      name,
-      phone,
-      bank_card AS bankCard,
-      createTime
+      account.id,
+      info.username AS userName,
+      account.name,
+      info.phone,
+      info.bank_card AS bankCard,
+      account.createTime
     FROM
-      user_info
+      user_info info,user_account account
     WHERE 1=1
     <if test="userInfo.name != null and userInfo.name != ''">
       AND
-        name = #{userInfo.name}
+      account.name = #{userInfo.name}
     </if>
     <if test="userInfo.phone != null and userInfo.phone != ''">
       AND
-        phone = #{userInfo.phone}
+      info.phone = #{userInfo.phone}
     </if>
     <if test="userInfo.createStartTime != null and userInfo.createStartTime != ''">
-      <![CDATA[ AND DATE_FORMAT(createTime,'%Y-%m-%d') >= #{userInfo.createStartTime} ]]>
+      <![CDATA[ AND DATE_FORMAT(account.createTime,'%Y-%m-%d') >= #{userInfo.createStartTime} ]]>
     </if>
     <if test="userInfo.createEndTime != null and userInfo.createEndTime != ''">
-      <![CDATA[ AND DATE_FORMAT(createTime,'%Y-%m-%d') <= #{userInfo.createEndTime} ]]>
+      <![CDATA[ AND DATE_FORMAT(account.createTime,'%Y-%m-%d') <= #{userInfo.createEndTime} ]]>
     </if>
   </select>
 </mapper>

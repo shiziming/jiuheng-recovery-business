@@ -94,11 +94,12 @@ public class LoginController {
             resp = new CommonResponse(node.getCode(),node.getMsg());
             return resp;
         }
-        long phone = dubboValidCodeService.checkVaildCode(loginRequest.getValidrand(),loginRequest.getValidCode());
+        /*long phone = dubboValidCodeService.checkVaildCode(loginRequest.getValidrand(),loginRequest.getValidCode());
         if(phone<0L){
             resp = new CommonResponse(LoginError.VAILD_CODE_ERROR.getCode(),LoginError.VAILD_CODE_ERROR.getMsg());
             return resp;
-        }
+        }*/
+        loginRequest.setName(loginRequest.getPhone().toString());
         resp = dubboLoginService.registerLogin(loginRequest);
         return resp;
     }

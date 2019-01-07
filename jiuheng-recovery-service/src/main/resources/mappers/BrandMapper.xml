@@ -152,9 +152,10 @@
   LEFT JOIN recovery_brand b ON a.brand_id = b.id
   LEFT JOIN recovery_category c ON a.category_id = c.id
   WHERE
-    a.category_id = #{categoryId}
-  AND
     b.status = 1
+    <if test="categoryId != null and categoryId != 0">
+      AND a.category_id = #{categoryId}
+    </if>
   </select>
   <select id="getGoodsByBrand" resultMap="GoodsMap" parameterType="int">
   SELECT

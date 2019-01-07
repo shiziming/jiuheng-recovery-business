@@ -10,7 +10,7 @@
 				<table class="table table-hover table-condensed" style="width: 100%; padding: 2px 1% 0px 1%">
 					<tr>
 						<td width="80px" align="center">订单号</td>
-						<td width="80px"><input  class="easyui-numberbox" name="orderId"></td>
+						<td width="80px"><input  class="easyui-textbox" type="text" name="orderId"></td>
 					    <td width="80px" align="center">订单状态</td>
 						<td width="100px"><select id="orderStatus" name="orderStatus" class="easyui-combobox" editable="false" style="width:74%;">
 								<option value="" selected="selected"></option>
@@ -20,7 +20,7 @@
 								<option value="3">已退货</option>
 						</select></td>
 						<td width="80px" align="center">客户名称</td>
-						<td width="80px"><input  class="easyui-numberbox" name="userName"></td>
+						<td width="80px"><input  class="easyui-textbox" type="text" name="userName"></td>
 						<td width="80px" align="center">客户手机号</td>
 						<td width="80px"><input  class="easyui-numberbox" name="userPhone"></td>
 

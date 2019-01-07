@@ -34,4 +34,33 @@
     userId = #{userId}
   AND STATUS = 1
   </select>
+  <select id="getTemplateOrderId" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+      orderId,
+      orderDetail,
+      userId,
+      createTime
+    FROM
+      recovery_tmp_order
+    WHERE
+      orderId = #{orderId}
+    AND STATUS = 1
+  </select>
+  <select id="getTemplateOrderIds" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+    orderId,
+    orderDetail,
+    userId,
+    createTime
+    FROM
+    recovery_tmp_order
+    WHERE
+    orderId = #{orderId}
+  </select>
+  <update id="updateTemplateOrder" parameterType="String">
+  UPDATE recovery_tmp_order
+  SET STATUS = 0
+  WHERE
+    orderId = #{orderId}
+  </update>
 </mapper>

@@ -36,4 +36,6 @@
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 	<dubbo:service interface="com.jiuheng.service.dubbo.DubboRecoveryQuotationService" ref="dubboRecoveryQuotationService"
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboRegionService" ref="dubboRegionService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 </beans>

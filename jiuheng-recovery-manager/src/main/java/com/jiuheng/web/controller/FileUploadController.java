@@ -1,9 +1,11 @@
 package com.jiuheng.web.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiuheng.web.common.Constant;
 import com.jiuheng.web.utils.DateUtil;
 import com.jiuheng.web.utils.StringUtils;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +20,18 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,7 +45,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class FileUploadController {
 
     protected Log log = LogFactory.getLog(FileUploadController.class);
-    
+
+    @Value("${GFS_TOKEN}")
+    private String token = null;
+    @Value("${GFS_URL}")
+    private String url = null;
     //定义允许上传的文件扩展名
     protected static HashMap<String, String> extMap = new HashMap<String, String>();
     static{
@@ -51,7 +65,7 @@ public class FileUploadController {
 //    }
 
     @RequestMapping("fileUpload")
-    public ModelAndView fileUpload(HttpServletRequest request, @RequestParam(value = "file", required = true) MultipartFile file,ModelMap model) {
+    public Map fileUpload(HttpServletRequest request, @RequestParam(value = "file", required = true) MultipartFile file,Map model) {
     	
     	String errorMsg = "";
     	String dirName = request.getParameter("dir");
@@ -61,10 +75,10 @@ public class FileUploadController {
     	
     	if(!extMap.containsKey(dirName)){
     		errorMsg = "暂不支持该文件类型";
-            model.addAttribute("state", errorMsg);
-            model.addAttribute("error", "1");	
-            model.addAttribute("message", errorMsg);
-            return new ModelAndView("jsonView", model);
+            model.put("state", errorMsg);
+            model.put("error", "1");
+            model.put("message", errorMsg);
+            return  model;
     	}
     	
     	//检查扩展名
@@ -72,10 +86,10 @@ public class FileUploadController {
 		String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
 		if(!Arrays.<String>asList(extMap.get(dirName).split(",")).contains(fileExt)){
 			errorMsg = "上传文件扩展名是不允许的扩展名。\n只允许" + extMap.get(dirName) + "格式。";
-            model.addAttribute("state", errorMsg);
-            model.addAttribute("error", "1");	
-            model.addAttribute("message", errorMsg);
-            return new ModelAndView("jsonView", model);
+            model.put("state", errorMsg);
+            model.put("error", "1");
+            model.put("message", errorMsg);
+            return model;
 		}
     			
     	if("image".equals(dirName))
@@ -86,10 +100,10 @@ public class FileUploadController {
     		return attachmentFileUpload(request,file);
     	else{
     		errorMsg = "暂不支持该类型";
-            model.addAttribute("state", errorMsg);
-            model.addAttribute("error", "1");	
-            model.addAttribute("message", errorMsg);
-            return new ModelAndView("jsonView", model);
+            model.put("state", errorMsg);
+            model.put("error", "1");
+            model.put("message", errorMsg);
+            return model;
     	}
     	
     }
@@ -101,10 +115,11 @@ public class FileUploadController {
      * @return
      */
     @RequestMapping("imgFileUpload")
-    public ModelAndView imgFileUpload(HttpServletRequest request,@RequestParam(value = "file", required = true) MultipartFile file) {
+    @ResponseBody
+    public Map imgFileUpload(HttpServletRequest request,@RequestParam(value = "file", required = true) MultipartFile file) {
 
         log.debug("文件上传,文件名:" + file.getOriginalFilename() + ";文件大小:" + file.getSize());
-        ModelMap model = new ModelMap();
+        Map model = new HashMap();
         try {
 
             //生成保存到服务器的路径
@@ -159,24 +174,24 @@ public class FileUploadController {
 //            }
 
             //封装返回数据
-            model.addAttribute("state", "SUCCESS");
-            model.addAttribute("error", 0);
-            model.addAttribute("url", Constant.UPLOAD_FILE_PRE_PATH + sb.toString());
-            model.addAttribute("fileType", getFileExt(fileName));
-            model.addAttribute("original", fileName);
-            model.addAttribute("title", request.getParameter("pictitle") == null ? "" : request.getParameter("pictitle"));
-            model.addAttribute("lisitPath", Constant.UPLOAD_FILE_URL_PRE);
+            model.put("state", "SUCCESS");
+            model.put("error", 0);
+            model.put("url", Constant.UPLOAD_FILE_PRE_PATH + sb.toString());
+            model.put("fileType", getFileExt(fileName));
+            model.put("original", fileName);
+            model.put("title", request.getParameter("pictitle") == null ? "" : request.getParameter("pictitle"));
+            model.put("lisitPath", Constant.UPLOAD_FILE_URL_PRE);
             //生成一个图片标示
-            model.addAttribute("imagId",UUID.randomUUID());
+            model.put("imagId",UUID.randomUUID());
             log.info("返回给页面的属性值是:url:" + Constant.UPLOAD_FILE_PRE_PATH + sb.toString() + ",fileType:" + getFileExt(fileName) + ",original:" + fileName + ",lisitPath:" + Constant.UPLOAD_FILE_URL_PRE);
         } catch (Exception e) {
-            model.addAttribute("state", "IO\\u5f02\\u5e38");
-            model.addAttribute("message", "IO\\u5f02\\u5e38");
-            model.addAttribute("error", 0);
-            model.addAttribute("url", "");
+            model.put("state", "IO\\u5f02\\u5e38");
+            model.put("message", "IO\\u5f02\\u5e38");
+            model.put("error", 0);
+            model.put("url", "");
             log.error("上传图片文件失败:" + e.getMessage(), e);
         }
-        return new ModelAndView("jsonView", model);
+        return model;
     }
 
     /**
@@ -186,11 +201,11 @@ public class FileUploadController {
      * @return
      */
     @RequestMapping("videoFileUpload")
-    public ModelAndView videoFileUpload(Map<String, String> param,
+    public Map videoFileUpload(Map<String, String> param,
                                         @RequestParam(value = "file", required = true) MultipartFile file) {
 
         log.debug("文件上传,文件名:" + file.getOriginalFilename() + ";文件大小:" + file.getSize());
-        ModelMap model = new ModelMap();
+        Map model = new HashMap();
         try {
 
             //生成保存到服务器的路径
@@ -217,22 +232,22 @@ public class FileUploadController {
 //            VideoUtils videoUtils = new VideoUtils();
 //            videoUtils.toMp4(saveFile, new File(Constant.UPLOAD_FILE_ROOT_PATH+Constant.UPLOAD_FILE_PRE_PATH+sb.toString()+"_v.mp4"));
             //封装返回数据
-            model.addAttribute("state", "SUCCESS");
-            model.addAttribute("error", 0);
-            model.addAttribute("url", Constant.UPLOAD_FILE_PRE_PATH + sb.toString() + getFileExt(fileName));
-            model.addAttribute("fileType", getFileExt(fileName));
-            model.addAttribute("original", fileName);
-            model.addAttribute("lisitPath", Constant.UPLOAD_FILE_URL_PRE);
+            model.put("state", "SUCCESS");
+            model.put("error", 0);
+            model.put("url", Constant.UPLOAD_FILE_PRE_PATH + sb.toString() + getFileExt(fileName));
+            model.put("fileType", getFileExt(fileName));
+            model.put("original", fileName);
+            model.put("lisitPath", Constant.UPLOAD_FILE_URL_PRE);
             
 
            
         } catch (Exception e) {
-            model.addAttribute("state", "IO错误");
-            model.addAttribute("message", "IO\\u5f02\\u5e38");
-            model.addAttribute("error", 1);
+            model.put("state", "IO错误");
+            model.put("message", "IO\\u5f02\\u5e38");
+            model.put("error", 1);
             log.error("上传视频文件失败:" + e.getMessage(), e);
         }
-        return new ModelAndView("jsonView", model);
+        return model;
     }
 
     @RequestMapping("testConver")
@@ -254,13 +269,13 @@ public class FileUploadController {
      * @return
      */
     @RequestMapping("attachmentFileUpload")
-    public ModelAndView attachmentFileUpload(HttpServletRequest request,
+    public Map attachmentFileUpload(HttpServletRequest request,
                                              @RequestParam(value = "file", required = true) MultipartFile file) {
 
         log.debug("文件上传,文件名:" + file.getOriginalFilename() + ";文件大小:" + file.getSize());
 
 
-        ModelMap model = new ModelMap();
+        Map model = new HashMap();
         try {
 
             //生成保存到服务器的路径
@@ -302,7 +317,7 @@ public class FileUploadController {
             if (!overrideIfExists && saveFile.exists()) {
 
                 //封装返回数据
-                model.addAttribute("state", "目标文件已存在，并且未设置覆盖");
+                model.put("state", "目标文件已存在，并且未设置覆盖");
 
             } else {
                 //复制文件
@@ -310,8 +325,8 @@ public class FileUploadController {
                 file.transferTo(saveFile);
 
                 //封装返回数据
-                model.addAttribute("state", "SUCCESS");
-                model.addAttribute("error", 0);
+                model.put("state", "SUCCESS");
+                model.put("error", 0);
 
             }
 
@@ -332,19 +347,19 @@ public class FileUploadController {
 //                }
 //            }
 
-            model.addAttribute("url", urlPath);
-            model.addAttribute("fileType", getFileExt(fileName));
-            model.addAttribute("original", fileName);
-            model.addAttribute("lisitPath", Constant.UPLOAD_FILE_URL_PRE);
+            model.put("url", urlPath);
+            model.put("fileType", getFileExt(fileName));
+            model.put("original", fileName);
+            model.put("lisitPath", Constant.UPLOAD_FILE_URL_PRE);
         } catch (Exception e) {
-            model.addAttribute("state", "IO\\u5f02\\u5e38");
-            model.addAttribute("message", "IO\\u5f02\\u5e38");
-            model.addAttribute("error", 1);
+            model.put("state", "IO\\u5f02\\u5e38");
+            model.put("message", "IO\\u5f02\\u5e38");
+            model.put("error", 1);
             log.error("上传文件失败:" + e.getMessage(), e);
 
             e.printStackTrace();
         }
-        return new ModelAndView("jsonView", model);
+        return model;
     }
 
     /**
@@ -375,5 +390,108 @@ public class FileUploadController {
         } else
             return fileName.substring(fileName.lastIndexOf("."));
     }
-    
+    // 工程头像上传图片
+    /**
+     * 上传图片的功能
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("/uploadImg")
+    public ModelAndView uploadImg(HttpServletRequest request,@RequestParam(value = "file", required = true) MultipartFile file) {
+        log.debug("文件上传,文件名:" + file.getOriginalFilename() + ";文件大小:" + file.getSize());
+        ModelMap model = new ModelMap();
+
+        // 获取上传文件的路径
+        String uploadFilePath = file.getOriginalFilename();
+        log.info("uploadFlePath:" + uploadFilePath);
+
+        // 截取上传文件的文件名
+        String uploadFileName = uploadFilePath.substring(uploadFilePath.lastIndexOf('\\') + 1,
+            uploadFilePath.lastIndexOf('.'));
+        log.info("uploadFileName：  " + uploadFileName);
+
+        // 截取上传文件的后缀
+        String suffix = uploadFilePath.substring(uploadFilePath.lastIndexOf(".") + 1);
+        log.info("uploadFileSuffix:   " + suffix);
+
+        InputStream fis = null;
+        try {
+            Integer length = file.getBytes().length;
+            log.info("file size: " + length);
+
+            fis = file.getInputStream();
+            Map result = this.upload(fis, suffix);
+            log.info("map:"+result);
+
+            //封装返回数据
+            model.addAttribute("state", "SUCCESS");
+            model.addAttribute("error", 0);
+            model.addAttribute("url", result.get("url"));
+            model.addAttribute("fileType", suffix);
+            model.addAttribute("original", uploadFilePath);
+            model.addAttribute("title", request.getParameter("pictitle") == null ? "" : request.getParameter("pictitle"));
+            return new ModelAndView("jsonView", model);
+
+        } catch (Exception e) {
+            model.addAttribute("state", "IO\\u5f02\\u5e38");
+            model.addAttribute("message", "IO\\u5f02\\u5e38");
+            model.addAttribute("error", 0);
+            model.addAttribute("url", "");
+            log.error("上传图片文件失败:" + e.getMessage(), e);
+            return new ModelAndView("jsonView", model);
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 上传图片后，将图片的信息返回
+     * @param fis
+     * @return
+     */
+    private Map upload(InputStream fis, String suffix) {
+
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+
+            byte[] b = new byte[1024];
+            int n = 0;
+            while ((n = fis.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            byte[] buffer = bos.toByteArray();
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            httpClient.setHttpRequestRetryHandler(new DefaultHttpRequestRetryHandler(0, false));
+            HttpPost post = new HttpPost(url + suffix);
+            log.info(" image upload url :" + url);
+
+            post.addHeader("token", token);
+            post.setEntity(new ByteArrayEntity(buffer));
+
+            HttpResponse httpResponse = httpClient.execute(post);
+            // 将结果转换成串
+            String content = EntityUtils.toString(httpResponse.getEntity());
+            log.info("upload result :" + content);
+
+            fis.close();
+            bos.close();
+            httpClient.close();
+
+            ObjectMapper mapper = new ObjectMapper();
+            Map map = mapper.readValue(content, Map.class);
+
+            return map;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

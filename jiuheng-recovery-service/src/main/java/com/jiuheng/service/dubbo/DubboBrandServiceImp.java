@@ -139,7 +139,7 @@ public class DubboBrandServiceImp implements DubboBrandService{
         }
     }
     @Override
-    public Response<SearchResult> getBrandByCategory(int categoryId){
+    public Response<SearchResult> getBrandByCategory(Long categoryId){
         SearchResult result = new SearchResult(0, null);
         try {
             CategoryResp resp= branchMapper.getBrandByCategory(categoryId);

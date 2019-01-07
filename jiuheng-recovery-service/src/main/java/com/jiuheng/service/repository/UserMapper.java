@@ -22,7 +22,11 @@ public interface UserMapper {
 
     void updateUserInfo(UserInfo userInfo);
 
+    void addUserInfo(UserInfo userInfo);
+
     List<UserAddr> getUserAddr(long userId);
+
+    UserAddr getUserAddrByUserIdAndAddrId(long userId,int addrId);
 
     void delUserAddr(@Param("userAddr") UserAddr userAddr);
 

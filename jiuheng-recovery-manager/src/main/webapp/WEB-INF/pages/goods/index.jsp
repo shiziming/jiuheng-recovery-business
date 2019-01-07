@@ -133,12 +133,9 @@
 
   function saveDevice(){
     $("#device_data_form").form("submit",{
-      url : "goods/saveGoods",
+      url : "goods/updateOrder",
       onSubmit:function(param){
-        renameDeviceAttributes();
         var isValid = $(this).form('validate');
- 	   	var reg = new RegExp("^[0-9]*$");
-	   	var supplierPhone =	$('#supplierPhone').val();
 	    if (!isValid){
           $.messager.progress('close');	// 如果表单是无效的则隐藏进度条
         }

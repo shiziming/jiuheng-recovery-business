@@ -1,6 +1,7 @@
 package com.jiuheng.service.dubbo;
 
 import com.jiuheng.service.domain.RecycleQuotation;
+import com.jiuheng.service.domain.RecycleQuotationItem;
 import com.jiuheng.service.domain.RecycleQuotationItemVo;
 import com.jiuheng.service.domain.RecycleQuotationVo;
 import com.jiuheng.service.repository.RecoveryQuotationMapper;
@@ -40,4 +41,25 @@ public class DubboRecoveryQuotationServiceImp implements DubboRecoveryQuotationS
     public List<RecycleQuotationItemVo> getRecycleQuotationItem(Integer deviceId,Long quotationId) {
         return recoveryQuotationMapper.getRecycleQuotationItem(deviceId,quotationId);
     }
+
+    @Override
+    public void saveRecycleQuotation(RecycleQuotation recycleQuotation) {
+        if(recycleQuotation.getId() == null){
+            recoveryQuotationMapper.addRecycleQuotation(recycleQuotation);
+        }else{
+            recoveryQuotationMapper.updateRecycleQuotation(recycleQuotation);
+        }
+    }
+
+    @Override
+    public void saveRecycleQuotationItem(RecycleQuotationItem recycleQuotationItem) {
+        if(recycleQuotationItem.getId() == null){
+            recoveryQuotationMapper.addRecycleQuotationItem(recycleQuotationItem);
+        }else{
+            recoveryQuotationMapper.updateRecycleQuotationItem(recycleQuotationItem);
+        }
+
+    }
+
+
 }

@@ -28,7 +28,7 @@ public interface DubboBrandService {
 
     Response<Boolean> deleteBrand(BrandReq brand);
 
-    Response<SearchResult> getBrandByCategory(int categoryId);
+    Response<SearchResult> getBrandByCategory(Long categoryId);
 
     CommonResult<BrandResp> getGoodsByBrand(int brandId);
 

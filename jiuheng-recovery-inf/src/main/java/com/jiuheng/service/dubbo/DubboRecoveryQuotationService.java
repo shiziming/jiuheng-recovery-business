@@ -1,6 +1,7 @@
 package com.jiuheng.service.dubbo;
 
 import com.jiuheng.service.domain.RecycleQuotation;
+import com.jiuheng.service.domain.RecycleQuotationItem;
 import com.jiuheng.service.domain.RecycleQuotationItemVo;
 import com.jiuheng.service.domain.RecycleQuotationVo;
 import java.util.List;
@@ -20,4 +21,7 @@ public interface DubboRecoveryQuotationService{
 
     public List<RecycleQuotationItemVo> getRecycleQuotationItem(Integer deviceId,Long quotationId);
 
+    public void saveRecycleQuotation(RecycleQuotation recycleQuotation);
+
+    public void saveRecycleQuotationItem(RecycleQuotationItem recycleQuotationItem);
 }
