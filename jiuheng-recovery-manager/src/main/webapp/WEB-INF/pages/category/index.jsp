@@ -117,7 +117,7 @@
                 if (response != null) {
                     $("#device_category_data_div").datagrid('updateRow',{
                         index: index,
-                        row:response.url
+                        row:{categoryPic:response.url}
                     });
                     $("#device_category_data_div").datagrid("beginEdit", index);
                 } else {

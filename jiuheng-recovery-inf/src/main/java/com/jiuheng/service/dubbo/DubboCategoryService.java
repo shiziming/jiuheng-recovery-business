@@ -18,4 +18,6 @@ public interface DubboCategoryService {
 
     Response<CategoryResp> getDeviceCategory(long id);
 
+    Response<Boolean> updateCategory(CategoryReq categoryReq);
+
 }

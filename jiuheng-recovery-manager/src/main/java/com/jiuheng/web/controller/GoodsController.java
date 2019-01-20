@@ -89,33 +89,6 @@ public class GoodsController {
             result = dubboGoodsService.saveGoods(goodsReq);
         }else{
             result = dubboGoodsService.updateGoods(goodsReq);
-            /*List<DeviceAttributeValue> usedValues = deviceService.checkAttributeValue(device.getAttrs());
-
-            if(usedValues == null){
-                deviceService.updateDevice(device);
-                model.addAttribute("result", 1);
-            }else{
-                //属性已经在方案中使用，提示用户。
-                //如果用户未确认强制更新
-                if(StringUtils.isTrimEmpty(updateToken)){
-                    model.clear();
-                    model.addAttribute("result", 2);
-                    String token = RandomCodeUtils.makeLetterCode(32);
-                    request.getSession().setAttribute(FORCE_UPDATE, token);
-
-                    model.addAttribute("updateToken", token);
-                }else{
-                    //用户确认强制更新，执行更新
-                    Object token = request.getSession().getAttribute(FORCE_UPDATE);
-                    if(token == null || !updateToken.equals(token)){
-                        throw new IllegalArgumentException("未找到该token，请重新提交");
-                    }else{
-                        deviceService.updateDevice(device);
-                        model.addAttribute("result", 1);
-                        request.getSession().removeAttribute(FORCE_UPDATE);
-                    }
-                }
-            }*/
         }
         return result;
     }
@@ -218,5 +191,25 @@ public class GoodsController {
         model.addObject("device", goodsResp.getResult());
         model.addObject("type", type);
         return model;
+    }
+
+    @RequestMapping("addDevice")
+    public ModelAndView addDevice(Long categoryId, Long brandId){
+        ModelAndView m = new ModelAndView("goods/goodsAdd");
+        m.addObject("categories", dubboCategoryService.getCategoryList(null, 0,0).getResult().getRows());
+        //加入-2的条件 停用的品牌也需要显示出来
+        BrandReq req = new BrandReq();
+        req.setStatus(-2);
+        if(categoryId !=null){
+            req.setCategoryId(categoryId);
+        }
+        m.addObject("brands", dubboBrandService.getAllBranch(req, 0,0).getResult().getRows());
+        if(categoryId != null && categoryId >= 0){
+            m.addObject("attrs", dubboAttributeService.getCategoryAttributesByCategory(categoryId).getResult().getRows());
+            m.addObject("categoryId", categoryId);
+            m.addObject("brandId", brandId);
+        }
+
+        return m;
     }
 }

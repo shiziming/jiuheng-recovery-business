@@ -11,24 +11,26 @@
 
 	<!-- 订单服务 -->
 	<dubbo:reference id="dubboOrderService" interface="com.jiuheng.service.dubbo.DubboOrderService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="3"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="3"/>
 	<!-- 菜单服务 -->
 	<dubbo:reference id="dubboMenuService" interface="com.jiuheng.service.dubbo.DubboMenuService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboBrandService" interface="com.jiuheng.service.dubbo.DubboBrandService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboCategoryService" interface="com.jiuheng.service.dubbo.DubboCategoryService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboAttributeService" interface="com.jiuheng.service.dubbo.DubboAttributeService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboGoodsService" interface="com.jiuheng.service.dubbo.DubboGoodsService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboUserInfoService" interface="com.jiuheng.service.dubbo.DubboUserInfoService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboRecoveryQuotationService" interface="com.jiuheng.service.dubbo.DubboRecoveryQuotationService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboTmpOrderService" interface="com.jiuheng.service.dubbo.DubboTmpOrderService"
-		registry="clientZk" version="${dubbo.version.client}" check="true" retries="0"/>
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboRegionService" interface="com.jiuheng.service.dubbo.DubboRegionService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+	<dubbo:reference id="dubboIndexService" interface="com.jiuheng.service.dubbo.DubboIndexService"
 		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 </beans>

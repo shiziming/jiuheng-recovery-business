@@ -34,4 +34,8 @@ public class BrandReq implements Serializable{
      * 图片地址
      */
     private String pic;
+    /**
+     * 品类
+     */
+    private Long categoryId;
 }

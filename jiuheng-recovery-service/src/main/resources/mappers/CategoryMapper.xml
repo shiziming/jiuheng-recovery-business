@@ -34,7 +34,8 @@
       a.*, b.id AS sub_id,
       b.fid AS sub_fid,
       b. NAME AS sub_name,
-      b.path_id as sub_path_id
+      b.path_id as sub_path_id,
+      b.category_pic as sub_category_pic
     FROM
       recovery_category a
     LEFT JOIN recovery_category b ON a.id = b.fid

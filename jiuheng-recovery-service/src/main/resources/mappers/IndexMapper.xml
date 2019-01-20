@@ -35,4 +35,19 @@
     LEFT JOIN recovery_goods b ON a.skuId = b.skuId
     AND a. STATUS = 1
   </select>
+  <update id="updatePicture">
+    UPDATE
+     recovery_banner_image
+    SET
+     STATUS = 0
+  </update>
+  <insert id="savePicture" parameterType="java.util.List">
+    insert
+    into
+      recovery_banner_image (linkUrl, imageUrl,sort,status,createTime,createUser)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.linkUrl,jdbcType=VARCHAR}, #{item.imageUrl,jdbcType=VARCHAR},#{item.sort,jdbcType=INTEGER},#{item.status,jdbcType=INTEGER},SYSDATE(),#{item.createUser,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
 </mapper>

@@ -45,10 +45,4 @@
 		<servlet-name>dispatch</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<jsp-config>
-		<taglib>
-			<taglib-uri>/struts-tags</taglib-uri>
-			<taglib-location>WEB-INF/struts-tags.tld</taglib-location>
-		</taglib>
-	</jsp-config>
 </web-app>

@@ -52,11 +52,15 @@ public class CategoryController {
     @RequestMapping("saveCategory")
     @ResponseBody
     public Response<Boolean> saveCategory(CategoryReq categoryReq, HttpServletRequest request){
-        ModelMap model = new ModelMap();
+        Response<Boolean> result = null;
         if(categoryReq.getId() != null && categoryReq.getId() <= 0){
             throw new IllegalArgumentException("设备分类参数不正确");
         }
-        Response<Boolean> result = dubboCategoryService.saveCategory(categoryReq);
+        if(null == categoryReq.getId()){
+            result = dubboCategoryService.saveCategory(categoryReq);
+        }else{
+            result = dubboCategoryService.updateCategory(categoryReq);
+        }
         return result;
     }
 }

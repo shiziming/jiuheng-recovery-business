@@ -30,17 +30,14 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
     public Response<SearchResult> getCategoryList(CategoryReq categoryReq, int pageNo, int pageSize){
         try {
             List<CategoryResp> list = null;
-            int count=0;
             if(categoryReq == null){
                 categoryReq = new CategoryReq();
             }
             if(pageSize != 0){
                 PageHelper.startPage(pageNo, pageSize,true);
                 list = categoryMapper.getCategoryList(categoryReq);
-                count = categoryMapper.getCategoryListCount(categoryReq);
             }else{
                 list=categoryMapper.getCategoryList(categoryReq);
-                count = categoryMapper.getCategoryListCount(categoryReq);
             }
             Page<CategoryResp>  page = PageHelper.startPage(pageNo, pageSize);
             list=categoryMapper.getCategoryList(categoryReq);
@@ -58,7 +55,7 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
 
             }
             SearchResult searchResult = EasyUiDataGridUtil.convertToResult(queryList);
-            searchResult.setTotal(count);
+            searchResult.setTotal(queryList.size());
             return Response.ok(searchResult);
         } catch (Exception e) {
             log.error("DubboCategoryService.getCategoryList",e);
@@ -121,6 +118,33 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
             return Response.ok(parentCategory);
         } catch (Exception e) {
             log.error("DubboCategoryService.getDeviceCategory",e);
+            return Response.fail(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public Response<Boolean> updateCategory(CategoryReq categoryReq){
+        try {
+            if(categoryReq == null || categoryReq.getFid() == null) {
+                throw new IllegalArgumentException("无效的设备分类");
+            }
+            categoryReq.setStatus((byte)1);
+            if(categoryReq.getFid() == -1){
+                categoryReq.setPathId(String.valueOf(categoryReq.getId()));
+                categoryReq.setPathName(categoryReq.getName());
+                categoryMapper.updateDeviceCategory(categoryReq);
+
+            }else {
+                //获取节点
+                CategoryResp parentCategory = categoryMapper.getDeviceCategory(categoryReq.getFid());
+                categoryReq.setPathId(parentCategory.getPathId()+"," + categoryReq.getId());
+                categoryReq.setPathName(parentCategory.getPathName()+" >> " + categoryReq.getName());
+                categoryMapper.updateDeviceCategory(categoryReq);
+            }
+            return Response.ok(Boolean.TRUE);
+        } catch (IllegalArgumentException e) {
+            log.error("DubboCategoryService.updateCategory",e);
             return Response.fail(e.getMessage());
         }
 

@@ -2,6 +2,8 @@ package com.jiuheng.service.dubbo;
 
 import com.jiuheng.service.dto.BannerImage;
 import com.jiuheng.service.dto.HotGoods;
+import com.jiuheng.service.dto.IndexPicture;
+import com.jiuheng.service.respResult.Response;
 import java.util.List;
 
 /**
@@ -10,6 +12,8 @@ import java.util.List;
 public interface DubboIndexService {
 
     List<BannerImage> getBannerImage();
+
+    Response<Boolean> savePicture(IndexPicture pics);
 
     List<HotGoods> getHotGoodsList();
 }

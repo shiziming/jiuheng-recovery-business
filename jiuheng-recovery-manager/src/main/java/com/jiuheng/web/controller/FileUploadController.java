@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
@@ -42,9 +43,8 @@ import org.springframework.web.servlet.ModelAndView;
  * Description:
  */
 @Controller
+@Slf4j
 public class FileUploadController {
-
-    protected Log log = LogFactory.getLog(FileUploadController.class);
 
     @Value("${GFS_TOKEN}")
     private String token = null;

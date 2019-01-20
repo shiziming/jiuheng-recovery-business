@@ -49,9 +49,9 @@
         <label>图标</label>
         <a class="easyui-linkbutton" id="device_upload_pic_btn" plain="true" iconCls="icon-add">传图</a>
         <input type="hidden" name="pic" value="${device.pic}" />
-        <c:if test="${device.pic != null}">
+        <c:if test="${device.pic != null && device.pic != ''}">
             <div style="display: inline-block;">
-                <img src="${uploadFilePath}${device.pic}" width="90" height="90">
+                <img src="${uploadFilePath}${device.pic}" width="90" height="90" name="showPic">
                 <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="delete_device_pic">删除</a>
             </div>
         </c:if>
@@ -199,7 +199,8 @@
             var $t = $(this);
             $.messager.confirm("提示", "确定删除上传的logo吗？",function(r){
                 if(r){
-                    $t.siblings("input:hidden[name=pic]").val("").siblings("img").remove();
+                    $("input:hidden[name=pic]").val("");
+                    $("[name=showPic]").remove();
                 }
             });
         });
@@ -208,13 +209,11 @@
             fileType:'pic',
             action:"imgFileUpload",
             onComplete:function(file,response){
-                alert(JSON.stringify(response));
-                alert(picUrl+response.url);
                 $("input:hidden[name=pic]").val(response.url);
                 if($("input:hidden[name=pic]").siblings("img")[0] != undefined){
                     $("input:hidden[name=pic]").siblings("img").remove();
                 }
-                $('<img src="'+picUrl+ response.url+'" width="90" height="90">').insertAfter("input:hidden[name=pic]");
+                $('<img src="'+picUrl+ response.url+'" width="90" height="90" name="showPic">').insertAfter("input:hidden[name=pic]");
             }
         });
 

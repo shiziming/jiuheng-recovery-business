@@ -95,6 +95,11 @@
       recovery_category d
     ON
       c.category_id = d.id
+    <where>
+      <if test="brandReq.categoryId != null and brandReq.categoryId != 0">
+        AND category_id = #{brandReq.categoryId}
+      </if>
+    </where>
   </select>
 
   <select id="getAllBranchCount" resultType="int">

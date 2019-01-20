@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.RegionMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.dto.Region">
+    <id column="DIVISION_CODE" property="regionCode" />
+    <result column="DIVISION_NAME" property="regionName" />
+  </resultMap>
+
+  <select id="getProvinces" resultMap="BaseResultMap">
+    SELECT
+      DIVISION_CODE,DIVISION_NAME
+    FROM
+      recovery_region
+    WHERE
+      PARENT_DIVISION_CODE = 'CN'
+    AND IS_SHOW = 1;
+  </select>
+  <select id="getCitys" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+      DIVISION_CODE,DIVISION_NAME
+    FROM
+      recovery_region
+    WHERE
+      PARENT_DIVISION_CODE = #{provinceId}
+    AND IS_SHOW = 1;
+  </select>
+
+  <select id="getCountys" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+        DIVISION_CODE,DIVISION_NAME
+      FROM
+        recovery_region
+      WHERE
+        PARENT_DIVISION_CODE = #{cityId}
+      AND IS_SHOW = 1;
+  </select>
+  <select id="getRegionByCode" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+      DIVISION_CODE,DIVISION_NAME
+    FROM
+      recovery_region
+    WHERE
+      DIVISION_CODE = #{code}
+  </select>
+</mapper>

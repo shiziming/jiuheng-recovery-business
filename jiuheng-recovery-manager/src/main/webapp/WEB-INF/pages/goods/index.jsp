@@ -57,7 +57,7 @@
     $("#device_search_btn").click(loadDeviceList);
 
     $("#device_add_btn").click(function(){
-        showBrandDialog(ctx+"/device/addDevice");
+        showBrandDialog("goods/addDevice");
     });
 
     $("#device_data_div").datagrid({
@@ -133,8 +133,9 @@
 
   function saveDevice(){
     $("#device_data_form").form("submit",{
-      url : "goods/updateOrder",
+      url : "goods/saveGoods",
       onSubmit:function(param){
+        renameDeviceAttributes();
         var isValid = $(this).form('validate');
 	    if (!isValid){
           $.messager.progress('close');	// 如果表单是无效的则隐藏进度条

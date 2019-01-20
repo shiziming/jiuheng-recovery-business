@@ -41,7 +41,15 @@ public class BrandController {
     @RequestMapping("/getAllBranch")
     @ResponseBody
     public SearchResult getAllBranch(BrandReq req,HttpServletRequest request){
-        Response<SearchResult> result=dubboBrandService.getAllBranch(req,Integer.parseInt(request.getParameter("page")), Integer.parseInt(request.getParameter("rows")));
+        String page = request.getParameter("page");
+        String rows = request.getParameter("rows");
+        if(null == page){
+            page = "0";
+        }
+        if(null == rows){
+            rows = "0";
+        }
+        Response<SearchResult> result=dubboBrandService.getAllBranch(req,Integer.parseInt(page), Integer.parseInt(rows));
         return result.getResult();
     }
     @RequestMapping("/getBranchByCategoryId")

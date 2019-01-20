@@ -115,7 +115,7 @@ public class DubboOrderServiceImp implements DubboOrderService {
         }
     }
     @Override
-    @Transactional()
+    @Transactional
     public Response<Boolean> updateOrder(RecoveryOrderReq orderReq){
         try {
             recoveryOrderMapper.updateOrder(orderReq);
