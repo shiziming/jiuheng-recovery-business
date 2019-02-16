@@ -43,7 +43,7 @@
                 },
                 {title:"分类图标地址",field:"categoryPic",width:100, align:"center",formatter:function(val, row, idx){
                     if(val){
-                        return '<img src="${uploadFilePath}'+val+'" width="90px" height="90px" >'+
+                        return '<img src="'+val+'" width="90px" height="90px" >'+
                                 '<a class="easyui-linkbutton" onmouseover="uploadCategoryPic(this,'+idx+')" onmouseenter="uploadCategoryPic(this,'+idx+')" iconCls="icon-edit" href="javascript:;">编辑</a>  '+
                                 '<a class="easyui-linkbutton" onclick="deleteCategoryPic('+idx+')" href="javascript:;">删除</a>';
                     }else{

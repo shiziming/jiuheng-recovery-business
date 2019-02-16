@@ -54,7 +54,7 @@
             <input type="hidden" name="pic" value="${device.pic}"/>
             <c:if test="${device.pic != null}">
                 <div style="display: inline-block">
-                    <img src="${uploadFilePath}${device.pic}" width="90" height="90">
+                    <img src="${device.pic}" width="90" height="90">
                     <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="delete_device_pic">删除</a>
                 </div>
             </c:if>
@@ -158,7 +158,7 @@
                     if ($("input:hidden[name=pic]").siblings("img")[0] != undefined) {
                         $("input:hidden[name=pic]").siblings("img").remove();
                     }
-                    $('<img src="${uploadFilePath}' + response.url + '" width="90" height="90">').insertAfter("input:hidden[name=pic]");
+                    $('<img src="' + response.url + '" width="90" height="90">').insertAfter("input:hidden[name=pic]");
                 }
             });
 

@@ -20,4 +20,7 @@ public interface DubboCategoryService {
 
     Response<Boolean> updateCategory(CategoryReq categoryReq);
 
+    Response<SearchResult> getCategory();
+
+
 }

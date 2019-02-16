@@ -16,4 +16,7 @@ public interface DubboIndexService {
     Response<Boolean> savePicture(IndexPicture pics);
 
     List<HotGoods> getHotGoodsList();
+
+    Response<Boolean> saveHotModels(List<HotGoods> hotModels);
+
 }

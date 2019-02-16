@@ -94,4 +94,16 @@
     from recovery_category dc
     WHERE id = #{id}
   </select>
+  <select id="getCategory" resultMap="RMSubDeviceCategory">
+    SELECT
+      id,
+      NAME,
+      category_Pic,
+      sort
+    FROM
+      recovery_category
+    WHERE
+      fid != - 1
+    AND STATUS = 1
+  </select>
 </mapper>

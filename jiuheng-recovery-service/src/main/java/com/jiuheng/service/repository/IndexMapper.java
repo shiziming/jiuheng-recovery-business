@@ -17,4 +17,9 @@ public interface IndexMapper {
     void savePicture(List<BannerImage> pics);
 
     void updatePicture();
+
+    void updateHotGoods();
+
+    void saveHotGoods(List<HotGoods> hotModels);
+
 }

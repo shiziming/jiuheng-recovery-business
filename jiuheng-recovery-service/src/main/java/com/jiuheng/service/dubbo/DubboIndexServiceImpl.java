@@ -59,5 +59,20 @@ public class DubboIndexServiceImpl implements DubboIndexService{
         }
     }
 
+    @Override
+    @Transactional
+    public Response<Boolean> saveHotModels(List<HotGoods> hotModels){
+        try {
+            indexMapper.updateHotGoods();
+            if(hotModels.size()>0){
+                indexMapper.saveHotGoods(hotModels);
+            }
+            return Response.ok(Boolean.TRUE);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            log.error("DubboIndexService.saveHotModels",e);
+            return Response.fail(e.getMessage());
+        }
+    }
 
 }

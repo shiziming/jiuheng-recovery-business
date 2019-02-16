@@ -33,4 +33,8 @@
 		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 	<dubbo:reference id="dubboIndexService" interface="com.jiuheng.service.dubbo.DubboIndexService"
 		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+	<dubbo:reference id="dubboBackerAccountService" interface="com.jiuheng.service.dubbo.DubboBackerAccountService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+	<dubbo:reference id="dubboPowerService" interface="com.jiuheng.service.dubbo.DubboPowerService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 </beans>

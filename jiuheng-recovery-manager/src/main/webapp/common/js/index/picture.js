@@ -28,7 +28,7 @@ picture_add.inits = function() {
 			align:"center",
 			formatter:function(val, row, idx){
 				if(val){
-					return '<img src="${uploadFilePath}'+val+'" width="90px" height="90px" >'+
+					return '<img src="'+val+'" width="90px" height="90px" >'+
 							'<a class="easyui-linkbutton" onmouseover="picture_add.uploadIndexPic(this,'+idx+')" onmouseenter="picture_add.uploadIndexPic(this,'+idx+')" iconCls="icon-edit" href="javascript:;">编辑</a>  '+
 							'<a class="easyui-linkbutton" onclick="picture_add.deleteIndexPic('+idx+')" href="javascript:;">删除</a>';
 				}else{
@@ -113,6 +113,18 @@ picture_add.save=function(){
 			return false;
 		}
 	};
+	for (var i = 0; i < materials.length; i++) {
+		var k=0;
+		for (var j = 0; j < materials.length; j++) {
+			if(materials[j].sort == materials[i].sort){
+				k++;
+			}
+			if(2==k){
+				$.messager.alert('请核实图片显示位置','图片顺序重复，请修改后保存！', 'warning');
+				return false;
+			}
+		}
+	}
 	var savePicture={};
 	savePicture.pics=materials;
 	$.ajax({

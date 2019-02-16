@@ -170,6 +170,13 @@ public class DubboBrandServiceImp implements DubboBrandService{
         CommonResult<List<GoodsAttribute>> result = null;
         try {
             List<GoodsAttribute> resp= branchMapper.getAttrByGoodsId(goodsId);
+            for (GoodsAttribute attr:resp) {
+                if(1 == attr.getAttributeType() || 2 == attr.getAttributeType()){
+                    attr.setChoice(2);
+                }else{
+                    attr.setChoice(3);
+                }
+            }
             result = new CommonResult<List<GoodsAttribute>>(resp);
             return result;
         } catch (Exception e) {

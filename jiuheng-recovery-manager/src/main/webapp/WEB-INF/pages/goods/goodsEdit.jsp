@@ -51,7 +51,7 @@
         <input type="hidden" name="pic" value="${device.pic}" />
         <c:if test="${device.pic != null && device.pic != ''}">
             <div style="display: inline-block;">
-                <img src="${uploadFilePath}${device.pic}" width="90" height="90" name="showPic">
+                <img src="${device.pic}" width="90" height="90" name="showPic">
                 <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="delete_device_pic">删除</a>
             </div>
         </c:if>

@@ -44,5 +44,9 @@ public class GoodsAttribute implements Serializable{
      * 属性集合
      */
     private List<AttributeValue> attributeValueList;
-
+    /**
+     * 是否必选
+     * 0 是单选 1 是多选 2 单选非必选 3 多选非必选
+     */
+    private Integer choice;
 }

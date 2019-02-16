@@ -26,4 +26,12 @@ public class HotGoods implements Serializable{
      * 回收均价
      */
     private long recoveryAveragePrice;
+    /**
+     * 创建人
+     */
+    private String createUser;
+    /**
+     * 状态
+     */
+    private int status;
 }

@@ -11,9 +11,9 @@
     <result column="createUser" jdbcType="VARCHAR" property="createUser"/>
   </resultMap>
   <resultMap id="HotGoodsResultMap" type="com.jiuheng.service.dto.HotGoods">
-    <id column="goodsId" jdbcType="INTEGER" property="skuId"/>
+    <id column="skuId" jdbcType="INTEGER" property="goodsId"/>
     <result column="goodsName" jdbcType="VARCHAR" property="goodsName"/>
-    <result column="imageUrl" jdbcType="VARCHAR" property="pic"/>
+    <result column="pic" jdbcType="VARCHAR" property="imageUrl"/>
     <result column="recoveryAveragePrice" jdbcType="BIGINT" property="recoveryAveragePrice"/>
   </resultMap>
   <select id="getBannerImage" resultMap="BaseResultMap">
@@ -29,11 +29,11 @@
       a.skuId,
       a.recoveryAveragePrice,
       b.goodsName,
-     	b.pic
+     	a.pic
     FROM
       recovery_hot_goods a
     LEFT JOIN recovery_goods b ON a.skuId = b.skuId
-    AND a. STATUS = 1
+    WHERE a.STATUS = 1
   </select>
   <update id="updatePicture">
     UPDATE
@@ -48,6 +48,21 @@
     values
     <foreach collection="list" item="item" index="index" separator=",">
       (#{item.linkUrl,jdbcType=VARCHAR}, #{item.imageUrl,jdbcType=VARCHAR},#{item.sort,jdbcType=INTEGER},#{item.status,jdbcType=INTEGER},SYSDATE(),#{item.createUser,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <update id="updateHotGoods">
+    UPDATE
+    recovery_hot_goods
+    SET
+    STATUS = 0
+  </update>
+  <insert id="saveHotGoods" parameterType="java.util.List">
+    insert
+    into
+    recovery_hot_goods (skuId, pic,recoveryAveragePrice,status,createTime,createUser)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.goodsId,jdbcType=INTEGER}, #{item.imageUrl,jdbcType=VARCHAR},#{item.recoveryAveragePrice,jdbcType=INTEGER},#{item.status,jdbcType=INTEGER},SYSDATE(),#{item.createUser,jdbcType=VARCHAR})
     </foreach>
   </insert>
 </mapper>

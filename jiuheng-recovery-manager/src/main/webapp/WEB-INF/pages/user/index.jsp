@@ -19,11 +19,11 @@
 								<option value="2">已下单</option>
 								<option value="3">已退货</option>
 						</select></td>--%>
-						<td width="80px" align="center">客户名称</td>
-						<td width="80px"><input name="name" type="text"></td>
+						<td width="80px" align="center">用户昵称</td>
+						<td width="80px"><input name="userName" type="text"></td>
 						<td width="80px" align="center">客户手机号</td>
 						<td width="80px"><input  class="easyui-numberbox" name="phone"></td>
-						<td width="80px" align="center">订单提交日期</td>
+						<td width="80px" align="center">注册日期</td>
 						<td width="80px" colspan="2"><input id="createStartTime" style="width:100px"
 															placeholder="起始日期" class="easyui-datebox" name="createStartTime" type="text" />至
 							<input id="createEndTime" style="width: 100px" placeholder="结束日期" class="easyui-datebox" name="createEndTime" type="text" /></td>

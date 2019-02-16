@@ -13,7 +13,7 @@ hotModel_add.inits = function() {
 		fitColumns : true,
 		rownumbers : true,
 		checkOnSelect : false,
-		url:'index/bannerList',
+		url:'index/getHotModelList',
 		onDblClickRow : function(index,row){
 			$(hotModel_add.dgId).datagrid('beginEdit',index);
 		},
@@ -22,13 +22,31 @@ hotModel_add.inits = function() {
 			width : 10,
 			checkbox : true
 		}, {
+			field : 'getSpuInfo',
+			title : '获取商品信息',
+			align:'center',
+			width : 100,
+			formatter:function(value,row,index){
+				return  '<a href="#" onclick="hotModel_add.getSpuInfo(this);">查询</a>';
+			}
+		}, {
+			field : 'goodsId',
+			title : '商品id',
+			align:'center',
+			width : 100,
+		}, {
+			field : 'goodsName',
+			title : '商品名称',
+			align:'center',
+			width : 100,
+		}, {
 			title:"图片地址",
 			field:"imageUrl",
 			width:100,
 			align:"center",
 			formatter:function(val, row, idx){
 				if(val){
-					return '<img src="${uploadFilePath}'+val+'" width="90px" height="90px" >'+
+					return '<img src="'+val+'" width="90px" height="90px" >'+
 							'<a class="easyui-linkbutton" onmouseover="hotModel_add.uploadIndexPic(this,'+idx+')" onmouseenter="hotModel_add.uploadIndexPic(this,'+idx+')" iconCls="icon-edit" href="javascript:;">编辑</a>  '+
 							'<a class="easyui-linkbutton" onclick="hotModel_add.deleteIndexPic('+idx+')" href="javascript:;">删除</a>';
 				}else{
@@ -36,17 +54,11 @@ hotModel_add.inits = function() {
 				}
 			}
 		}, {
-			field : 'linkUrl',
-			title : '图片链接',
+			field : 'recoveryAveragePrice',
+			title : '平均价格',
 			align:'center',
 			width : 100,
-			editor:{type:'textbox'}
-		}, {
-			field : 'sort',
-			title : '排序',
-			align:'center',
-			width : 100,
-			editor:{type:'numberbox',options:{required:true,max :6,min:1}}
+			editor:{type:'numberbox'}
 		}] ],
 		toolbar : hotModel_add.tbId
 	});
@@ -104,23 +116,26 @@ hotModel_add.save=function(){
 	$(hotModel_add.dgId).datagrid('acceptChanges');
 	var materials = $(hotModel_add.dgId).datagrid('getRows');
 	for (var i = 0; i < materials.length; i++) {
+		if ($.o2m.isEmpty(materials[i].goodsId)) {
+			$.messager.alert('请核实商品', '第' + (i + 1) + '行商品数据未添加！', 'warning');
+			return false;
+		}
 		if ($.o2m.isEmpty(materials[i].imageUrl)) {
 			$.messager.alert('请核实图片地址', '第' + (i + 1) + '行数据未添加图片地址！', 'warning');
 			return false;
 		}
-		if ($.o2m.isEmpty(materials[i].sort)) {
-			$.messager.alert('请核实图片显示位置', '第' + (i + 1) + '行数据未添加图片排序！', 'warning');
+		if ($.o2m.isEmpty(materials[i].recoveryAveragePrice)) {
+			$.messager.alert('请核实价格', '第' + (i + 1) + '行数据价格未添加！', 'warning');
 			return false;
 		}
 	};
-	var savePicture={};
-	savePicture.pics=materials;
+	var hotModels=materials;
 	$.ajax({
 		type : "POST",
-		url : "index/savePicture",
+		url : "index/saveHotModels",
 		dataType : "json",
 		contentType : "application/json",
-		data : JSON.stringify(savePicture),
+		data : JSON.stringify(hotModels),
 		success : function(data) {
 			if(data.result==true){
 				$.messager.alert('提示','保存成功','success');
@@ -130,6 +145,20 @@ hotModel_add.save=function(){
 		}
 	});
 	
+}
+
+hotModel_add.getSpuInfo=function(obj) {
+	var row =$(obj).parents('tr').attr('datagrid-row-index');
+	$('#magnifier').window({
+		width: 700,
+		height: 450,
+		modal: true,
+		inline:true,
+		method:'post',
+		href: "index/hotModelManager?row="+row,
+		title: "全部商品"
+	});
+	$('#magnifier').window('open');
 }
 hotModel_add.inits();
 

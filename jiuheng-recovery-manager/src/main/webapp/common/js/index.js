@@ -5,7 +5,7 @@
 	var zTree_Menu = null;
 	
 	this.logout = function(){
-		window.location.href="power/toLogin";
+		window.location.href="login/toLogin";
 	}
 
 	this.init = function(){

@@ -1,11 +1,17 @@
 package com.jiuheng.web.controller;
 
 import com.jiuheng.service.domain.Menu;
+import com.jiuheng.service.domain.UserAccount;
+import com.jiuheng.service.dubbo.DubboBackerAccountService;
 import com.jiuheng.service.dubbo.DubboMenuService;
+import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.web.utils.SysUser;
+import java.io.IOException;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +26,8 @@ public class LoginController {
 
 	@Resource
 	private DubboMenuService dubboMenuService;
+	@Resource
+	private DubboBackerAccountService dubboBackerAccountService;
 
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	@ResponseBody
@@ -29,11 +37,18 @@ public class LoginController {
 
 		if(StringUtils.isBlank(indexLoginId)) return "{\"flag\" : \"loginIdNull\"}";
 		if(StringUtils.isBlank(indexLoginPwd)) return "{\"flag\" : \"loginPwdNull\"}";
+		UserAccount userAccount = new UserAccount();
+		userAccount.setAccount(indexLoginId);
+		userAccount.setPassword(indexLoginPwd);
+		userAccount = dubboBackerAccountService.login(userAccount);
+		if(null == userAccount){
+			return "{\"flag\" : \"loginPwdError\"}";
+		}
 		SysUser sysUser = new SysUser();
-		sysUser.setUserId(123456);
-		sysUser.setUserAccount(indexLoginId);
-		sysUser.setUserName("石子明");
-		if(indexLoginId.equals("admin") && indexLoginPwd.equals("123456")){
+		sysUser.setUserId(userAccount.getUserId());
+		sysUser.setUserAccount(userAccount.getAccount());
+		sysUser.setUserName(userAccount.getUserName());
+		if(indexLoginId.equals(userAccount.getAccount()) && indexLoginPwd.equals(userAccount.getPassword())){
 			request.getSession().setAttribute("user", sysUser);
 			return "{\"flag\" : \"success\"}";
 		}else{
@@ -41,7 +56,19 @@ public class LoginController {
 		}
 
 	}
-
+	/**
+	 * 跳转用户登录页面
+	 *
+	 */
+	@RequestMapping(value="/toLogin")
+	public void toLogin(HttpSession session,HttpServletResponse response){
+		session.removeAttribute("user");
+		try {
+			response.sendRedirect("/jiuheng-recovery-manager/login");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	@RequestMapping(value="/getPositionRoleMenuTree")
 	@ResponseBody
 	public String getPositionRoleMenuTree(HttpServletRequest request){
@@ -58,31 +85,6 @@ public class LoginController {
 			object.put("lnkUrl", menu.getLnkUrl());
 			object.put("icon", menu.getIcon());
 			array.add(object);
-
-			/*object.put("id", 123);
-			object.put("pId", 0);
-			object.put("name", "商品管理");
-			object.put("lnkUrl", "");
-			object.put("icon", "/images/icons/kongtiao.png");
-			array.add(object);
-			object.put("id", 145);
-			object.put("pId", 0);
-			object.put("name", "用户管理");
-			object.put("lnkUrl", "");
-			object.put("icon", "/images/icons/kongtiao.png");
-			array.add(object);
-			object.put("id", 1234);
-			object.put("pId", 123);
-			object.put("name", "商品管理");
-			object.put("lnkUrl", "http://bj.58.com/");
-			object.put("icon", "/images/icons/kongtiao.png");
-			array.add(object);
-			object.put("id", 12342);
-			object.put("pId", 145);
-			object.put("name", "用户查询");
-			object.put("lnkUrl", "http://bj.58.com/");
-			object.put("icon", "");
-			array.add(object);*/
 		}
 		return array.toString();
 	}

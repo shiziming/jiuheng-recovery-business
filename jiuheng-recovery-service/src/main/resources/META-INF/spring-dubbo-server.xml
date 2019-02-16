@@ -38,4 +38,8 @@
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 	<dubbo:service interface="com.jiuheng.service.dubbo.DubboRegionService" ref="dubboRegionService"
 		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboBackerAccountService" ref="dubboBackerAccountService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
+	<dubbo:service interface="com.jiuheng.service.dubbo.DubboPowerService" ref="dubboPowerService"
+		registry="serverZk" timeout="5000" version="${dubbo.version.server}"/>
 </beans>

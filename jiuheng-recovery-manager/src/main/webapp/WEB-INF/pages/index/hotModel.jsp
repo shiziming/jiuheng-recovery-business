@@ -10,7 +10,7 @@
                 <td width="10%"></td>
                 <td width="10%" align="center">
                     <a href="#" class="easyui-linkbutton"	data-options="toggle:true,group:'g2',plain:true,iconCls:'icon-ok'"
-                       onclick="picture_add.save();">保存</a>
+                       onclick="hotModel_add.save();">保存</a>
                 <td width="10%"></td>
                 <td width="10%"></td>
                 <td width="10%"></td>
@@ -19,9 +19,9 @@
     </form>
     <div id="tb" style="display: none;">
         <a href="javascript:void(0);"	class="easyui-linkbutton"
-           data-options="iconCls:'icon-add',plain:true" onclick="picture_add.addRow();">增加</a>
+           data-options="iconCls:'icon-add',plain:true" onclick="hotModel_add.addRow();">增加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton"
-           data-options="iconCls:'icon-remove',plain:true" onclick="picture_add.delRow();">删除</a>
+           data-options="iconCls:'icon-remove',plain:true" onclick="hotModel_add.delRow();">删除</a>
     </div>
     <div class="easyui-window" data-options="closed:true,cache:false" id="magnifier"></div>
 </div>

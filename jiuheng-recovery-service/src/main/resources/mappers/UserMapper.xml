@@ -179,9 +179,10 @@
     FROM
       user_info info,user_account account
     WHERE 1=1
-    <if test="userInfo.name != null and userInfo.name != ''">
+    AND info.id = account.id
+    <if test="userInfo.userName != null and userInfo.userName != ''">
       AND
-      account.name = #{userInfo.name}
+      info.username = #{userInfo.userName}
     </if>
     <if test="userInfo.phone != null and userInfo.phone != ''">
       AND

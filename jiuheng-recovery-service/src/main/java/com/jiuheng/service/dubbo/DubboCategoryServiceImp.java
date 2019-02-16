@@ -150,4 +150,17 @@ public class DubboCategoryServiceImp implements DubboCategoryService{
 
     }
 
+    @Override
+    public Response<SearchResult> getCategory(){
+        try {
+            List<CategoryResp> list = categoryMapper.getCategory();
+            SearchResult searchResult = EasyUiDataGridUtil.convertToResult(list);
+            return Response.ok(searchResult);
+        } catch (Exception e) {
+            log.error("DubboCategoryService.getCategory",e);
+            return new Response("500","服务器内部错误，请稍后重试");
+        }
+
+    }
+
 }

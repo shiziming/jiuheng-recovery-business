@@ -21,4 +21,6 @@ public interface CategoryMapper {
     void insertDeviceCategory(CategoryReq categoryReq);
 
     CategoryResp getDeviceCategory(long id);
+
+    List<CategoryResp> getCategory();
 }

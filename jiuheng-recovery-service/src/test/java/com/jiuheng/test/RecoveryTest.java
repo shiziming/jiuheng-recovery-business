@@ -3,6 +3,7 @@ package com.jiuheng.test;
 import com.jiuheng.service.ServiceApp;
 import com.jiuheng.service.dto.RegionList;
 import com.jiuheng.service.dto.TemplateOrder;
+import com.jiuheng.service.dubbo.DubboIndexService;
 import com.jiuheng.service.dubbo.DubboRegionService;
 import com.jiuheng.service.dubbo.DubboTmpOrderService;
 import com.jiuheng.service.respResult.CommonResult;
@@ -20,6 +21,8 @@ public class RecoveryTest {
     private DubboTmpOrderService dubboTmpOrderService;
     @Autowired
     private DubboRegionService dubboRegionService;
+    @Autowired
+    private DubboIndexService dubboIndexService;
     @Test
     public void testEncodeCert(){
         TemplateOrder tmpOrder =new TemplateOrder();
@@ -35,6 +38,10 @@ public class RecoveryTest {
         CommonResult<RegionList> result2= dubboRegionService.getCitys("13000000");
         CommonResult<RegionList> result3= dubboRegionService.getCountys("13110000");
         System.out.print("success");
+    }
+    @Test
+    public void testGetHotGoodsList(){
+        dubboIndexService.getHotGoodsList();
     }
 
 }

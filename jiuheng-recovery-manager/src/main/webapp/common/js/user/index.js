@@ -33,11 +33,7 @@ userquery.inits = function() {
 			align:'center',
 		},{
 			field : 'userName',
-			title : '用户名称',
-			align:'center',
-		},{
-			field : 'name',
-			title : '昵称',
+			title : '用户昵称',
 			align:'center',
 		},{
 			field : 'phone',

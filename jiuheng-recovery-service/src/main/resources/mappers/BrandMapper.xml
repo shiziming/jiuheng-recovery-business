@@ -46,6 +46,7 @@
     <result column="goodsId" jdbcType="INTEGER" property="goodsId"/>
     <result column="attributeId" jdbcType="INTEGER" property="attributeId"/>
     <result column="attributeValue" jdbcType="VARCHAR" property="attributeValue"/>
+    <result column="attributeType" jdbcType="VARCHAR" property="attributeType"/>
     <collection property="attributeValueList" resultMap="GoodsAttrMap" columnPrefix="attr_" />
 </resultMap>
   <resultMap id="GoodsAttrMap" type="com.jiuheng.service.domain.AttributeValue">
@@ -180,7 +181,8 @@
   SELECT
     ra.id,
     rg.skuId AS goodsId,
-    ra. name AS attributeValue,
+    ra.name AS attributeValue,
+    ra.type AS attributeType,
     ra.id AS attributeId,
     rgav.id AS attr_attribute_id,
     rgav.attribute_value AS attr_attribute_value
