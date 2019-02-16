@@ -6,6 +6,7 @@ import com.jiuheng.service.domain.BrandResp;
 import com.jiuheng.service.domain.CategoryResp;
 import com.jiuheng.service.domain.GoodsAttribute;
 import com.jiuheng.service.dubbo.DubboBrandService;
+import com.jiuheng.service.dubbo.DubboCategoryService;
 import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.service.respResult.CommonResult;
 import com.jiuheng.service.respResult.Response;
@@ -29,7 +30,8 @@ public class GoodsController {
 
     @Autowired
     private DubboBrandService dubboBrandService;
-
+    @Autowired
+    private DubboCategoryService dubboCategoryService;
     @RequestMapping(value = "/getBrandByCategory", method = RequestMethod.GET)
     public CommonResponse getBrandByCategory(Long categoryId){
         CommonResponse response = null;
@@ -37,8 +39,11 @@ public class GoodsController {
             Response<SearchResult> result =  dubboBrandService.getBrandByCategory(categoryId);
             if(result.getResult() != null && result.getResult().getRows() != null && result.getResult().getRows().size()>0){
                 response = new WebResponse<>(result.getResult().getRows());
+            }else if(result.getError() != null){
+                response = new CommonResponse(500,"服务器内部错误");
             }else{
-                response = new CommonResponse();
+                response = new CommonResponse(200,"");
+
             }
         } catch (Exception e) {
             log.error("getBrandByCategory.error",e);
@@ -78,6 +83,19 @@ public class GoodsController {
         } catch (Exception e) {
             log.error("getAttrByGoodsId.error",e);
             response = new UnknowResponse();
+        }
+        return response;
+    }
+    @RequestMapping(value = "/getCategory", method = RequestMethod.GET)
+    public CommonResponse getCategory(){
+        CommonResponse response = null;
+        Response<SearchResult> result = dubboCategoryService.getCategory();
+        if(result.getResult() != null && result.getResult().getRows() != null && result.getResult().getRows().size()>0){
+            response = new WebResponse<>(result.getResult().getRows());
+        }else if(result.getError() != null){
+            response = new CommonResponse(Integer.parseInt(result.getError()),result.getErrorMessage());
+        }else{
+            response = new CommonResponse(200,"");
         }
         return response;
     }

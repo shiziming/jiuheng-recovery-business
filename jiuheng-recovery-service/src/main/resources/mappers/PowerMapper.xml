@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuheng.service.repository.PowerMapper">
+  <resultMap id="BaseResultMap" type="com.jiuheng.service.domain.UserPower">
+    <id column="userId" property="userId" />
+    <result column="account" property="account" />
+    <result column="menuId" property="menuId" />
+    <result column="menuName" property="menuName" />
+    <result column="createTime" property="createTime" />
+    <result column="createUser" property="createUser" />
+  </resultMap>
+  <resultMap id="UserAccountResultMap" type="com.jiuheng.service.domain.UserAccount">
+    <id column="userId" property="userId" />
+    <result column="account" property="account" />
+    <result column="password" property="password" />
+    <result column="userName" property="userName" />
+    <result column="createTime" property="createTime" />
+  </resultMap>
+  <select id="getPowers" parameterType="int" resultMap="BaseResultMap">
+    SELECT
+      power.userId as userId,
+      account.account AS account,
+      power.menuId AS menuId,
+      menu.name as menuName,
+      power.createTime,
+      newaccount.account AS createUser
+    FROM
+      backer_user_power power
+    LEFT JOIN backer_user_account account ON power.userId = account.userId
+    LEFT JOIN backer_user_account newaccount ON power.createUser = newaccount.userId
+    LEFT JOIN menu menu ON power.menuId = menu.id
+    WHERE
+      power.userId = #{userId}
+  </select>
+  <select id="getUserAccount" resultMap="UserAccountResultMap">
+    SELECT
+      userId,
+      account,
+      password,
+      userName,
+      createTime
+    FROM
+      backer_user_account
+  </select>
+  <select id="getUserAccountByUserId" parameterType="int" resultMap="UserAccountResultMap">
+    SELECT
+      userId,
+      account,
+      password,
+      userName,
+      createTime
+    FROM
+      backer_user_account
+    WHERE
+      userId = #{userId}
+  </select>
+</mapper>

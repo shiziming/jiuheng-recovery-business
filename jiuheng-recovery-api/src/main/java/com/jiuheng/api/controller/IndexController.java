@@ -37,6 +37,9 @@ public class IndexController {
                 response = new CommonResponse(5001,"image is null");
                 return response;
             }else{
+                for (BannerImage image:images) {
+
+                }
                 response = new WebResponse<List<BannerImage>>(images);
                 return response;
             }

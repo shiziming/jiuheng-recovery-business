@@ -19,6 +19,9 @@
 	<dubbo:reference id="dubboBrandService" interface="com.jiuheng.service.dubbo.DubboBrandService"
 		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 
+	<dubbo:reference id="dubboCategoryService" interface="com.jiuheng.service.dubbo.DubboCategoryService"
+		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
+
 	<dubbo:reference id="dubboIndexService" interface="com.jiuheng.service.dubbo.DubboIndexService"
 		registry="clientZk" version="${dubbo.version.client}" check="false" retries="0"/>
 
