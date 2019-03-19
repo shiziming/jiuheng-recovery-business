@@ -9,6 +9,7 @@ import com.jiuheng.service.respResult.WebResponse;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,8 @@ public class IndexController {
 
     @Autowired
     private DubboIndexService dubboIndexService;
+    @Value("${imageUrl}")
+    private String imageUrl;
 
     /**
      *首页banner图接口
@@ -38,7 +41,7 @@ public class IndexController {
                 return response;
             }else{
                 for (BannerImage image:images) {
-
+                    image.setImageUrl(imageUrl+image.getImageUrl());
                 }
                 response = new WebResponse<List<BannerImage>>(images);
                 return response;
@@ -63,6 +66,9 @@ public class IndexController {
                 response = new CommonResponse(5002,"hotGoods is null");
                 return response;
             }else{
+                for (HotGoods hotGoods:hotGoodses) {
+                    hotGoods.setImageUrl(imageUrl + hotGoods.getImageUrl());
+                }
                 response = new WebResponse<List<HotGoods>>(hotGoodses);
                 return response;
             }

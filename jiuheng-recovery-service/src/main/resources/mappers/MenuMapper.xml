@@ -9,9 +9,36 @@
     <result column="icon" jdbcType="VARCHAR" property="icon"/>
   </resultMap>
 
-  <select id="queryMenu" resultMap="BaseResultMap">
+  <select id="queryMenu" resultMap="BaseResultMap" parameterType="int">
     SELECT
-      *
+      m.*
+    FROM
+      backer_user_power b
+    LEFT JOIN menu m ON b.menuId = m.id
+    AND b.userId = #{userId};
+  </select>
+  <select id="queryModel" resultMap="BaseResultMap">
+  SELECT
+    id,
+    name
+  FROM
+    menu
+  WHERE
+    pid = 0;
+  </select>
+  <select id="queryFunctionByFatherId" resultMap="BaseResultMap" parameterType="String">
+    SELECT
+      id,
+      name
+    FROM
+      menu
+    WHERE
+      pid = #{modelid};
+  </select>
+  <select id="queryAllMenu" resultMap="BaseResultMap">
+    SELECT
+      id,
+      name
     FROM
       menu;
   </select>

@@ -22,7 +22,9 @@ import com.jiuheng.service.utils.DateUtils;
 import com.jiuheng.service.utils.EasyUiDataGridUtil;
 import com.jiuheng.service.utils.SerializableUtils;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +87,10 @@ public class DubboOrderServiceImp implements DubboOrderService {
                 recoveryOrderDto.setStatus(0);
             }
             recoveryOrderDto.setSubTime(DateUtils.currDays());
-            UserAddr userAddr = userMapper.getUserAddrByUserIdAndAddrId(order.getUserId(),order.getAddrId());
+            Map map= new HashMap();
+            map.put("userId",order.getUserId());
+            map.put("addrId",order.getAddrId());
+            UserAddr userAddr = userMapper.getUserAddrByUserIdAndAddrId(map);
             recoveryOrderDto.setProvinceCode(userAddr.getProvince());
             recoveryOrderDto.setCityCode(userAddr.getCity());
             recoveryOrderDto.setDistrictCode(userAddr.getDistrict());

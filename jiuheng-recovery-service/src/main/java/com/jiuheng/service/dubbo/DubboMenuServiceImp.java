@@ -16,8 +16,8 @@ public class DubboMenuServiceImp implements DubboMenuService{
     private MenuMapper menuMapper;
 
     @Override
-    public List<Menu> queryMenu(){
-        List<Menu> list=menuMapper.queryMenu();
+    public List<Menu> queryMenu(Integer userId){
+        List<Menu> list=menuMapper.queryMenu(userId);
         return list;
     }
 

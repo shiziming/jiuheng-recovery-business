@@ -16,6 +16,7 @@ import com.jiuheng.service.respResult.WebResponse;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +33,22 @@ public class GoodsController {
     private DubboBrandService dubboBrandService;
     @Autowired
     private DubboCategoryService dubboCategoryService;
+    @Value("${imageUrl}")
+    private String imageUrl;
+
     @RequestMapping(value = "/getBrandByCategory", method = RequestMethod.GET)
     public CommonResponse getBrandByCategory(Long categoryId){
         CommonResponse response = null;
         try {
             Response<SearchResult> result =  dubboBrandService.getBrandByCategory(categoryId);
             if(result.getResult() != null && result.getResult().getRows() != null && result.getResult().getRows().size()>0){
-                response = new WebResponse<>(result.getResult().getRows());
+                List<Brand> brands = (List<Brand>)result.getResult().getRows();
+                if(null != brands && brands.size()>0){
+                    for (Brand brand:brands) {
+                        brand.setPic(imageUrl + brand.getPic());
+                    }
+                }
+                response = new WebResponse<>(brands);
             }else if(result.getError() != null){
                 response = new CommonResponse(500,"服务器内部错误");
             }else{
@@ -59,6 +69,8 @@ public class GoodsController {
     try {
         CommonResult<BrandResp> result =  dubboBrandService.getGoodsByBrand(brandId);
         if(null != result && result.getData() != null){
+            BrandResp resp = result.getData();
+            resp.setPic(imageUrl + resp.getPic());
             response = new WebResponse<>(result.getData());
         }else{
             response = new CommonResponse();
@@ -91,7 +103,11 @@ public class GoodsController {
         CommonResponse response = null;
         Response<SearchResult> result = dubboCategoryService.getCategory();
         if(result.getResult() != null && result.getResult().getRows() != null && result.getResult().getRows().size()>0){
-            response = new WebResponse<>(result.getResult().getRows());
+            List<CategoryResp> list = (List<CategoryResp>)result.getResult().getRows();
+            for (CategoryResp categoryResp:list) {
+                categoryResp.setCategoryPic(imageUrl+categoryResp.getCategoryPic());
+            }
+            response = new WebResponse<>();
         }else if(result.getError() != null){
             response = new CommonResponse(Integer.parseInt(result.getError()),result.getErrorMessage());
         }else{

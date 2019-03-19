@@ -87,7 +87,7 @@
     #{recoveryOrderDto.payTime},
     #{recoveryOrderDto.message},
     #{recoveryOrderDto.userName},
-    #{recoveryOrderDto.userPhone}
+    #{recoveryOrderDto.userPhone},
     now(),
     now()
     )

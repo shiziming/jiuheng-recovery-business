@@ -7,6 +7,7 @@ import com.jiuheng.service.dto.login.MemberInfo;
 import com.jiuheng.service.respResult.Response;
 import com.jiuheng.service.respResult.SearchResult;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -26,7 +27,7 @@ public interface UserMapper {
 
     List<UserAddr> getUserAddr(long userId);
 
-    UserAddr getUserAddrByUserIdAndAddrId(long userId,int addrId);
+    UserAddr getUserAddrByUserIdAndAddrId(Map map);
 
     void delUserAddr(@Param("userAddr") UserAddr userAddr);
 

@@ -20,7 +20,7 @@ public class UserPower implements Serializable{
     /**
      * 菜单id
      */
-    public int menuId;
+    public String menuId;
     /**
      * 菜单名称
      */

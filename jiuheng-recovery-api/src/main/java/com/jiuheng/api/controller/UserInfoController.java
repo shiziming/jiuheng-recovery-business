@@ -85,7 +85,7 @@ public class UserInfoController {
     public CommonResponse getUserAddr(HttpSession httpSession){
         CommonResponse response = null;
         try {
-            Long userId = 1L;//(Long) httpSession.getAttribute(CommonValues.SESSION_UID);
+            Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
             // 检查登录
             if (userId == null) {
                 throw new LoginException();
@@ -104,7 +104,7 @@ public class UserInfoController {
     public CommonResponse delAddress(int addrId,HttpSession httpSession) {
         CommonResponse response = null;
         try {
-            Long userId = 1L;//(Long) httpSession.getAttribute(CommonValues.SESSION_UID);
+            Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
             // 检查登录
             if (userId == null) {
                 throw new LoginException();

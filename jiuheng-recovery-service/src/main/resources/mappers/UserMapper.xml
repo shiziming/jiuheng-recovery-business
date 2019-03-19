@@ -195,4 +195,25 @@
       <![CDATA[ AND DATE_FORMAT(account.createTime,'%Y-%m-%d') <= #{userInfo.createEndTime} ]]>
     </if>
   </select>
+  <select id="getUserAddrByUserIdAndAddrId" parameterType="map" resultMap="UserAddrMap">
+    SELECT
+      id,
+      userId,
+      userName,
+      phone,
+      province,
+      provinceName,
+      city,
+      cityName,
+      district,
+      districtName,
+      detailed,
+      zipCode,
+      isDefault
+    FROM
+      user_addr
+    WHERE
+      userId = #{userId}
+    AND id = #{addrId}
+  </select>
 </mapper>

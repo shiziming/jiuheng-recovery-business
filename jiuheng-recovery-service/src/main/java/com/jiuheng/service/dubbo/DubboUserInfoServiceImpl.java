@@ -2,9 +2,11 @@ package com.jiuheng.service.dubbo;
 
 import com.github.pagehelper.PageHelper;
 import com.jiuheng.service.domain.RecoveryOrderResp;
+import com.jiuheng.service.dto.Region;
 import com.jiuheng.service.dto.UserAddr;
 import com.jiuheng.service.dto.UserInfo;
 import com.jiuheng.service.dto.login.MemberInfo;
+import com.jiuheng.service.repository.RegionMapper;
 import com.jiuheng.service.repository.UserMapper;
 import com.jiuheng.service.respResult.CommonResponse;
 import com.jiuheng.service.respResult.Response;
@@ -26,6 +28,8 @@ public class DubboUserInfoServiceImpl implements DubboUserInfoService{
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RegionMapper regionMapper;
    public MemberInfo getUserInfo(Long userId){
        try {
            MemberInfo memberInfo = userMapper.getUserInfo(userId);
@@ -58,6 +62,14 @@ public class DubboUserInfoServiceImpl implements DubboUserInfoService{
         List<UserAddr> list = null;
         try {
             list = userMapper.getUserAddr(userId);
+            for (UserAddr addr:list) {
+                Region provinceName =regionMapper.getRegionByCode(String.valueOf(addr.getProvince()));
+                Region cityName =regionMapper.getRegionByCode(String.valueOf(addr.getCity()));
+                Region districtName =regionMapper.getRegionByCode(String.valueOf(addr.getDistrict()));
+                addr.setProvinceName(provinceName.getRegionName());
+                addr.setCityName(cityName.getRegionName());
+                addr.setDistrictName(districtName.getRegionName());
+            }
             return list;
         } catch (Exception e) {
             log.error("DubboUserInfoService.getUserAddr",e);

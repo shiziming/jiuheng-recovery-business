@@ -73,7 +73,7 @@ public class LoginController {
 	@ResponseBody
 	public String getPositionRoleMenuTree(HttpServletRequest request){
 		SysUser sysUser = (SysUser) request.getSession().getAttribute("user");
-		List<Menu> menus = dubboMenuService.queryMenu();
+		List<Menu> menus = dubboMenuService.queryMenu(sysUser.getUserId());
 		/*Role role=sysUser.getRole();
 		List<Menu> menus=role.getMenuList();*/
 		JSONArray array = new JSONArray();
