@@ -123,6 +123,7 @@
 			modal : true,
 			maximizable:true,
 			resizable :true,
+			async:false,
 			href : url,
 			buttons:[{
 				text :"保存",

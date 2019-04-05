@@ -44,6 +44,9 @@ public class LoginController {
 		if(null == userAccount){
 			return "{\"flag\" : \"loginPwdError\"}";
 		}
+		if(-1 == userAccount.getStatus()){
+			return "{\"flag\" : \"loginLock\"}";
+		}
 		SysUser sysUser = new SysUser();
 		sysUser.setUserId(userAccount.getUserId());
 		sysUser.setUserAccount(userAccount.getAccount());

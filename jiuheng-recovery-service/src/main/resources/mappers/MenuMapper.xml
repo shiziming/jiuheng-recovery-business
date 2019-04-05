@@ -15,7 +15,10 @@
     FROM
       backer_user_power b
     LEFT JOIN menu m ON b.menuId = m.id
-    AND b.userId = #{userId};
+    LEFT JOIN backer_user_account a ON a.userId = b.userId
+    WHERE
+      b.userId = #{userId}
+    AND a. STATUS != - 1;
   </select>
   <select id="queryModel" resultMap="BaseResultMap">
   SELECT

@@ -190,7 +190,7 @@
 				} else if ($.parseJSON(msg).flag == "loginDimission") {
 					$('#error_info').html('该用户已离职!');
 				} else if ($.parseJSON(msg).flag == "loginLock") {
-					$('#error_info').html('账户被锁定,无法登陆系统,请先解锁!');
+					$('#error_info').html('该账户已被停用,无法登陆系统!');
 				}  else if($.parseJSON(msg).flag == "needModifyPass") {
 					$('#error_info').html('密码已经过期!');
 				}  else if($.parseJSON(msg).flag == "haveNoFun"){
