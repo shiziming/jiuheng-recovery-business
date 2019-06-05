@@ -31,7 +31,7 @@
             <option value="1">启用</option>
             <option value="0">停用</option>
         </select>
-        <a class="easyui-linkbutton" plain="true" id="device_search_btn" href="javascript:;" iconCls="icon-search">搜索</a>
+        <a class="easyui-linkbutton" plain="true" id="device_search_btn" href="javascript:;" onclick="loadDeviceList()" iconCls="icon-search">搜索</a>
         <s:privilege ifAny="rec_quot_manage_add">
         <a href="javaScript:" class="easyui-linkbutton" onclick="openSourceOrder()" iconCls="icon-add" plain="true" id="btnAdd" >新增报价</a>
         </s:privilege>
@@ -74,7 +74,6 @@
             }
         });
     });
-    $("#device_search_btn").click(loadDeviceList);
     function loadDeviceList(){
         $("#data_div").datagrid("load", $("#device_search_form").serializeObject());
     }

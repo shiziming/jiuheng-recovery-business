@@ -44,7 +44,7 @@ public class AttributeController {
         Response<SearchResult> attrByCateResult= dubboAttributeService.getCategoryAttributesByCategory(categoryId);
         model.put("rows", attrResult.getResult().getRows());
         model.put("exist", attrByCateResult.getResult().getRows());
-        model.put("total",0);
+        model.put("total",attrResult.getResult().getRows() == null ? 0:attrResult.getResult().getRows().size());
         return model;
     }
 

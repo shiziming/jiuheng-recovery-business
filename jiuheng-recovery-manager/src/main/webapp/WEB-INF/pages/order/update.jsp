@@ -15,7 +15,7 @@
             <td width="8%" align="right">订单号：</td>
             <td width="30%">
                 ${order.orderId}
-                <input  type="hidden" name="orderId" value="${order.orderId}">
+                <input  type="hidden" name="orderId" id="orderId" value="${order.orderId}">
             </td>
             <td width="10%" align="right">订单状态：</td>
             <td width="30%">
@@ -120,36 +120,98 @@
             </td>
         </tr>
     </table>
+    <table width="100%" style="margin-top: 100px">
+        <tr>
+            <td width="10%"></td>
+            <td width="15%"></td>
+            <td width="15%"></td>
+            <td width="10%" align="center"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="saveOrderService()">保存</a>
+            <td width="10%" align="center"><a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="closeOrderService()">关闭</a>
+            <td width="15%"></td>
+            <td width="15%"></td>
+            <td width="10%"></td>
+        </tr>
+    </table>
 </form>
 <script type="text/javascript">
-
-    $("#province").combobox({
-        onChange: function (newprovinceId,oldprovinceId) {
-            $.ajax({
-                url: "region/getCitys?provinceId=" + newprovinceId,
-                dataType: 'json',
-                method: 'get',
-                success: function (data) {
-                    $("#city").combobox('clear');
-                    $("#city").append("<option> </option>");
-                    $("#city").combobox('loadData',data.body.citys);
-                }
-            });
-        }
+    $(document).ready(function () {
+        $("#province").combobox({
+            onChange: function (newprovinceId,oldprovinceId) {
+                $.ajax({
+                    url: "region/getCitys?provinceId=" + newprovinceId,
+                    dataType: 'json',
+                    method: 'get',
+                    success: function (data) {
+                        $("#city").combobox('clear');
+                        $("#city").append("<option> </option>");
+                        $("#city").combobox('loadData',data.body.citys);
+                    }
+                });
+            }
+        });
+        $("#city").combobox({
+            onChange: function (newCityId,oldCityId) {
+                $.ajax({
+                    url: "region/getCountys?cityId=" + newCityId,
+                    dataType: 'json',
+                    method: 'get',
+                    success: function (data) {
+                        $("#county").combobox('clear');
+                        $("#county").append("<option> </option>");
+                        $("#county").combobox('loadData',data.body.countys);
+                    }
+                });
+            }
+        });
     });
-    $("#city").combobox({
-        onChange: function (newCityId,oldCityId) {
-            $.ajax({
-                url: "region/getCountys?cityId=" + newCityId,
-                dataType: 'json',
-                method: 'get',
-                success: function (data) {
-                    $("#county").combobox('clear');
-                    $("#county").append("<option> </option>");
-                    $("#county").combobox('loadData',data.body.countys);
-                }
-            });
-        }
-    });
 
+    function saveOrderService(){
+        $.messager.progress();
+        $("#order_data_form").form("submit",{
+            url : "order/updateOrder",
+            onSubmit:function(param){
+                var isValid = $(this).form('validate');
+                if (!isValid){
+                    $.messager.progress('close');	// 如果表单是无效的则隐藏进度条
+                }
+                return isValid;	// 返回false终止表单提交
+
+            },
+            success:function(data){
+                $.messager.progress('close');	// 如果提交成功则隐藏进度条
+                data = $.parseJSON(data);
+                if(data.result == true){
+                    $.messager.alert("提示","保存成功","info");
+                    $("#order_update_div").dialog("close");
+                    var tab = $('#tabs').tabs('getSelected');  // get selected panel
+                    var orderId = $("#orderId").val();
+                    var url = "order/viewOrderInfo?orderId="+orderId;
+                    tab.panel('refresh', url);
+                    $("#order_index  #list_panel  #dg").datagrid('reload');
+                    /*var selectTab = $('#tabs').tabs('select', '订单详情查看');
+                    alert(selectTab.toString());
+                    $('#tabs').tabs('update', {
+                        tab: selectTab,
+                        options: {
+                            href: 'http://localhost:8083/jiuheng-recovery-manager/order/viewOrderInfo?orderId=H1556382053278&_=1557571443001'  // the new content URL
+                        }
+                    });*/
+                    /*var selectTab =  $('#tabs').tabs('getSelected');
+                    var url =$(selectTab.panel('options').content).attr('src');
+                    $('#tabs').tabs('update', {
+                        tab : selectTab,
+                        options : {
+                            href : url
+                        }
+                    });*/
+                }
+                else {
+                    $.messager.alert("警告", "保存失败", "warning");
+                }
+            }
+        });
+    }
+    function closeOrderService(){
+        $("#order_update_div").dialog("close");
+    }
 </script>

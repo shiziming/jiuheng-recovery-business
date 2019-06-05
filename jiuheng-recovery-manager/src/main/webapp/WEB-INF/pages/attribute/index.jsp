@@ -12,9 +12,9 @@ $(function(){
     datagrid=$("#select_attribute_data_container").datagrid({  
         url:"attribute/getAttributeList",//加载的URL
         isField:"id",  
-        pagination:true,//显示分页  
+        /*pagination:true,//显示分页
         pageSize:20,//分页大小
-        pageList:[5,10,15,20],//每页的个数  
+        pageList:[5,10,15,20],//每页的个数*/
         fitColumns:true,
         iconCls:"icon-save",//图标
        /*  title:"用户管理",  */

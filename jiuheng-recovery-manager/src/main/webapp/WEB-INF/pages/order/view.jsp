@@ -3,8 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div id="order_view" style="width: 100%; height: auto;">
-     <div id="view_index_panel" class="easyui-panel" style="width: 100%;">
-		<div id="order_panel" class="easyui-panel" title="主单信息"	style="width: 100%; background-color: #eff5ff; height: 100%;cache:false"
+     <div id="view_index_panel" class="easyui-panel" style="width: 100%; height: auto;">
+		<div id="order_panel" class="easyui-panel" title="主单信息"	style="width: 100%; background-color: #eff5ff; height: 200px;cache:false"
 			data-options="collapsible:true" >
 				<table class="table table-hover table-condensed" style="width: 100%; padding: 3px 1% 3px 1%">
 					<tr>
@@ -60,12 +60,12 @@
 						<td width="5%">${order.subTime}</td>
 						<td></td>
 						<td></td>
-						<td align="right"><a href="javascript:updateOrder(${order.orderId})" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a></td>
+						<td align="right"><a href="javascript:updateOrder('${order.orderId}')" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a></td>
 						<td></td>
 					</tr>
 				</table>
 		</div>
-		<div id="suborder_panel" class="easyui-panel" title="商品信息" style="width: 100%;  background-color: #eff5ff;height: 100%"
+		<div id="suborder_panel" class="easyui-panel" title="商品信息" style="width: 100%;  background-color: #eff5ff;height: 200px"
 			data-options="collapsible:true">
 				<table class="table table-hover table-condensed" style="width: 100%; padding: 5px 1% 3px 1%">
 					<c:forEach items="${props}" var="prop">
@@ -82,7 +82,7 @@
 								<td width="11%" align="right">${prop.prop2.name} :</td>
 								<td width="20%">
 									<c:forEach items="${prop.prop2.attributeValues}" var="value">
-										${value.prop2.attributeValueName}
+										${value.attributeValueName}
 									</c:forEach>
 								</td>
 							</c:if>
@@ -95,7 +95,7 @@
 								<td width="11%" align="right">${prop.prop3.name} :</td>
 								<td width="20%">
 									<c:forEach items="${prop.prop3.attributeValues}" var="value">
-										${value.prop3.attributeValueName}
+										${value.attributeValueName}
 									</c:forEach>
 								</td>
 							</c:if>
@@ -124,12 +124,11 @@
 			maximizable:true,
 			resizable :true,
 			async:false,
-			href : url,
-			buttons:[{
+			href : url
+			/*buttons:[{
 				text :"保存",
 				iconCls:"icon-save",
 				handler:function(){
-					$.messager.progress();
 					 saveOrderService();
 				}
 			},
@@ -137,35 +136,7 @@
 					text:"关闭",
 					iconCls:"icon-cancel",
 					handler:closeOrderService
-				}]
+				}]*/
 		});
 	}
-	function closeOrderService(){
-		$("#order_update_div").dialog("close");
-	}
-	function saveOrderService(){
-		$("#order_data_form").form("submit",{
-			url : "order/updateOrder",
-			onSubmit:function(param){
-				var isValid = $(this).form('validate');
-				if (!isValid){
-					$.messager.progress('close');	// 如果表单是无效的则隐藏进度条
-				}
-				return isValid;	// 返回false终止表单提交
-
-			},
-			success:function(data){
-				$.messager.progress('close');	// 如果提交成功则隐藏进度条
-				data = $.parseJSON(data);
-				if(data.result == true){
-					$.messager.alert("提示","保存成功","info");
-					$("#order_update_div").dialog("close");
-				}
-				else {
-					$.messager.alert("警告", "保存失败", "warning");
-				}
-			}
-		});
-	}
-
 </script>

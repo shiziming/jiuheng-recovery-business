@@ -46,26 +46,36 @@ public class DubboTmpOrderServiceImpl implements DubboTmpOrderService{
     public CommonResponse saveTemplateOrder(TemplateOrder tmpOrder){
         CommonResponse resp = null;
         try {
-            tmpOrder.setOrderDetail(SerializableUtils.json.writeValueAsString(tmpOrder));
-            recoveryTmpOrderMapper.saveTemplateOrder(tmpOrder);
             RecycleQuotationVo recycleQuotationVo = recoveryQuotationMapper.getRecycleQuotation(tmpOrder.getGoodsId());
+            BigDecimal basePrice = recycleQuotationVo.getBasicPrice();
+            BigDecimal baseAttrPrice = new BigDecimal("0");
+            BigDecimal funAttrPrice = new BigDecimal("0");
+            BigDecimal lessAttrPrice = new BigDecimal("1");
             if(null != recycleQuotationVo){
-                List<RecycleQuotationItemVo> list = recoveryQuotationMapper.getRecycleQuotationItemByQuotationId(recycleQuotationVo.getId());
-                BigDecimal basePrice = recycleQuotationVo.getBasicPrice();
-                BigDecimal baseAttrPrice = new BigDecimal("0");
-                BigDecimal funAttrPrice = new BigDecimal("0");
-                for(RecycleQuotationItemVo itemVo:list){
-                    if(itemVo.getType() == 1){
-                        baseAttrPrice = baseAttrPrice.add(itemVo.getPrice());
-                    }else if(itemVo.getType() == 2){
-                        baseAttrPrice = baseAttrPrice.subtract(itemVo.getPrice());
-                    }else if(itemVo.getType() == 4){
-                        funAttrPrice = funAttrPrice.add(itemVo.getPrice());
-                    }
+                List<RecoveryProp> prods = tmpOrder.getProps();
+                if(null != prods && prods.size() > 0){
+                    for (RecoveryProp prod:prods) {
+                        for (AttributeValue attributeValue:prod.getAttributeValues()) {
+                            List<RecycleQuotationItemVo> list = recoveryQuotationMapper.getRecycleQuotationItemByQuotationId(recycleQuotationVo.getId().intValue(),prod.getId(),attributeValue.getAttributeValueId());
+                            for(RecycleQuotationItemVo itemVo:list){
+                                if(itemVo.getType() == 1){
+                                    baseAttrPrice = baseAttrPrice.add(itemVo.getPrice());
+                                }else if(itemVo.getType() == 2){
+                                    baseAttrPrice = baseAttrPrice.subtract(itemVo.getPrice());
+                                }else if(itemVo.getType() == 4){
+                                    funAttrPrice = funAttrPrice.add(itemVo.getPrice());
+                                }
 
+                            }
+                        }
+
+                    }
                 }
                 //以分为单位所以百分百没有除以100
-                BigDecimal offerPrice=basePrice.add(baseAttrPrice).multiply(funAttrPrice);
+                BigDecimal offerPrice=basePrice.add(baseAttrPrice).multiply(lessAttrPrice.subtract(funAttrPrice));
+                tmpOrder.setPrice(offerPrice);
+                tmpOrder.setOrderDetail(SerializableUtils.json.writeValueAsString(tmpOrder));
+                recoveryTmpOrderMapper.saveTemplateOrder(tmpOrder);
                 TemplateOrderReq orderReq = new TemplateOrderReq();
                 orderReq.setOrderId(tmpOrder.getOrderId());
                 orderReq.setPrice(offerPrice);
@@ -108,6 +118,7 @@ public class DubboTmpOrderServiceImpl implements DubboTmpOrderService{
                     Goods goods=goodsMapper.queryGoodsByGoodId(templateOrdere.getGoodsId());
                     templateOrder.setGoodsName(goods.getGoodsName());
                     templateOrder.setProps(pops);
+                    templateOrder.setPrice(templateOrdere.getPrice());
                     templateOrder.setOrderDetail(null);
                 }
             }

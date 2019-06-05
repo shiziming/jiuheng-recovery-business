@@ -1,6 +1,7 @@
 package com.jiuheng.service.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
@@ -42,4 +43,8 @@ public class TemplateOrder implements Serializable{
      * 创建时间
      */
     private String createTime;
+    /**
+     * 订单金额
+     */
+    private BigDecimal price;
 }

@@ -147,5 +147,9 @@
       t_recycle_quotation_item
     WHERE
       quotation_id = #{quotationId}
+    AND
+      attribute_id = #{attrubuteId}
+    AND
+      attribute_value_id = #{attrubuteValueId}
   </select>
 </mapper>

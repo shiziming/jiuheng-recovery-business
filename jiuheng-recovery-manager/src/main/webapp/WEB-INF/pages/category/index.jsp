@@ -207,14 +207,7 @@
             modal : true,
             maximizable:true,
             resizable :true,
-            href : "category/selectAttribute?categoryid="+selected.id+ "&type=" + type,
-//      buttons:[
-//        {
-//          text:"关闭",
-//          iconCls:"icon-cancel",
-//          handler:closeCategoryDlg
-//        }
-//      ]
+            href : "category/selectAttribute?categoryid="+selected.id+ "&type=" + type
         });
     }
 

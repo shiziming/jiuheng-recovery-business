@@ -37,6 +37,6 @@ public interface RecoveryQuotationMapper {
     public int getRecycleQuotationCount(
         @Param("recycleQuotation") RecycleQuotation recycleQuotation);
 
-    public List<RecycleQuotationItemVo> getRecycleQuotationItemByQuotationId(@Param("quotationId") Long quotationId);
+    public List<RecycleQuotationItemVo> getRecycleQuotationItemByQuotationId(@Param("quotationId") Integer quotationId,@Param("attrubuteId") Integer attrubuteId,@Param("attrubuteValueId") Integer attrubuteValueId);
 
 }

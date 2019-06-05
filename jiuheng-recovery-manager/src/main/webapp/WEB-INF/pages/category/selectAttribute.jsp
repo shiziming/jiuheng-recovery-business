@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<div id="page">
 <form name="select_attribute_search_form" id="select_attribute_search_form">
     属性名称：
     <input type="text" name="name">
@@ -13,6 +14,7 @@
     <a class="easyui-linkbutton" plain="true" iconCls="icon-add" id="select_attribute_save_btn">保存</a>
 </form>
 <div id="select_attribute_data_container"></div>
+</div>
 <script type="text/javascript" src="common/js/common/prototype.js"></script>
 <script type="text/javascript" src="common/js/common/jslist.js"></script>
 <script type="text/javascript">
@@ -45,7 +47,7 @@
 
         $("#select_attribute_data_container").datagrid({
             url: "attribute/getAttributeList?type="+${type},
-//            pagination: true,
+            //pagination: true,
             fitColumns: true,
             toolbar: "select_attribute_search_form",
             queryParams: {categoryId: ${categoryId}},
