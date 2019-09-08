@@ -135,6 +135,8 @@
 </form>
 <script type="text/javascript">
     $(document).ready(function () {
+
+
         $("#province").combobox({
             onChange: function (newprovinceId,oldprovinceId) {
                 $.ajax({
@@ -143,7 +145,8 @@
                     method: 'get',
                     success: function (data) {
                         $("#city").combobox('clear');
-                        $("#city").append("<option> </option>");
+                        $("#city").combobox('loadData',{data:[]});
+
                         $("#city").combobox('loadData',data.body.citys);
                     }
                 });
@@ -157,7 +160,8 @@
                     method: 'get',
                     success: function (data) {
                         $("#county").combobox('clear');
-                        $("#county").append("<option> </option>");
+                        $("#county").combobox('loadData',{data:[]});
+
                         $("#county").combobox('loadData',data.body.countys);
                     }
                 });
@@ -183,11 +187,15 @@
                 if(data.result == true){
                     $.messager.alert("提示","保存成功","info");
                     $("#order_update_div").dialog("close");
-                    var tab = $('#tabs').tabs('getSelected');  // get selected panel
+                    $(orderquery.viewpanel).panel('close');
+                    $(orderquery.list_panel).show();
+                    orderquery.reload();
+                    //$("#order_index  #list_panel  #dg").datagrid('reload');
+                    /*var tab = $('#tabs').tabs('getSelected');  // get selected panel
                     var orderId = $("#orderId").val();
                     var url = "order/viewOrderInfo?orderId="+orderId;
                     tab.panel('refresh', url);
-                    $("#order_index  #list_panel  #dg").datagrid('reload');
+                    $("#order_index  #list_panel  #dg").datagrid('reload');*/
                     /*var selectTab = $('#tabs').tabs('select', '订单详情查看');
                     alert(selectTab.toString());
                     $('#tabs').tabs('update', {

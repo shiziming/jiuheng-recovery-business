@@ -1,5 +1,7 @@
 package com.jiuheng.service.dubbo;
 
+import com.jiuheng.service.dto.Order;
+import com.jiuheng.service.dto.OrderResp;
 import com.jiuheng.service.dto.RecoveryProp;
 import com.jiuheng.service.dto.TemplateOrder;
 import com.jiuheng.service.respResult.CommonResponse;
@@ -15,4 +17,8 @@ public interface DubboTmpOrderService {
     List<TemplateOrder> getTemplateOrder(long userId);
 
     List<RecoveryProp> getTemplateOrderByOrderId(String orderId);
+
+    List<OrderResp> getOrderList(long userId);
+
+    OrderResp getOrderDatail(Long userId,String orderId);
 }

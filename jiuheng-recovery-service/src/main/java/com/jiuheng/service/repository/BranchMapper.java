@@ -18,8 +18,6 @@ public interface BranchMapper {
 
     List<BrandResp> getAllBranch(@Param("brandReq") BrandReq req,@Param("start")int start,@Param("row")int row);
 
-    List<BrandResp> getBranchByCategoryId();
-
     int getAllBranchCount(@Param("brandReq") BrandReq req);
     Brand getBrandById(@Param("brandReq")BrandReq brandReq);
 
@@ -33,7 +31,7 @@ public interface BranchMapper {
 
     CategoryResp getBrandByCategory(@Param("categoryId")Long categoryId);
 
-    BrandResp getGoodsByBrand(@Param("brandId")int brandId);
+    BrandResp getGoodsByBrand(@Param("brandId")int brandId,@Param("categoryId")int categoryId);
 
     List<GoodsAttribute> getAttrByGoodsId(@Param("goodsId")int goodsId);
 

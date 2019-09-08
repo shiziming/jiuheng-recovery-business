@@ -64,10 +64,10 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/getGoodsByBrand", method = RequestMethod.GET)
-    public CommonResponse getGoodsByBrand(int brandId){
+    public CommonResponse getGoodsByBrand(int brandId,int categoryId){
     CommonResponse response = null;
     try {
-        CommonResult<BrandResp> result =  dubboBrandService.getGoodsByBrand(brandId);
+        CommonResult<BrandResp> result =  dubboBrandService.getGoodsByBrand(brandId,categoryId);
         if(null != result && result.getData() != null){
             BrandResp resp = result.getData();
             resp.setPic(imageUrl + resp.getPic());

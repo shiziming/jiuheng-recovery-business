@@ -150,8 +150,11 @@ orderquery.inits = function() {
 	
 	orderquery.view = function(orderId){
 		var url = "order/viewOrderInfo?orderId="+orderId;
-		var title='订单详情查看';
-		$.o2m.addTabIframe(url,title);
+		$(orderquery.list_panel).hide();
+		$(orderquery.viewpanel).panel({title:'订单详情查看', href:url});
+		$(orderquery.viewpanel).panel('open');
+		/*var title='订单详情查看';
+		$.o2m.addTabIframe(url,title);*/
 	};
 	
 	orderquery.changeOrderTypeToName= function(value){

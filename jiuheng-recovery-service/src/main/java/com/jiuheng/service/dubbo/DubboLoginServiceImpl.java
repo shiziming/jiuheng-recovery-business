@@ -56,4 +56,33 @@ public class DubboLoginServiceImpl implements DubboLoginService {
             return resp;
         }
     }
+    @Override
+    public CommonResponse resetPassword(LoginRequest loginRequest){
+        CommonResponse resp = null;
+        try {
+            userMapper.resetPassword(loginRequest);
+            resp = new CommonResponse(200,"");
+            return resp;
+        } catch (Exception e) {
+            log.error("DubboLoginService.resetPassword",e);
+            resp = new CommonResponse(500,"unknow error");
+            return resp;
+        }
+    }
+    @Override
+    public WebResponse<MemberInfo> getUserLogin(LoginRequest loginRequest){
+        WebResponse<MemberInfo> webResponse = null;
+        try {
+            MemberInfo memberInfo = userMapper.checkUserLogin(loginRequest);
+            webResponse = new WebResponse<MemberInfo>(memberInfo);
+            return webResponse;
+        } catch (Exception e) {
+            log.error("DubboLoginService.getUserLogin",e);
+            webResponse = new WebResponse(500,"unknow error");
+            return webResponse;
+
+        }
+    }
+
+
 }

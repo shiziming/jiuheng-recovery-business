@@ -153,10 +153,10 @@ public class DubboBrandServiceImp implements DubboBrandService{
         }
     }
     @Override
-    public CommonResult<BrandResp> getGoodsByBrand(int brandId){
+    public CommonResult<BrandResp> getGoodsByBrand(int brandId,int categoryId){
         CommonResult<BrandResp> result = null;
         try {
-            BrandResp resp= branchMapper.getGoodsByBrand(brandId);
+            BrandResp resp= branchMapper.getGoodsByBrand(brandId,categoryId);
             result = new CommonResult<BrandResp>(resp);
             return result;
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package com.jiuheng.service.repository;
 
+import com.jiuheng.service.dto.OrderResp;
 import com.jiuheng.service.dto.TemplateOrder;
-import com.jiuheng.service.respResult.CommonResponse;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,5 +19,9 @@ public interface RecoveryTmpOrderMapper {
     TemplateOrder getTemplateOrderIds(String orderId);
 
     void updateTemplateOrder(String orderId);
+
+    List<OrderResp> getOrderList(long userId);
+
+    OrderResp getOrderDatail(@Param("userId") Long userId,@Param("orderId") String orderId);
 
 }

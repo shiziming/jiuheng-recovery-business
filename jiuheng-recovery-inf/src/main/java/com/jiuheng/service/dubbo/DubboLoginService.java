@@ -15,4 +15,8 @@ public interface DubboLoginService {
 
     CommonResponse registerLogin(LoginRequest loginRequest);
 
+    CommonResponse resetPassword(LoginRequest loginRequest);
+
+    WebResponse<MemberInfo> getUserLogin(LoginRequest loginRequest);
+
 }

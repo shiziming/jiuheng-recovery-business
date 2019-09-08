@@ -6,9 +6,12 @@ import static com.jiuheng.api.utils.RsaUtils.decryptByPrivateKey;
 import com.alibaba.fastjson.JSON;
 import com.jiuheng.api.utils.CookieCode;
 import com.jiuheng.api.utils.CookieOperator;
+import com.jiuheng.api.utils.PatternUtils;
+import com.jiuheng.api.utils.RandomUtils;
 import com.jiuheng.api.utils.SsoUserCookieTools;
 import com.jiuheng.service.dto.login.LoginError;
 import com.jiuheng.service.dto.login.LoginRequest;
+import com.jiuheng.service.dto.login.MemberInfo;
 import com.jiuheng.service.dubbo.DubboLoginService;
 import com.jiuheng.service.dubbo.DubboValidCodeService;
 import com.jiuheng.service.respResult.CommonResponse;
@@ -87,11 +90,14 @@ public class LoginController {
     public CommonResponse checkRegister(@RequestBody LoginRequest loginRequest){
         CommonResponse resp = null;
         ErrorNode node = null;
-        if(loginRequest.getPhone()==null|| StringUtils.isBlank(loginRequest.getPhone())||loginRequest.getPhone().contains(" ")){
-            node =  LoginError.ACCOUNT_EMPTY;
-        }
+        node = this.validParams(loginRequest);
         if(node!=null){
             resp = new CommonResponse(node.getCode(),node.getMsg());
+            return resp;
+        }
+        WebResponse<MemberInfo> webResponse = dubboLoginService.getUserLogin(loginRequest);
+        if (webResponse.getBody() != null) {
+            resp = new CommonResponse(LoginError.ACCOUNT_EXIST.getCode(),LoginError.ACCOUNT_EXIST.getMsg());
             return resp;
         }
         /*long phone = dubboValidCodeService.checkVaildCode(loginRequest.getValidrand(),loginRequest.getValidCode());
@@ -128,4 +134,37 @@ public class LoginController {
         log.info("decode account {} ", JSON.toJSONString(loginRequest));
         return loginRequest;
     }
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public CommonResponse resetPassword(@RequestBody LoginRequest loginRequest,
+        HttpSession httpSession,HttpServletRequest request,HttpServletResponse response){
+        CommonResponse commonResponse = null;
+        ErrorNode node = this.validParams(loginRequest);
+        if(null != node){
+            commonResponse = new CommonResponse(node.getCode(),node.getMsg());
+            return commonResponse;
+        }
+        commonResponse =  dubboLoginService.resetPassword(loginRequest);
+        return commonResponse;
+    }
+
+    @RequestMapping(value = "/sendCode", method = RequestMethod.POST)
+    public CommonResponse sendCode(@RequestBody LoginRequest loginRequest,
+        HttpSession httpSession,HttpServletRequest request,HttpServletResponse response){
+        CommonResponse commonResponse = null;
+        String validRand = null;
+        if (loginRequest.getPhone() == null) {
+            commonResponse = new CommonResponse(LoginError.PHONE_IS_NULL.getCode(),LoginError.PHONE_IS_NULL.getMsg());
+            return commonResponse;
+        }
+        if (!PatternUtils.matchMobile(loginRequest.getPhone())) {
+            throw new IllegalArgumentException("mobile is not support.");
+        }
+        String code = RandomUtils.randomDigit(6);
+        validRand = RandomUtils.randomUniqueToken();
+        //TODO 调用发短信接口，同时保存code和validRand到redis中
+        commonResponse =  new WebResponse<String>(validRand);
+        return commonResponse;
+    }
+
 }

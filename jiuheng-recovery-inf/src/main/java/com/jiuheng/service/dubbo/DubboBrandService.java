@@ -30,7 +30,7 @@ public interface DubboBrandService {
 
     Response<SearchResult> getBrandByCategory(Long categoryId);
 
-    CommonResult<BrandResp> getGoodsByBrand(int brandId);
+    CommonResult<BrandResp> getGoodsByBrand(int brandId,int categoryId);
 
     CommonResult<List<GoodsAttribute>> getAttrByGoodsId(int goodsId);
 }

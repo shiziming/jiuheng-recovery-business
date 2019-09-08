@@ -40,7 +40,7 @@
 			plain="true">
 			<div title="首页" style="font-size: 20px; padding: 10px">
 				<div class="easyui-panel" data-options="border:false"
-					style="font-size: 25px;"> ${ sessionScope.user.userName}，欢迎进入久恒回收管理平台! </div>
+					style="font-size: 25px;"> ${ sessionScope.user.userName}! </div>
 			</div>
 		</div>
 	</div>

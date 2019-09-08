@@ -37,4 +37,6 @@ public interface UserMapper {
 
     List<UserInfo> getUserList(@Param("userInfo") UserInfo userInfo, Integer page, Integer size);
 
+    void resetPassword(@Param("loginRequest") LoginRequest loginRequest);
+
 }

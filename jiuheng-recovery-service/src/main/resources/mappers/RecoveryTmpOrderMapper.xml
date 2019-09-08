@@ -7,6 +7,26 @@
     <result column="orderDetail" property="orderDetail"/>
     <result property="createTime" column="create_time"/>
   </resultMap>
+  <resultMap id="OrderRespResultMap" type="com.jiuheng.service.dto.OrderResp">
+    <id column="orderId" property="orderId"/>
+    <result column="userId" property="userId"/>
+    <result column="orderDetail" property="orderDetail"/>
+    <result property="createTime" column="create_time"/>
+    <result property="onDoorTime" column="onDoorTime"/>
+    <result property="remark" column="remark"/>
+    <result property="valuationPrice" column="valuationPrice"/>
+    <result property="payType" column="payType"/>
+    <result property="recoveryType" column="recoveryType"/>
+    <result property="userName" column="userName"/>
+    <result property="phone" column="phone"/>
+    <result property="provinceName" column="provinceName"/>
+    <result property="cityName" column="cityName"/>
+    <result property="districtName" column="districtName"/>
+    <result property="detailed" column="detailed"/>
+    <result property="payTime" column="payTime"/>
+    <result property="goodsName" column="goodsName"/>
+    <result property="status" column="status"/>
+  </resultMap>
   <insert id="saveTemplateOrder" parameterType="com.jiuheng.service.dto.TemplateOrder">
   INSERT INTO recovery_tmp_order(
     orderId,
@@ -33,6 +53,20 @@
   WHERE
     userId = #{userId}
   AND STATUS = 1
+  </select>
+  <select id="getOrderList" parameterType="long" resultMap="OrderRespResultMap">
+  SELECT
+    o.orderId,
+    t.createTime,
+    o.onDoorTime,
+    o.valuationPrice,
+    o.status,
+    o.goodsName
+  FROM
+    recovery_order o
+  LEFT JOIN recovery_tmp_order t ON o.orderId = t.orderId
+  WHERE
+    o.userId = #{userId}
   </select>
   <select id="getTemplateOrderId" parameterType="String" resultMap="BaseResultMap">
     SELECT
@@ -63,4 +97,33 @@
   WHERE
     orderId = #{orderId}
   </update>
+  <select id="getOrderDatail" resultMap="OrderRespResultMap">
+  SELECT
+    o.orderId,
+    t.orderDetail,
+    t.createTime,
+    o.onDoorTime,
+    o.message,
+    o.valuationPrice,
+    o.payType,
+    o.recoveryType,
+    r.userName,
+    r.phone,
+    r.provinceName,
+    r.cityName,
+    r.districtName,
+    o.detailed,
+    o.payTime,
+    t.orderDetail
+  FROM
+    recovery_order o
+  LEFT JOIN recovery_tmp_order t ON o.orderId = t.orderId
+  LEFT JOIN user_addr r ON o.provinceCode = r.province
+  AND o.cityCode = r.city
+  AND o.districtCode = r.district
+  WHERE
+    o.userId = #{userId}
+  AND
+    o.orderId = #{orderId}
+  </select>
 </mapper>

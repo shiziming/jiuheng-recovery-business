@@ -7,6 +7,8 @@ import com.jiuheng.service.domain.GoodsResp;
 import com.jiuheng.service.domain.RecycleQuotationItemVo;
 import com.jiuheng.service.domain.RecycleQuotationVo;
 import com.jiuheng.service.dto.Goods;
+import com.jiuheng.service.dto.Order;
+import com.jiuheng.service.dto.OrderResp;
 import com.jiuheng.service.dto.RecoveryProp;
 import com.jiuheng.service.dto.TemplateOrder;
 import com.jiuheng.service.dto.TemplateOrderReq;
@@ -149,6 +151,80 @@ public class DubboTmpOrderServiceImpl implements DubboTmpOrderService{
             log.error("getTemplateOrderByOrderId.error",e);
         }
         return pops;
+    }
+
+
+    @Override
+    public List<OrderResp> getOrderList(long userId){
+        List<OrderResp> list = null;
+        try {
+            list = recoveryTmpOrderMapper.getOrderList(userId);
+            if(null != list && list.size()>0){
+                //获取所有零时订单
+                for (OrderResp orderResp : list) {
+                    TemplateOrder templateOrdere = SerializableUtils.json.readValue(orderResp.getOrderDetail(),TemplateOrder.class);
+                    List<RecoveryProp> pops=templateOrdere.getProps();
+                    //获取所有属性
+                    for (RecoveryProp recoveryProp:pops) {
+                        AttributeReq attribute = new AttributeReq();
+                        attribute.setId(recoveryProp.getId());
+                        List<AttributeResp> attributeResps = attributeMapper.getAttributeList(attribute);
+                        if(null != attributeResps && attributeResps.size()>0){
+                            recoveryProp.setName(attributeResps.get(0).getName());
+                        }
+                        //获取所有属性值
+                        List<AttributeValue> attributeValues = recoveryProp.getAttributeValues();
+                        for (AttributeValue attributeValue : attributeValues) {
+                            if(null != attributeValue.getAttributeValueId()){
+                                attributeValue.setAttributeValueName(attributeMapper.getAttributeValueById(attributeValue.getAttributeValueId()).getAttributeValueName());
+                            }
+                        }
+                    }
+                    Goods goods=goodsMapper.queryGoodsByGoodId(templateOrdere.getGoodsId());
+                    orderResp.setGoodsName(goods.getGoodsName());
+                    orderResp.setProps(pops);
+                    orderResp.setPrice(templateOrdere.getPrice());
+                    orderResp.setOrderDetail(null);
+                }
+            }
+        } catch (Exception e) {
+            log.error("getTemplateOrder.error",e);
+        }
+        return list;
+    }
+
+    @Override
+    public OrderResp getOrderDatail(Long userId,String orderId){
+        OrderResp orderResp = null;
+        try {
+            orderResp = recoveryTmpOrderMapper.getOrderDatail(userId,orderId);
+            TemplateOrder templateOrdere = SerializableUtils.json.readValue(orderResp.getOrderDetail(),TemplateOrder.class);
+            List<RecoveryProp> pops=templateOrdere.getProps();
+            //获取所有属性
+            for (RecoveryProp recoveryProp:pops) {
+                AttributeReq attribute = new AttributeReq();
+                attribute.setId(recoveryProp.getId());
+                List<AttributeResp> attributeResps = attributeMapper.getAttributeList(attribute);
+                if(null != attributeResps && attributeResps.size()>0){
+                    recoveryProp.setName(attributeResps.get(0).getName());
+                }
+                //获取所有属性值
+                List<AttributeValue> attributeValues = recoveryProp.getAttributeValues();
+                for (AttributeValue attributeValue : attributeValues) {
+                    if(null != attributeValue.getAttributeValueId()){
+                        attributeValue.setAttributeValueName(attributeMapper.getAttributeValueById(attributeValue.getAttributeValueId()).getAttributeValueName());
+                    }
+                }
+            }
+            Goods goods=goodsMapper.queryGoodsByGoodId(templateOrdere.getGoodsId());
+            orderResp.setGoodsName(goods.getGoodsName());
+            orderResp.setProps(pops);
+            orderResp.setPrice(templateOrdere.getPrice());
+            orderResp.setOrderDetail(null);
+        } catch (Exception e) {
+            log.error("getOrderDatail.error",e);
+        }
+        return orderResp;
     }
 
 }

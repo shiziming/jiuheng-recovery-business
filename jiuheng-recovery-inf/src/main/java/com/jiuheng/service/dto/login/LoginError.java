@@ -11,6 +11,7 @@ public class LoginError {
     public final static ErrorNode PWD_EMPTY = new ErrorNode(40002, "密码不能为空或包含空格");
     public final static ErrorNode LOGIN_ERROR = new ErrorNode(40003, "登录失败");
     public final static ErrorNode ACCOUNT_EXIST = new ErrorNode(40004, "该帐号已经注册");
+    public final static ErrorNode PHONE_IS_NULL = new ErrorNode(40050, "手机号不能为空");
     public final static ErrorNode VAILD_CODE_ERROR = new ErrorNode(40051, "手机验证码错误");
     public final static ErrorNode MESSAGE_TOO_BUSY = new ErrorNode(20002, "send message too busy.");
     public final static ErrorNode HOUR_MESSAGE_TOO_BUSY = new ErrorNode(20003, "hour send message too busy.");
@@ -24,6 +25,8 @@ public class LoginError {
     public static final ErrorNode VERIFY_CODE_ERROR = new ErrorNode(40106,"验证码验证失败");
 
     public static final ErrorNode NOT_FIND_BIND_MOB_ERROR = new ErrorNode(30001,"验证码错误");
+
+
 
 
 

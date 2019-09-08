@@ -4,6 +4,7 @@ import com.jiuheng.api.domain.CommonValues;
 import com.jiuheng.api.exception.LoginException;
 import com.jiuheng.service.domain.CategoryResp;
 import com.jiuheng.service.dto.Order;
+import com.jiuheng.service.dto.OrderResp;
 import com.jiuheng.service.dto.TemplateOrder;
 import com.jiuheng.service.dto.error.LoginErrorResponse;
 import com.jiuheng.service.dubbo.DubboOrderService;
@@ -101,6 +102,55 @@ public class OrderController {
             response = new LoginErrorResponse();
         } catch (Exception e) {
             log.error("saveTemplateOrder.error",e);
+            response = new UnknowResponse();
+        }
+        return response;
+    }
+
+    /**
+     * 手机平板类已完成订单查询
+     * @param httpSession
+     * @return
+     */
+    @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
+    public CommonResponse getOrderList(HttpSession httpSession){
+        CommonResponse response = null;
+        try {
+            Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
+            // 检查登录
+            if (userId == null) {
+                throw new LoginException();
+            }
+            List<OrderResp> list = dubboTmpOrderService.getOrderList(userId);
+            response = new WebResponse<List<OrderResp>>(list);
+        } catch (LoginException e) {
+            response = new LoginErrorResponse();
+        } catch (Exception e) {
+            log.error("getOrderList.error",e);
+            response = new UnknowResponse();
+        }
+        return response;
+    }
+    /**
+     * 手机平板类已完成订单查询
+     * @param httpSession
+     * @return
+     */
+        @RequestMapping(value = "/getOrderDatail", method = RequestMethod.GET)
+    public CommonResponse getOrderDatail(HttpSession httpSession,String orderId){
+        CommonResponse response = null;
+        try {
+            Long userId = (Long) httpSession.getAttribute(CommonValues.SESSION_UID);
+            // 检查登录
+            if (userId == null) {
+                throw new LoginException();
+            }
+            OrderResp orderResp = dubboTmpOrderService.getOrderDatail(userId,orderId);
+            response = new WebResponse<OrderResp>(orderResp);
+        } catch (LoginException e) {
+            response = new LoginErrorResponse();
+        } catch (Exception e) {
+            log.error("getOrderDatail.error",e);
             response = new UnknowResponse();
         }
         return response;

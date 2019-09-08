@@ -166,15 +166,17 @@
   <select id="getGoodsByBrand" resultMap="GoodsMap" parameterType="int">
   SELECT
     b.id,
-    b.name,
+    b. NAME,
     g.skuId AS goods_skuId,
     g.goodsName AS goods_goodsName,
     g.pic AS goods_pic
   FROM
     recovery_brand b
   LEFT JOIN recovery_goods g ON b.id = g.brandId
+  LEFT JOIN recovery_category c ON c.id = g.categoryId
   WHERE
     b.id = #{brandId}
+  AND c.id = #{categoryId}
   </select>
 
   <select id="getAttrByGoodsId" resultMap="AttrMap" parameterType="int">

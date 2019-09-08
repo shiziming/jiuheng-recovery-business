@@ -216,4 +216,10 @@
       userId = #{userId}
     AND id = #{addrId}
   </select>
+  <update id="resetPassword">
+    UPDATE user_account
+    SET PASSWORD = #{loginRequest.password}
+    WHERE
+      phone = #{loginRequest.phone}
+  </update>
 </mapper>

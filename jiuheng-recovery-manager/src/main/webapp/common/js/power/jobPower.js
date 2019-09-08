@@ -1,7 +1,11 @@
 var jobPower={};
+jobPower.pageId="#jobPowerPage";
+jobPower.userId=jobPower.pageId + " #userId";
+
 jobPower.inits=function(){
+	var userId = $(jobPower.userId).val();
 	$('#dg2').datagrid({
-		url:'power/queryAllMenu?userId='+1+'&currtime='+ new Date(),
+		url:'power/queryAllMenu?userId='+userId+'&currtime='+ new Date(),
 			striped : true,
 			collapsible : true,
 			autoRowHeight : true,

@@ -104,10 +104,27 @@
 								<td width="20%"></td>
 							</c:if>
 						</tr>
+
 					</c:forEach>
 
 				</table>
+
 		</div>
+		 <div id="button_panel" class="easyui-panel" style="width: 100%;  background-color: #eff5ff;height: 35px">
+			 <table width="100%">
+				 <tr>
+					 <td width="10%"></td>
+					 <td width="10%"></td>
+					 <td width="10%"></td>
+					 <td width="10%"></td>
+					 <td style="align:center"><a href="javascript:back()" class="easyui-linkbutton" iconCls="icon-back" plain="true">返回</a></td>
+					 <td width="10%"></td>
+					 <td width="10%"></td>
+					 <td width="10%"></td>
+					 <td width="10%"></td>
+				 </tr>
+			 </table>
+		 </div>
 		 <div id="order_update_div"></div>
 	 </div>
 </div>
@@ -138,5 +155,9 @@
 					handler:closeOrderService
 				}]*/
 		});
+	}
+	function back(){
+		$(orderquery.viewpanel).panel('close');
+		$(orderquery.list_panel).show();
 	}
 </script>
